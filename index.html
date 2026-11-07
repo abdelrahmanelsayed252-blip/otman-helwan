@@ -440,6 +440,14 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   #go .band{height:34px}
   .tkt-char{height:44px}
 }
+
+/* online name claim */
+.claimbox{padding:8px 14px 10px;transform:rotate(-.6deg)}
+.claimbox input{font:400 clamp(22px,4vh,28px)/1.2 var(--rk);color:var(--tk-ink);background:transparent;border:0;border-bottom:2px dashed var(--tk-print);width:100%;outline:none;padding:0 0 2px}
+.claimbox input:focus{border-bottom-style:solid}
+.claimwarn{margin:6px 0 0;font:700 13px/1.5 var(--body);color:var(--tk-red)}
+#nm[readonly]{cursor:default;border-bottom-color:transparent}
+@media (max-height:450px){ .claimwarn{font-size:11px} .claimbox input{font-size:18px} }
 </style>
 </head>
 <body>
@@ -482,7 +490,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           </div>
           <!-- 4 · your name on a pink ticket, the combos and the sound as small stubs -->
           <div class="trow">
-            <label class="tkt tkt-p tname"><small>اسم الراكب</small><input id="nm" maxlength="18" value="عتمان حلوان" autocomplete="off" spellcheck="false"></label>
+            <label class="tkt tkt-p tname"><small id="nmNote">اسم الراكب</small><input id="nm" maxlength="18" value="عتمان حلوان" autocomplete="off" spellcheck="false"></label>
             <button class="mi tkt tkt-g tstub" type="button" data-to="moves"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"></path><path d="M8 9h6M8 13h6"></path></svg><small>الكومبوهات</small></button>
             <button class="mi tkt tkt-s tstub" type="button" id="mute"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l4 4H7v6h4l4 4V5H11"></path><path d="M3 9v6h4"></path><path d="M19 9a4 4 0 0 1 0 6"></path></svg><small>الصوت <span id="muteV">شغال</span></small></button>
           </div>
@@ -517,6 +525,13 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
         <h2 class="mh">العب مع صاحبك</h2>
         <p class="onote">واحد فيكم يعمل أوضة ويبعت الكود للتاني، والتاني يكتبه ويدخل.</p>
         <div class="mlist">
+          <!-- first time online: pick a name; it is yours alone and fixed for 30 days -->
+          <div class="tkt tkt-p claimbox" id="onClaim" hidden>
+            <small>اختار اسمك في الأونلاين</small>
+            <input id="claimIn" maxlength="18" autocomplete="off" spellcheck="false">
+            <p class="claimwarn">خد بالك: الاسم ده هيتثبت عليك شهر كامل ومحدش غيرك يقدر ياخده، ومش هتقدر تغيره قبل <b id="claimUntil"></b>.</p>
+          </div>
+          <button class="mi go" id="claimGo" type="button" hidden><span class="band" id="claimBand">ثبّت الاسم</span></button>
           <button class="mi go" id="onHost" type="button"><span class="band">اعمل أوضة</span></button>
           <div class="tkt tkt-y ocode" id="onCodeBox" hidden><small>كود الأوضة، ابعته لصاحبك</small><b id="onCode" dir="ltr">----</b></div>
           <button class="mi go" id="onStart" type="button" hidden><span class="band">ابدأ الماتش</span></button>
@@ -2888,11 +2903,12 @@ function savePrefs() {
 function loadPrefs(extra) {
   let p = extra && extra.sel ? extra : null;
   if (!p) { try { p = JSON.parse(localStorage.getItem(PREF_KEY) || 'null'); } catch (e) { p = null; } }
-  if (!p) return;
+  if (!p) return renderName();
   if (p.sel) for (const k in sel) if (Number.isInteger(p.sel[k]) && p.sel[k] >= 0 && p.sel[k] < (k === 'char' ? CHARS.length : OPTS[k].length)) sel[k] = p.sel[k];
   if (DIFF[p.diff]) diff = p.diff;
   if (typeof p.name === 'string' && p.name.trim()) el.nm.value = p.name.slice(0, 18);
   if (p.muted) { SFX.muted = true; renderMute(); }
+  renderName();
 }
 
 /* ---------------- loop ---------------- */
@@ -3041,8 +3057,13 @@ function getUser() { if (!userP) userP = LOCALNET || !IN_CLAUDE ? Promise.resolv
 function onStatus(t, bad) { const n = $('#onStatus'); n.textContent = t; n.classList.toggle('bad', !!bad); }
 function netLobbyReset() {
   if (NET.role) return;
-  $('#onHost').hidden = false; $('#onCodeBox').hidden = true; $('#onStart').hidden = true; $('#onJoinRow').hidden = false;
-  onStatus('');
+  const claim = needClaim();
+  $('#onClaim').hidden = $('#claimGo').hidden = !claim;
+  $('#onHost').hidden = $('#onJoinRow').hidden = claim;
+  $('#onCodeBox').hidden = true; $('#onStart').hidden = true;
+  claimArm = 0; $('#claimBand').textContent = 'ثبّت الاسم';
+  if (claim) { $('#claimIn').value = cleanName(el.nm.value, ''); $('#claimUntil').textContent = fmtDate(Date.now() + MONTH); }
+  onStatus(claim ? '' : NAME_LOCK ? 'هتلعب باسم ' + myName() + '.' : '');
 }
 async function netJoin(role, code) {
   const room = await getRoom();
@@ -3290,6 +3311,71 @@ async function loadScores() {
 }
 
 
+
+// ---- online names: claimed once on Supabase (claim_name), fixed for 30 days ----
+// The browser keeps a random secret token; the server stores only its hash next to the name,
+// so nobody else can take or use that name. Clearing the browser's data loses the token (and
+// with it the name: it stays reserved for its old owner). Not used inside claude.ai.
+const ID_KEY = 'otman-helwan-id', MONTH = 30 * 864e5;
+const NAME_LOCK = !IN_CLAUDE;
+function idGet() { try { return JSON.parse(localStorage.getItem(ID_KEY) || 'null'); } catch (e) { return null; } }
+function idSet(v) { try { localStorage.setItem(ID_KEY, JSON.stringify(v)); } catch (e) {} }
+function idToken() {
+  const v = idGet() || {};
+  if (!v.token) { const a = new Uint8Array(24); crypto.getRandomValues(a); v.token = [...a].map(x => x.toString(16).padStart(2, '0')).join(''); idSet(v); }
+  return v.token;
+}
+function nameLocked() { const v = idGet(); return !!(v && v.name && v.until && Date.now() < Date.parse(v.until)); }
+function needClaim() { if (!NAME_LOCK) return false; const v = idGet(); return !(v && v.name) || (!nameLocked() && myName() !== v.name); }
+function fmtDate(t) { try { return new Intl.DateTimeFormat('ar-EG-u-nu-latn', { day: 'numeric', month: 'long' }).format(new Date(t)); } catch (e) { return ''; } }
+function renderName() {
+  const v = idGet(), lock = NAME_LOCK && nameLocked();
+  if (NAME_LOCK && v && v.name && (lock || !el.nm.value.trim())) el.nm.value = v.name;
+  el.nm.readOnly = lock;
+  $('#nmNote').textContent = lock ? 'اسمك متثبت لحد ' + fmtDate(v.until) : 'اسم الراكب';
+}
+async function claimName(name) {
+  if (LOCALNET) {   // local stand-in: names in this browser's storage
+    const K = 'otman-fake-players', all = JSON.parse(localStorage.getItem(K) || '{}'), t = idToken();
+    const mine = Object.keys(all).find(n => all[n].t === t);
+    if (mine && mine === name) return { ok: true, name, until: new Date(all[name].at + MONTH).toISOString() };
+    if (mine && Date.now() - all[mine].at < MONTH) return { ok: false, err: 'locked', name: mine, until: new Date(all[mine].at + MONTH).toISOString() };
+    if (all[name] && all[name].t !== t) return { ok: false, err: 'taken' };
+    if (mine) delete all[mine];
+    all[name] = { t, at: Date.now() }; localStorage.setItem(K, JSON.stringify(all));
+    return { ok: true, name, until: new Date(Date.now() + MONTH).toISOString() };
+  }
+  const sb = await getSupa();
+  const { data, error } = await sb.rpc('claim_name', { p_token: idToken(), p_name: name });
+  if (error) throw error;
+  return data;
+}
+let claimArm = 0;
+async function doClaim() {
+  const name = cleanName($('#claimIn').value, '');
+  if (name.length < 2) { onStatus('الاسم لازم يكون حرفين على الأقل.', true); return; }
+  // two presses: the first one only asks "are you sure?"
+  if (Date.now() - claimArm > 6000) {
+    claimArm = Date.now(); $('#claimBand').textContent = 'متأكد؟ دوس تاني';
+    onStatus('"' + name + '" هيبقى اسمك لحد ' + fmtDate(Date.now() + MONTH) + '، ومش هتقدر تغيره قبلها.');
+    return;
+  }
+  claimArm = 0; $('#claimBand').textContent = 'ثبّت الاسم'; onStatus('بنثبّت الاسم...');
+  let r;
+  try { r = await claimName(name); } catch (e) { onStatus('معرفناش نثبّت الاسم دلوقتي. جرب تاني كمان شوية.', true); return; }
+  const v = idGet() || {};
+  if (r && (r.ok || r.err === 'locked')) {
+    v.name = r.name; v.until = r.until; idSet(v); el.nm.value = r.name; renderName(); savePrefs();
+    netLobbyReset();
+    onStatus(r.ok ? 'تمام! اسمك في الأونلاين بقى ' + r.name + '.' : 'إنت مثبّت اسم ' + r.name + ' لحد ' + fmtDate(r.until) + '، فهتلعب بيه.', !r.ok);
+    SFX.ui(true);
+  } else if (r && r.err === 'taken') onStatus('الاسم ده حد تاني واخده. اختار اسم غيره.', true);
+  else onStatus('الاسم مينفعش. من 2 لـ 18 حرف، من غير رموز غريبة.', true);
+}
+$('#claimGo').addEventListener('click', doClaim);
+$('#claimIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#claimIn').blur(); doClaim(); } });
+el.nm.addEventListener('click', () => { if (el.nm.readOnly) SFX.ui(); });
+
 // ---- Supabase stand-ins with the same shape the game uses (room.join → presence/onPeers/leave; db.collection) ----
 // Presence objects travel as Realtime broadcasts (Supabase's own presence is rate-limited; it is
 // used only to see who joined and left). Sends are coalesced to 30 a second, plus a keepalive;
@@ -3340,7 +3426,9 @@ function supaDb() {
   return { collection: () => ({
     add: async rec => {
       const sb = await getSupa();
-      const { error } = await sb.from('matches').insert({ a: rec.a, b: rec.b, w: rec.w, ca: rec.ca | 0, cb: rec.cb | 0, ka: rec.ka | 0, kb: rec.kb | 0 });
+      // the server checks our name by its token and that the friend's name is a claimed one
+      const { error } = await sb.rpc('record_match', { p_token: idToken(), p_b: rec.b, p_a_won: rec.w === rec.a,
+        p_ca: rec.ca | 0, p_cb: rec.cb | 0, p_ka: rec.ka | 0, p_kb: rec.kb | 0 });
       if (error) throw error;
       return {};
     },
