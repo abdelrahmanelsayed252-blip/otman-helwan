@@ -473,8 +473,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     padding:30px 18px calc(18px + env(safe-area-inset-bottom,0px));
     background:linear-gradient(to bottom,rgba(58,34,18,0) 0,rgba(58,34,18,.94) 40px,#3a2212 90px)}
   #menu:not([data-screen="tailor"]){background:#3a2212}
-  #menu[data-screen="main"] .logo--img{position:fixed;top:calc(6px + env(safe-area-inset-top,0px));right:10px;left:auto;translate:none;margin:0;font-size:16px;transform:rotate(-2deg)}
-  #menu[data-screen="main"] .logo-img{height:auto;width:min(122px,31vw)}
+  #menu[data-screen="main"] .logo--img{position:fixed;top:calc(6px + env(safe-area-inset-top,0px));left:50%;right:auto;translate:-50% 0;margin:0;font-size:16px;transform:rotate(-2deg)}
+  #menu[data-screen="main"] .logo-img{height:auto;width:min(132px,34vw)}
   #menu[data-screen="main"] .mlist{gap:12px}
   #go.mi.go{padding:5px 0 6px}
   #go .band{height:52px;font-size:38px}
@@ -492,7 +492,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   .kart{height:36vh;width:calc(36vh * 1.777)}
   #menu[data-screen="main"] .mcol{max-height:calc(100% - 22vh);gap:8px;padding-top:24px}
   #menu[data-screen="main"] .mlist{gap:8px}
-  #menu[data-screen="main"] .logo-img{width:118px}
+  #menu[data-screen="main"] .logo-img{width:88px}
+  #menu[data-screen="main"] .logo--img{top:calc(3px + env(safe-area-inset-top,0px))}
   #go .band{height:44px;font-size:32px}
   .tkt-char{height:58px}.tier{height:44px}.tier.on{height:50px}
   .tonline,.tstub,.tname{min-height:54px}
