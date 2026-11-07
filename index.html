@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" id="vp" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <style>
 /* base reset (previously injected by the artifact host) */
 :root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);box-sizing:border-box}
@@ -35,7 +35,11 @@ img{max-width:100%}
   color-scheme:dark;
 }
 html,body{height:100%}
-body{background:var(--night);color:var(--chalk);font-family:var(--body);overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
+body{background:var(--night);color:var(--chalk);font-family:var(--body);overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+/* phones: the page itself never scrolls, bounces or zooms; only the menu column scrolls */
+html,body{position:fixed;inset:0;width:100%;overscroll-behavior:none;touch-action:none}
+.mcol{touch-action:pan-y}
+input{-webkit-user-select:text;user-select:text;touch-action:manipulation}
 #app{position:relative;width:100%;height:100%;overflow:hidden}
 #c{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 button{font-family:inherit;color:inherit;cursor:pointer}
@@ -448,6 +452,51 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .claimwarn{margin:6px 0 0;font:700 13px/1.5 var(--body);color:var(--tk-red)}
 #nm[readonly]{cursor:default;border-bottom-color:transparent}
 @media (max-height:450px){ .claimwarn{font-size:11px} .claimbox input{font-size:18px} }
+
+/* ===== phone held upright: the canvas artboard "المنيو: موبايل بالطول" (390×844) =====
+   the key art on top, cropped from the left so the five fighters fill the width, the logo over
+   the sky on the right, and every ticket in the brown panel below, sized for a thumb */
+.tl-rot{display:none}
+#rotate{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:rgba(10,17,32,.86);padding:24px}
+#rotate[hidden]{display:none}
+.rotbox{display:flex;flex-direction:column;align-items:center;gap:8px;padding:22px 24px 24px;text-align:center;transform:rotate(-2deg);box-shadow:6px 6px 0 #16110a;max-width:300px}
+.rotbox b{font:400 30px/1.1 var(--rk)}
+.rotbox span{font:700 14px/1.5 var(--body);color:var(--tk-print)}
+.rotbox svg{animation:rotph 1.6s ease-in-out infinite}
+@keyframes rotph{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(-90deg)}}
+@media (orientation:portrait) and (max-width:700px){
+  .kart{left:0;top:0;transform:none;height:44vh;width:calc(44vh * 1.777)}
+  #rot{display:none!important}
+  #menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="scores"] .mcol{
+    left:0;right:0;top:auto;bottom:0;width:auto;max-height:calc(100% - 30vh);border-radius:0;box-shadow:none;
+    -webkit-backdrop-filter:none;backdrop-filter:none;gap:12px;
+    padding:30px 18px calc(18px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(to bottom,rgba(58,34,18,0) 0,rgba(58,34,18,.94) 40px,#3a2212 90px)}
+  #menu:not([data-screen="tailor"]){background:#3a2212}
+  #menu[data-screen="main"] .logo--img{position:fixed;top:calc(6px + env(safe-area-inset-top,0px));right:10px;left:auto;translate:none;margin:0;font-size:16px;transform:rotate(-2deg)}
+  #menu[data-screen="main"] .logo-img{height:auto;width:min(122px,31vw)}
+  #menu[data-screen="main"] .mlist{gap:12px}
+  #go.mi.go{padding:5px 0 6px}
+  #go .band{height:52px;font-size:38px}
+  #go .tl{font-size:11px}
+  #go .tl-rot{display:flex;align-items:center;gap:6px;padding:5px 12px 0;justify-content:flex-start}
+  .tkt-char{height:70px}.tkt-char b{font-size:28px}.tarr{width:46px;height:46px}.stampimg{width:44px;height:44px}
+  .tiers-k{display:block;font-size:13px}
+  .tier{height:50px;font-size:21px}.tier.on{height:58px;font-size:24px}
+  .tonline{min-height:62px}.tonline b{font-size:22px}
+  .tstub{width:62px;min-height:62px}.tstub small{display:block;font-size:10px}
+  .tname{min-height:62px}.tname input{font-size:21px}
+}
+/* shorter phones held upright (iPhone SE and the like) */
+@media (orientation:portrait) and (max-width:700px) and (max-height:740px){
+  .kart{height:36vh;width:calc(36vh * 1.777)}
+  #menu[data-screen="main"] .mcol{max-height:calc(100% - 22vh);gap:8px;padding-top:24px}
+  #menu[data-screen="main"] .mlist{gap:8px}
+  #menu[data-screen="main"] .logo-img{width:118px}
+  #go .band{height:44px;font-size:32px}
+  .tkt-char{height:58px}.tier{height:44px}.tier.on{height:50px}
+  .tonline,.tstub,.tname{min-height:54px}
+}
 </style>
 </head>
 <body>
@@ -468,7 +517,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <section class="mscr" id="sMain" aria-label="القايمة">
         <div class="mlist">
           <!-- 1 · the one main action: the back of a ticket, neon with the black magnetic stripe -->
-          <button class="mi go" id="go" type="button"><span class="tl"><span>تذكرة دخول · خط 1</span><span>حلوان ← المرج</span></span><span class="band">انزل الرصيف</span><span class="tl tl-end" data-kb>Enter</span></button>
+          <button class="mi go" id="go" type="button"><span class="tl"><span>تذكرة دخول · خط 1</span><span>حلوان ← المرج</span></span><span class="band">انزل الرصيف</span><span class="tl tl-end" data-kb>Enter</span><span class="tl tl-rot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M3 8a9 9 0 0 1 4-4M21 16a9 9 0 0 1-4 4"></path></svg> لف الموبايل بالعرض لما الماتش يبدأ</span></button>
           <button class="mi" type="button" id="tailorB" data-to="tailor">فصّل بدلتك</button>
           <!-- 2 · your fighter: a yellow ticket with our mark, ‹ › to switch -->
           <div class="mi tkt tkt-y tkt-char" id="charB" tabindex="0" role="group" aria-label="شخصيتك" hidden>
@@ -582,6 +631,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 
   <div id="big"></div>
 
+  <!-- a phone held upright during a match: ask to turn it -->
+  <div id="rotate" hidden><div class="tkt tkt-s rotbox"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M3 8a9 9 0 0 1 4-4M21 16a9 9 0 0 1-4 4"></path></svg><b>لف الموبايل بالعرض</b><span>القتال محتاج الشاشة بالعرض عشان تشوف الرصيف والزراير</span></div></div>
   <div id="touch" dir="ltr" hidden>
     <div id="stick"><div id="knob"></div></div>
     <div id="btns">
@@ -2038,7 +2089,7 @@ const el = {
   menu: $('#menu'), hud: $('#hud'), touch: $('#touch'), result: $('#result'), big: $('#big'), pops: $('#pops'), you: $('#you'),
   nP: $('#nP'), nC: $('#nC'), dP: $('#dP'), dC: $('#dC'), gP: $('#gP'), gC: $('#gC'), gbP: $('#gbP'), gbC: $('#gbC'), lP: $('#lP'), lC: $('#lC'),
   cardP: $('#cardP'), cardC: $('#cardC'), timer: $('#timer'), warn: $('#warn'), warnSide: $('#warnSide'),
-  nm: $('#nm'), go: $('#go'), mute: $('#mute'), rot: $('#rot'), help: $('#help'),
+  nm: $('#nm'), go: $('#go'), rotate: $('#rotate'), mute: $('#mute'), rot: $('#rot'), help: $('#help'),
 };
 const coarse = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window);
 if (coarse) el.help.hidden = true;
@@ -2912,14 +2963,38 @@ function loadPrefs(extra) {
 }
 
 /* ---------------- loop ---------------- */
+let sizeW = 0, sizeH = 0;
 function resize() {
   const w = canvas.clientWidth, h = canvas.clientHeight;
+  sizeW = w; sizeH = h;
   renderer.setSize(w, h, false);
   camera.aspect = w / Math.max(1, h);
   camera.updateProjectionMatrix();
   el.rot.hidden = !(coarse && h > w);
 }
 addEventListener('resize', resize);
+// iPhone Safari: after a rotation it can report the old size at first, zoom the page, or zoom
+// on a pinch / double tap even with user-scalable=no. Re-measure a few times, put the scale back,
+// and refuse the zoom gestures (the menu column still scrolls).
+function fixViewport() {
+  const vp = document.getElementById('vp');
+  if (vp) { const c = vp.content; vp.content = c + ', x=1'; vp.content = c; }
+  window.scrollTo(0, 0);
+  resize();
+}
+addEventListener('orientationchange', () => [60, 250, 600, 1000].forEach(t => setTimeout(fixViewport, t)));
+if (window.visualViewport) visualViewport.addEventListener('resize', () => { if (visualViewport.scale > 1.01) fixViewport(); else resize(); });
+for (const ev of ['gesturestart', 'gesturechange', 'gestureend']) document.addEventListener(ev, e => e.preventDefault(), { passive: false });
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+document.addEventListener('touchmove', e => {
+  if (e.touches.length > 1 || !(e.target.closest && e.target.closest('.mcol'))) e.preventDefault();
+}, { passive: false });
+let lastTouchEnd = 0;
+document.addEventListener('touchend', e => {
+  const now = Date.now();
+  if (now - lastTouchEnd < 320 && !(e.target.closest && e.target.closest('input'))) e.preventDefault();   // no double-tap zoom
+  lastTouchEnd = now;
+}, { passive: false });
 
 function updateAmbient(dt) {
   const tk = ambient.tuk;
@@ -2938,6 +3013,8 @@ function frame(now) {
   tick(now);
 }
 function tick(now) {
+  if (canvas.clientWidth !== sizeW || canvas.clientHeight !== sizeH) resize();
+  { const up = coarse && sizeH > sizeW && mode !== 'menu'; if (el.rotate.hidden === up) el.rotate.hidden = !up; }
   const dt = Math.min(0.033, Math.max(0, (now - last) / 1000));
   last = now; clock += dt;
 
