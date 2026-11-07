@@ -498,6 +498,40 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   .tkt-char{height:58px}.tier{height:44px}.tier.on{height:50px}
   .tonline,.tstub,.tname{min-height:54px}
 }
+
+/* ===== phone sideways: under the browser bar the screen is only ~320 px tall (user's iPhone,
+   8 Nov 2026), so the HUD becomes a thin strip at the top and the controls tuck into the corners ===== */
+@media (max-height:500px){
+  .card{top:calc(4px + env(safe-area-inset-top,0px));width:min(156px,23vw);padding:3px 8px 0;gap:0 6px;box-shadow:3px 3px 0 rgba(0,0,0,.5)}
+  #cardP{right:max(8px,env(safe-area-inset-right,0px))}
+  #cardC{left:max(8px,env(safe-area-inset-left,0px))}
+  .card .who{font-size:10px;line-height:1.25}
+  .card .who::before{display:none}
+  .pct{font-size:20px;line-height:1.05}
+  .card .lives{gap:4px}
+  .lives span{width:9px;height:9px}
+  #cardP .lives span.on,#cardC .lives span.on{border-width:1.5px}
+  .card .gbar{height:5px;margin:2px -8px 0}
+  #topbar{top:calc(4px + env(safe-area-inset-top,0px));flex-direction:row;align-items:flex-start;gap:6px}
+  #timer{font-size:17px;padding:3px 9px;min-width:0;box-shadow:2px 2px 0 rgba(0,0,0,.5)}
+  #timer::before{display:none}
+  #quit{font-size:11px;padding:3px 8px;min-height:0;border-width:1.5px}
+  #warn{position:absolute;top:32px;left:50%;transform:translateX(-50%) rotate(-2deg);font-size:14px;line-height:1.2;padding:2px 9px 3px;gap:6px;white-space:nowrap;border-width:2px;box-shadow:3px 3px 0 #16110a}
+  #warn::before{width:20px;height:20px;font-size:14px}
+  #warn small{font-size:10px}
+  #you{font-size:11px;padding:0 6px 1px;border-width:1.5px}
+  .pp,.pp.move,.pp.combo{font-size:14px;padding:1px 7px 2px;border-width:1.5px;box-shadow:2px 2px 0 #16110a}
+  #big{font-size:clamp(40px,10vw,76px)}
+  #stick{left:calc(10px + env(safe-area-inset-left,0px));bottom:calc(10px + env(safe-area-inset-bottom,0px));width:100px;height:100px;opacity:.85}
+  #knob{width:42px;height:42px;margin:-21px 0 0 -21px}
+  #btns{right:calc(8px + env(safe-area-inset-right,0px));bottom:calc(8px + env(safe-area-inset-bottom,0px));width:170px;height:144px}
+  .tb{opacity:.9;font-size:13px;box-shadow:2px 2px 0 rgba(12,7,4,.7)}
+  .tb[data-b="light"]{right:2px;bottom:2px;width:60px;height:60px;font-size:15px}
+  .tb[data-b="heavy"]{right:68px;bottom:0;width:50px;height:50px}
+  .tb[data-b="jump"]{right:8px;bottom:70px;width:50px;height:50px}
+  .tb[data-b="grab"]{right:66px;bottom:58px;width:44px;height:44px;font-size:12px}
+  .tb[data-b="guard"]{right:118px;bottom:16px;width:44px;height:44px;font-size:12px}
+}
 </style>
 </head>
 <body>
