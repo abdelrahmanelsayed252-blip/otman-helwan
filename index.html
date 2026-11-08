@@ -789,8 +789,296 @@ function rtext(g, txt, x, y, size, color, font = DISPLAY, align = 'center') {
   g.fillStyle = color; g.textAlign = align; g.textBaseline = 'middle';
   g.fillText(txt, x, y);
 }
+
+/* ---------------- wall ads: hand-painted like Egyptian street walls ----------------
+   Whitewashed patch with a ragged edge, a wobbly black frame, big black brush letters with
+   coloured halos or a paint splash behind, small lines in Ruqaa, a phone number. Each ad is
+   one canvas, painted with its own seeded random so it looks the same on every redraw.
+   Fonts are the game's own (user, 9 Nov 2026): Rakkas for the big words, IBM Plex Sans Arabic
+   for the small lines, like the tickets. */
+const AD_BIG = "Rakkas, 'IBM Plex Sans Arabic', serif", AD_SMALL = "'IBM Plex Sans Arabic', sans-serif";
+function muralRng(seed) { let s = seed % 2147483647 || 1; return () => (s = s * 16807 % 2147483647) / 2147483647; }
+function wallWash(g, w, h, r, base = '#ebe8de') {
+  const m = 10, pts = [];
+  for (let x = m; x < w - m; x += 36) pts.push([x, m + r() * 12]);
+  for (let y = m; y < h - m; y += 36) pts.push([w - m - r() * 12, y]);
+  for (let x = w - m; x > m; x -= 36) pts.push([x, h - m - r() * 10]);
+  for (let y = h - m; y > m; y -= 36) pts.push([m + r() * 12, y]);
+  g.save();
+  g.beginPath(); g.moveTo(pts[0][0], pts[0][1]); for (const p of pts) g.lineTo(p[0], p[1]); g.closePath();
+  g.fillStyle = base; g.fill(); g.clip();
+  for (let i = 0; i < 46; i++) {
+    g.fillStyle = `rgba(${110 + r() * 70 | 0},${100 + r() * 60 | 0},${80 + r() * 50 | 0},${0.03 + r() * 0.08})`;
+    g.beginPath(); g.ellipse(r() * w, r() * h, 20 + r() * 110, 10 + r() * 50, r() * 3, 0, 7); g.fill();
+  }
+  const gr = g.createLinearGradient(0, h * 0.7, 0, h);
+  gr.addColorStop(0, 'rgba(110,72,44,0)'); gr.addColorStop(1, 'rgba(110,72,44,.38)');
+  g.fillStyle = gr; g.fillRect(0, 0, w, h);
+  for (let i = 0; i < 26; i++) {          // dirty drips from the top edge
+    g.fillStyle = `rgba(90,70,50,${0.05 + r() * 0.1})`;
+    g.fillRect(r() * w, 0, 2 + r() * 3, 20 + r() * 90);
+  }
+  for (let i = 0; i < 2600; i++) { g.fillStyle = `rgba(0,0,0,${r() * 0.1})`; g.fillRect(r() * w, r() * h, 2, 2); }
+  g.restore();
+}
+function wallFrame(g, w, h, r, o = {}) {
+  const m = o.m || 30;
+  g.save(); g.strokeStyle = o.color || '#1a1410'; g.lineWidth = o.lw || 8; g.lineJoin = 'round'; g.lineCap = 'round';
+  g.beginPath(); g.moveTo(m, m + 4);
+  if (o.cloud) {
+    const n = o.cloud, seg = (w - 2 * m) / n;
+    for (let i = 0; i < n; i++) { const x0 = m + i * seg; g.quadraticCurveTo(x0 + seg / 2, m - 16 - r() * 10, x0 + seg, m + 2 + r() * 6); }
+  } else for (let x = m; x <= w - m; x += 50) g.lineTo(x, m + r() * 4);
+  for (let y = m; y <= h - m; y += 44) g.lineTo(w - m + r() * 5 - 2, y);
+  for (let x = w - m; x >= m; x -= 50) g.lineTo(x, h - m + r() * 5 - 2);
+  g.closePath(); g.stroke();
+  if (o.split) { g.beginPath(); g.moveTo(o.split, m + 6); for (let y = m; y <= h - m; y += 40) g.lineTo(o.split + r() * 6 - 3, y); g.stroke(); }
+  g.restore();
+}
+// paint splash: a spiky blot behind a word
+function wallSplash(g, cx, cy, rw, rh, color, r, spikes = 14) {
+  g.save(); g.fillStyle = color; g.beginPath();
+  for (let i = 0; i <= spikes * 2; i++) {
+    const a = i / (spikes * 2) * Math.PI * 2, k = i % 2 ? 0.55 + r() * 0.15 : 0.95 + r() * 0.3;
+    const x = cx + Math.cos(a) * rw * k, y = cy + Math.sin(a) * rh * k;
+    i ? g.lineTo(x, y) : g.moveTo(x, y);
+  }
+  g.closePath(); g.fill(); g.restore();
+}
+// big brush letters: coloured halos first (widest first), then the fill
+function wallBrush(g, txt, x, y, size, o = {}) {
+  g.save(); g.font = `${o.weight || ''} ${size}px ${o.font || AD_BIG}`; g.textAlign = o.align || 'center'; g.textBaseline = 'middle';
+  g.direction = 'rtl'; g.lineJoin = 'round';
+  if (o.rot) { g.translate(x, y); g.rotate(o.rot); x = 0; y = 0; }
+  for (const [c, lw] of o.halo || []) { g.strokeStyle = c; g.lineWidth = lw; g.strokeText(txt, x, y); }
+  for (const [c, dx, dy] of o.layers || []) { g.fillStyle = c; g.fillText(txt, x + dx, y + dy); }
+  if (o.rainbow) {
+    const m = g.measureText(txt), a = x - (o.align === 'right' ? m.width : o.align === 'left' ? 0 : m.width / 2);
+    const gr = g.createLinearGradient(a, 0, a + m.width, 0);
+    ['#e8322b', '#f28c1c', '#f4d21f', '#47b548', '#2b8fd6', '#8a4fc0'].forEach((c, i, l) => gr.addColorStop(i / (l.length - 1), c));
+    g.fillStyle = gr;
+  } else g.fillStyle = o.fill || '#16110a';
+  g.fillText(txt, x, y);
+  if (o.stroke) { g.strokeStyle = o.stroke[0]; g.lineWidth = o.stroke[1]; g.strokeText(txt, x, y); }
+  g.restore();
+}
+// the small hand-written lines
+function wallHand(g, txt, x, y, size, color = '#7a2d1a', align = 'center', rot = 0) {
+  g.save(); g.font = `700 ${size}px ${AD_SMALL}`; g.textAlign = align; g.textBaseline = 'middle'; g.direction = 'rtl';
+  g.translate(x, y); g.rotate(rot); g.fillStyle = color; g.fillText(txt, 0, 0); g.restore();
+}
+// a phone number as painted: digits left to right, "ت/" on the right
+function wallPhone(g, num, x, y, size, color = '#16110a', rot = 0) {
+  g.save(); g.font = `700 ${size}px ${AD_SMALL}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'ltr';
+  g.translate(x, y); g.rotate(rot); g.fillStyle = color; g.fillText(num + ' /\u062a', 0, 0); g.restore();
+}
+const WALL_ADS = {
+  // تحيا مصر: sun, pyramids, the Nile with feluccas, the flag's waves
+  tahya(g, w, h, r) {
+    wallWash(g, w, h, r, '#efece4');
+    const wave = (y0, amp, col, hgt) => {
+      g.fillStyle = col; g.beginPath(); g.moveTo(40, y0);
+      for (let x = 40; x <= w - 40; x += 8) g.lineTo(x, y0 + Math.sin(x / 120) * amp);
+      for (let x = w - 40; x >= 40; x -= 8) g.lineTo(x, y0 + hgt + Math.sin(x / 120) * amp);
+      g.closePath(); g.fill();
+    };
+    // sun with rays
+    g.save(); g.translate(640, 190); g.fillStyle = '#f39a1e';
+    for (let i = 0; i < 22; i++) { g.rotate(Math.PI * 2 / 22); g.beginPath(); g.moveTo(-12, -70); g.lineTo(0, -118 - (i % 2) * 14); g.lineTo(12, -70); g.closePath(); g.fill(); }
+    g.fillStyle = '#f5b422'; g.beginPath(); g.arc(0, 0, 76, 0, 7); g.fill(); g.restore();
+    // sea and feluccas on the right of the pyramids
+    g.fillStyle = '#3b8fd0'; g.fillRect(700, 262, 300, 40);
+    for (const bx of [800, 900]) {
+      g.fillStyle = '#5a3a20'; g.beginPath(); g.moveTo(bx - 24, 270); g.lineTo(bx + 24, 270); g.lineTo(bx + 14, 282); g.lineTo(bx - 14, 282); g.closePath(); g.fill();
+      g.fillStyle = '#2a2018'; g.beginPath(); g.moveTo(bx, 268); g.lineTo(bx, 210); g.lineTo(bx + 26, 262); g.closePath(); g.fill();
+    }
+    // palms on the left
+    for (const px of [478, 512]) {
+      g.strokeStyle = '#7a5a2a'; g.lineWidth = 8; g.beginPath(); g.moveTo(px, 300); g.quadraticCurveTo(px + 6, 250, px - 4, 210); g.stroke();
+      g.fillStyle = '#2f8a3a';
+      for (let i = 0; i < 6; i++) { g.save(); g.translate(px - 4, 210); g.rotate(-2.6 + i * 0.75); g.beginPath(); g.ellipse(22, 0, 26, 7, 0, 0, 7); g.fill(); g.restore(); }
+    }
+    // three pyramids
+    for (const [cx, b, t] of [[560, 120, 190], [690, 100, 215], [640, 150, 170]]) {
+      g.fillStyle = '#d98b45'; g.beginPath(); g.moveTo(cx - b, 300); g.lineTo(cx, t); g.lineTo(cx + b, 300); g.closePath(); g.fill();
+      g.fillStyle = '#b8682e'; g.beginPath(); g.moveTo(cx, t); g.lineTo(cx + b, 300); g.lineTo(cx + b * 0.2, 300); g.closePath(); g.fill();
+    }
+    // the flag as three waves
+    wave(296, 16, '#d72c2c', 64); wave(358, 16, '#f7f5ef', 48); wave(404, 16, '#16110a', 58);
+    // تحيا on the right, مصر on the left: blue letters over yellow and red outlines
+    const lay = [['#d72c2c', 9, 9], ['#f4c20d', 4, 4]];
+    wallBrush(g, 'تحيا', 1040, 150, 168, { layers: lay, fill: '#1e63c8', rot: -0.05 });
+    wallBrush(g, 'مصر', 220, 172, 166, { layers: lay, fill: '#1e63c8', rot: 0.04 });
+    // the painter's signature
+    g.save(); g.strokeStyle = '#16110a'; g.lineWidth = 3; g.beginPath(); g.ellipse(225, 262, 78, 24, 0, 0, 7); g.stroke(); g.restore();
+    wallHand(g, 'فضل النقاش', 225, 264, 30, '#16110a');
+  },
+  // فضل النقاش: broker, painter and contractor, next to تحيا مصر
+  fadl(g, w, h, r) {
+    wallWash(g, w, h, r);
+    wallFrame(g, w, h, r, { cloud: 9, lw: 8 });
+    wallSplash(g, 650, 200, 420, 110, '#f26a2e', r, 16);
+    wallSplash(g, 860, 175, 170, 80, '#5fd46a', r, 10);
+    wallBrush(g, 'فضل النقاش', 650, 196, 168, { halo: [['#8fe07a', 38], ['#16110a', 10]], fill: '#16110a', rot: -0.03 });
+    wallPhone(g, '0112 000 0000', 210, 82, 40, '#7a2d1a', 'center', -0.08);
+    wallHand(g, 'سمسار · نقاش · مقاول', 650, 330, 60, '#16110a');
+    wallHand(g, 'دهانات وتشطيبات · شقق إيجار وتمليك', 650, 400, 46, '#7a2d1a');
+    wallHand(g, 'تحت أمرك في أي وقت', 650, 452, 36, '#c0392b');
+    // paint roller
+    g.save(); g.translate(1110, 300); g.rotate(-0.4);
+    g.fillStyle = '#f26a2e'; g.strokeStyle = '#16110a'; g.lineWidth = 5;
+    g.beginPath(); g.roundRect(-70, -26, 140, 52, 16); g.fill(); g.stroke();
+    g.beginPath(); g.moveTo(70, 0); g.lineTo(96, 0); g.lineTo(96, 60); g.lineTo(10, 60); g.lineTo(10, 120); g.stroke();
+    g.lineWidth = 16; g.beginPath(); g.moveTo(10, 120); g.lineTo(10, 170); g.stroke();
+    g.restore();
+  },
+  // كبريتاج عين حلوان: the sulphur springs
+  kebritag(g, w, h, r) {
+    wallWash(g, w, h, r, '#ecefe9');
+    wallFrame(g, w, h, r, { lw: 9, color: '#1d4f8f', split: 330 });
+    wallBrush(g, 'كبريتاج', 790, 160, 180, { halo: [['#38b6d8', 40], ['#f2d22e', 22]], fill: '#16110a' });
+    wallBrush(g, 'عين حلوان', 790, 305, 104, { fill: '#d0332b', stroke: ['#16110a', 4] });
+    wallHand(g, 'مفتوح من 7 الصبح لـ 10 بالليل', 790, 418, 42, '#7a2d1a');
+    // left box: hot water with steam
+    g.fillStyle = '#3b8fd0'; g.beginPath(); g.ellipse(180, 330, 110, 34, 0, 0, 7); g.fill();
+    g.strokeStyle = '#9fb8c8'; g.lineWidth = 7; g.lineCap = 'round';
+    for (let i = 0; i < 3; i++) { g.beginPath(); for (let y = 0; y < 150; y += 6) g.lineTo(130 + i * 50 + Math.sin(y / 16 + i) * 12, 300 - y); g.stroke(); }
+    wallHand(g, 'مية كبريت سخنة', 180, 400, 36, '#16110a');
+    wallHand(g, 'للروماتيزم والضهر', 180, 446, 32, '#7a2d1a');
+  },
+  // سنتر الإسماعيلية التعليمي: rainbow letters and price boxes, like the school-tutoring walls
+  center(g, w, h, r) {
+    wallWash(g, w, h, r);
+    wallFrame(g, w, h, r, { lw: 8 });
+    wallHand(g, 'سنتر تعليمي', 640, 88, 58, '#16110a');
+    wallBrush(g, 'الإسماعيلية', 650, 220, 170, { rainbow: true, stroke: ['#16110a', 7] });
+    // left box: the stages
+    g.save(); g.strokeStyle = '#16110a'; g.lineWidth = 6;
+    g.strokeRect(60, 300, 300, 160); g.strokeRect(w - 300, 300, 240, 160); g.restore();
+    wallHand(g, 'ابتدائي', 210, 330, 38, '#16110a');
+    wallHand(g, 'إعدادي', 210, 380, 38, '#16110a');
+    wallHand(g, 'ثانوي عام', 210, 430, 38, '#16110a');
+    wallHand(g, 'الحصة بـ', w - 180, 335, 38, '#16110a');
+    wallBrush(g, '50ج', w - 180, 410, 92, { fill: '#16110a' });
+    wallHand(g, 'مجموعات تقوية لكل المواد', 650, 340, 44, '#7a2d1a');
+    wallHand(g, 'بنين / بنات', 650, 395, 40, '#16110a');
+    wallPhone(g, '0100 000 0000', 650, 448, 36, '#16110a');
+  },
+  // ونش إنقاذ: a donkey cart towing a broken tuk-tuk, a 24h badge and a tow-truck hazard stripe
+  winch(g, w, h, r) {
+    wallWash(g, w, h, r, '#efeadf');
+    wallFrame(g, w, h, r, { lw: 8 });
+    const ink = '#16110a';
+    // yellow and black hazard stripe along the bottom
+    g.save(); g.beginPath(); g.rect(40, 438, w - 80, 34); g.clip();
+    g.fillStyle = '#f4d21f'; g.fillRect(40, 438, w - 80, 34);
+    g.fillStyle = ink;
+    for (let x = 10; x < w; x += 48) { g.beginPath(); g.moveTo(x, 472); g.lineTo(x + 24, 472); g.lineTo(x + 58, 438); g.lineTo(x + 34, 438); g.closePath(); g.fill(); }
+    g.restore();
+    // the words on the right
+    wallBrush(g, 'ونش إنقاذ', 950, 120, 132, { halo: [['#f4d21f', 34], ['#d6302a', 18]], fill: ink });
+    wallHand(g, 'تكاتك وتروسيكلات', 950, 236, 48, ink);
+    wallHand(g, 'بعربيات كارو بحمار', 950, 298, 46, '#c0392b');
+    wallPhone(g, '0155 000 0000', 950, 372, 42, ink);
+    g.save(); g.lineJoin = 'round'; g.lineCap = 'round'; g.strokeStyle = ink; g.lineWidth = 4.5;
+    // ground and dust
+    g.fillStyle = 'rgba(120,90,60,.3)'; g.fillRect(40, 414, 600, 8);
+    g.fillStyle = 'rgba(150,140,125,.45)';
+    for (const [dx, dy, rr] of [[600, 398, 14], [622, 390, 10], [584, 404, 9], [640, 400, 7]]) { g.beginPath(); g.arc(dx, dy, rr, 0, 7); g.fill(); }
+    // cart: wooden bed with planks, side posts, shafts to the donkey, one big spoked wheel
+    g.fillStyle = '#a8692f'; g.beginPath(); g.rect(232, 318, 310, 22); g.fill(); g.stroke();
+    for (let x = 262; x < 542; x += 30) { g.beginPath(); g.moveTo(x, 318); g.lineTo(x, 340); g.stroke(); }
+    for (const px of [244, 530]) { g.fillStyle = '#8a531f'; g.fillRect(px - 5, 286, 10, 32); g.strokeRect(px - 5, 286, 10, 32); }
+    g.beginPath(); g.moveTo(236, 324); g.lineTo(150, 300); g.moveTo(236, 336); g.lineTo(150, 318); g.stroke();
+    g.fillStyle = '#c98c4a'; g.beginPath(); g.arc(420, 372, 48, 0, 7); g.fill(); g.stroke();
+    g.fillStyle = '#8a531f'; g.beginPath(); g.arc(420, 372, 10, 0, 7); g.fill(); g.stroke();
+    for (let i = 0; i < 10; i++) { const a = i * Math.PI / 5; g.beginPath(); g.moveTo(420 + Math.cos(a) * 10, 372 + Math.sin(a) * 10); g.lineTo(420 + Math.cos(a) * 46, 372 + Math.sin(a) * 46); g.stroke(); }
+    // the tuk-tuk on the cart, nose to the left: green body, yellow stripe, black canvas roof
+    // (drawn 25% narrower so it reads as a stubby tuk-tuk, not a bus)
+    g.save(); g.translate(300, 0); g.scale(0.75, 1); g.translate(-300, 0);
+    g.fillStyle = '#1f8a4a';
+    g.beginPath(); g.moveTo(286, 312); g.lineTo(286, 262); g.quadraticCurveTo(290, 238, 322, 234); g.lineTo(560, 234); g.lineTo(560, 312); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = '#2a2420'; g.beginPath(); g.rect(372, 196, 186, 40); g.fill();                  // open side
+    g.fillStyle = '#c0392b'; g.fillRect(430, 216, 110, 20);                                       // back seat
+    g.fillStyle = '#a9d8f0'; g.beginPath(); g.moveTo(296, 240); g.lineTo(302, 200); g.lineTo(358, 198); g.lineTo(362, 236); g.closePath(); g.fill(); g.stroke();   // windscreen
+    g.fillStyle = ink; g.beginPath(); g.moveTo(290, 202); g.quadraticCurveTo(300, 180, 330, 178); g.lineTo(566, 178); g.lineTo(566, 198); g.lineTo(290, 202); g.closePath(); g.fill();   // roof
+    g.beginPath(); g.moveTo(368, 198); g.lineTo(368, 236); g.moveTo(560, 198); g.lineTo(560, 236); g.stroke();   // pillars
+    g.strokeStyle = '#f4d21f'; g.lineWidth = 7; g.beginPath(); g.moveTo(290, 288); g.lineTo(558, 288); g.stroke();
+    g.strokeStyle = ink; g.lineWidth = 4.5;
+    g.restore();
+    g.fillStyle = '#ffe27a'; g.beginPath(); g.arc(291, 258, 10, 0, 7); g.fill(); g.stroke();      // headlight
+    for (const [wx, wr] of [[313, 15], [471, 17]]) { g.fillStyle = ink; g.beginPath(); g.arc(wx, 312, wr, 0, 7); g.fill(); g.fillStyle = '#9aa0a6'; g.beginPath(); g.arc(wx, 312, wr * 0.4, 0, 7); g.fill(); }
+    g.strokeStyle = '#7a4a1e'; g.lineWidth = 5;                                                   // ropes tying it down
+    g.beginPath(); g.moveTo(244, 290); g.lineTo(362, 236); g.moveTo(530, 290); g.lineTo(432, 236); g.stroke();
+    g.strokeStyle = ink; g.lineWidth = 4.5;
+    // the donkey, walking left
+    g.fillStyle = '#8f8b85';
+    for (const [lx, sw] of [[74, -4], [96, 4], [166, 4], [188, -4]]) {
+      g.beginPath(); g.moveTo(lx, 330); g.lineTo(lx + sw, 404); g.lineTo(lx + sw + 12, 404); g.lineTo(lx + 12, 330); g.closePath(); g.fill(); g.stroke();
+      g.save(); g.fillStyle = ink; g.fillRect(lx + sw - 1, 402, 14, 12); g.restore();
+    }
+    g.beginPath(); g.ellipse(134, 316, 72, 36, 0, 0, 7); g.fill(); g.stroke();                  // body
+    g.fillStyle = '#c4beb5'; g.beginPath(); g.ellipse(132, 336, 48, 13, 0, 0, 7); g.fill();     // belly
+    g.fillStyle = '#8f8b85';
+    g.beginPath(); g.moveTo(80, 306); g.lineTo(50, 250); g.lineTo(80, 238); g.lineTo(108, 294); g.closePath(); g.fill(); g.stroke();   // neck
+    g.save(); g.translate(42, 250); g.rotate(-0.4);
+    g.beginPath(); g.ellipse(0, 0, 36, 18, 0, 0, 7); g.fill(); g.stroke();                       // head
+    g.fillStyle = '#d6d0c6'; g.beginPath(); g.ellipse(-24, 4, 15, 14, 0, 0, 7); g.fill(); g.stroke();   // muzzle
+    g.fillStyle = ink; g.beginPath(); g.arc(-30, 2, 2.6, 0, 7); g.fill(); g.beginPath(); g.arc(8, -6, 3.4, 0, 7); g.fill();   // nostril, eye
+    g.restore();
+    g.fillStyle = '#8f8b85';
+    for (const [ex, er] of [[60, 0.1], [76, 0.42]]) {                                            // ears
+      g.save(); g.translate(ex, 214); g.rotate(er);
+      g.beginPath(); g.ellipse(0, 0, 8, 28, 0, 0, 7); g.fill(); g.stroke();
+      g.strokeStyle = '#d9a3a0'; g.lineWidth = 3; g.beginPath(); g.moveTo(0, -18); g.lineTo(0, 16); g.stroke(); g.restore();
+    }
+    g.strokeStyle = '#3a342e'; g.lineWidth = 7;                                                  // mane
+    g.beginPath(); g.moveTo(64, 236); g.lineTo(98, 288); g.stroke();
+    g.strokeStyle = ink; g.lineWidth = 4.5;
+    g.beginPath(); g.moveTo(204, 306); g.quadraticCurveTo(224, 326, 214, 362); g.stroke();      // tail
+    g.fillStyle = '#3a342e'; g.beginPath(); g.ellipse(214, 368, 6, 12, 0, 0, 7); g.fill();
+    // harness: red collar with yellow pompoms and a blue bead against the evil eye
+    g.strokeStyle = '#c0392b'; g.lineWidth = 9; g.beginPath(); g.moveTo(84, 294); g.quadraticCurveTo(102, 318, 112, 300); g.stroke();
+    g.beginPath(); g.moveTo(112, 300); g.lineTo(150, 306); g.stroke();
+    g.fillStyle = '#f4d21f'; for (let i = 0; i < 5; i++) { g.beginPath(); g.arc(84 + i * 8, 300 + Math.sin(i) * 4, 5, 0, 7); g.fill(); }
+    g.fillStyle = '#2b6fd6'; g.beginPath(); g.arc(96, 318, 7, 0, 7); g.fill();
+    g.fillStyle = '#fff'; g.beginPath(); g.arc(96, 318, 3, 0, 7); g.fill();
+    g.restore();
+    // round 24h badge over the drawing
+    g.save(); g.translate(560, 104); g.rotate(-0.14);
+    g.fillStyle = '#d6302a'; g.strokeStyle = ink; g.lineWidth = 5;
+    g.beginPath(); g.arc(0, 0, 62, 0, 7); g.fill(); g.stroke();
+    g.fillStyle = '#fff'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'rtl';
+    g.font = `58px ${AD_BIG}`; g.fillText('24', 0, -12);
+    g.font = `700 22px ${AD_SMALL}`; g.fillText('ساعة', 0, 30);
+    g.restore();
+  },
+  // ميكانيكي: crossed wrenches, from Motobas
+  mech(g, w, h, r) {
+    wallWash(g, w, h, r, '#ece6da');
+    wallFrame(g, w, h, r, { lw: 8 });
+    wallSplash(g, 720, 170, 360, 90, '#f2c23a', r, 14);
+    wallBrush(g, 'ميكانيكي', 720, 168, 172, { halo: [['#f26a2e', 26]], fill: '#16110a', rot: 0.03 });
+    wallHand(g, 'مركز مطوبس · كفر الشيخ', 720, 300, 58, '#c0392b');
+    wallHand(g, 'عمرة موتورات · كهربا · فرامل · سمكرة', 720, 372, 40, '#16110a');
+    wallPhone(g, '0128 000 0000', 720, 432, 38, '#7a2d1a');
+    const wrench = (rot) => {
+      g.save(); g.translate(190, 260); g.rotate(rot);
+      g.fillStyle = '#8f9aa3'; g.strokeStyle = '#16110a'; g.lineWidth = 5;
+      g.beginPath(); g.roundRect(-14, -120, 28, 210, 10); g.fill(); g.stroke();
+      g.beginPath(); g.arc(0, -130, 34, 0, 7); g.fill(); g.stroke();
+      g.fillStyle = '#ece6da'; g.fillRect(-12, -170, 24, 44);
+      g.restore();
+    };
+    wrench(0.6); wrench(-0.6);
+  },
+};
+function wallAdTex(kind, seed) {
+  return tex(1280, 512, (g, w, h) => WALL_ADS[kind](g, w, h, muralRng(seed)), { font: true });
+}
+
 if (document.fonts && document.fonts.load) {
-  Promise.all([document.fonts.load('80px Lalezar'), document.fonts.load('600 40px "IBM Plex Sans Arabic"'), document.fonts.load('700 80px "Aref Ruqaa"'), document.fonts.load('800 80px "Noto Kufi Arabic"')])
+  Promise.all([document.fonts.load('80px Lalezar'), document.fonts.load('80px Rakkas'), document.fonts.load('600 40px "IBM Plex Sans Arabic"'), document.fonts.load('700 40px "IBM Plex Sans Arabic"'), document.fonts.load('700 80px "Aref Ruqaa"'), document.fonts.load('800 80px "Noto Kufi Arabic"')])
     .then(() => fontRedraws.forEach(f => f())).catch(() => {});
 }
 const glowTex = tex(64, 64, g => {
@@ -1032,43 +1320,15 @@ function buildStation() {
   scene.add(sign);
   for (const sx of [-3, 3]) { const p = mesh(box(0.12, 2.6, 0.12), L({ color: BLUE })); p.position.set(sx, 2.3, -OUT_Z + 0.05); scene.add(p); }
 
-  // posters on the far wall
-  const posters = [
-    tex(400, 560, (g, w, h) => {
-      g.fillStyle = '#f2a33a'; g.fillRect(0, 0, w, h);
-      g.fillStyle = '#4a2512'; g.fillRect(0, 0, w, 150);
-      rtext(g, 'فول وطعمية', w / 2, 82, 78, '#fff3dc');
-      g.fillStyle = '#9b4f21'; g.beginPath(); g.ellipse(w / 2, 330, 120, 95, 0, 0, 7); g.fill();
-      g.fillStyle = '#c4732d'; g.beginPath(); g.ellipse(w / 2, 260, 120, 26, 0, 0, 7); g.fill();
-      g.fillStyle = '#5a2b12'; g.fillRect(w / 2 - 12, 190, 24, 50);
-      rtext(g, 'عربية الحاج زكي', w / 2, 470, 44, '#4a2512');
-      rtext(g, 'قدام المحطة من الفجر', w / 2, 520, 30, '#4a2512', "'IBM Plex Sans Arabic', sans-serif");
-    }, { font: true }),
-    tex(400, 560, (g, w, h) => {
-      g.fillStyle = '#0d2c66'; g.fillRect(0, 0, w, h);
-      rtext(g, 'مين عتمان', w / 2, 70, 66, '#ffb23e');
-      rtext(g, 'الحقيقي؟', w / 2, 140, 66, '#ffb23e');
-      g.fillStyle = '#07142c';
-      g.beginPath(); g.moveTo(w / 2 - 40, 230); g.lineTo(w / 2 - 130, 470); g.lineTo(w / 2 + 130, 470); g.lineTo(w / 2 + 40, 230); g.closePath(); g.fill();
-      g.beginPath(); g.arc(w / 2, 215, 40, 0, 7); g.fill();
-      g.fillStyle = '#ffb23e'; g.beginPath(); g.arc(w / 2, 320, 34, 0, 7); g.fill();
-      rtext(g, 'ع', w / 2, 326, 52, '#07142c');
-      rtext(g, 'المعركة على رصيف حلوان', w / 2, 515, 32, '#f3f0e7', "'IBM Plex Sans Arabic', sans-serif");
-    }, { font: true }),
-    tex(400, 560, (g, w, h) => {
-      g.fillStyle = '#1f7a73'; g.fillRect(0, 0, w, h);
-      g.strokeStyle = 'rgba(255,255,255,.45)'; g.lineWidth = 6;
-      for (let i = 0; i < 4; i++) { g.beginPath(); for (let y = 0; y < 200; y += 4) g.lineTo(110 + i * 60 + Math.sin(y / 18 + i) * 12, 380 - y); g.stroke(); }
-      g.fillStyle = '#0f4f4a'; g.fillRect(40, 390, w - 80, 60);
-      rtext(g, 'كبريتاج', w / 2, 70, 76, '#fff');
-      rtext(g, 'حلوان', w / 2, 140, 60, '#ffe6a6');
-      rtext(g, 'مية كبريت سخنة تريّح الضهر', w / 2, 500, 28, '#fff', "'IBM Plex Sans Arabic', sans-serif");
-    }, { font: true }),
-  ];
-  const posterX = [-21, -15.8, -10.5, -5.2, 5.2, 10.5, 15.8, 21, -28, 28];
-  posterX.forEach((x, i) => {
-    const p = mesh(new THREE.PlaneGeometry(1.6, 2.24), B({ map: posters[i % 3] }));
-    p.position.set(x, -0.15, -OUT_Z + 0.01);
+  // hand-painted wall ads on the far wall, like Egyptian street walls (user's list, 9 Nov 2026):
+  // تحيا مصر with فضل النقاش next to it, the mechanic and the tutoring centre on the left,
+  // the sulphur springs and the donkey-cart rescue on the right; the outer two repeat
+  const adTex = {};
+  const ADS = [['tahya', -5.2], ['fadl', -10.6], ['mech', -16.0], ['center', -21.4], ['kebritag', 5.2], ['winch', 10.6], ['center', 16.0], ['fadl', 21.4]];
+  ADS.forEach(([k, x], i) => {
+    const t = adTex[k] || (adTex[k] = wallAdTex(k, 7 + i * 13));
+    const p = mesh(new THREE.PlaneGeometry(5.0, 2.0), B({ map: t, transparent: true, alphaTest: 0.4, color: 0xd6d0c4 }));
+    p.position.set(x, 0.12, -OUT_Z + 0.012);
     scene.add(p);
   });
   const graffiti = tex(512, 160, (g, w, h) => {
