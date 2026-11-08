@@ -2239,7 +2239,7 @@ function doJump(f) {
   else if (f.jumps > 0) { f.vel.y = 10; f.jumps = 0; emit(tmpV.set(f.pos.x, f.pos.y + 0.2, f.pos.z), 0xbfd4ff, 4, 2, 0.4, 0.3, 0); }
   else return;
   f.onGround = false;
-  if (!f.isCPU || mode === 'fight') SFX.jump();
+  if (!f.isCPU || mode === 'fight') ownSfx(f, 'jump');
 }
 function lightName(f) { return f.chainT > 0 && f.chain === 1 ? 'jab2' : f.chainT > 0 && f.chain === 2 ? 'kick' : 'jab1'; }
 function heavyName(f) { return f.onGround ? (f.chainT > 0 && f.chain === 2 ? 'fin' : 'heavy') : 'spike'; }
@@ -2253,7 +2253,7 @@ function startAttack(f, name) {
     if (Math.hypot(dx, dz) < 3.2) f.face = Math.atan2(dx, dz);
   }
   if (m.lunge && f.onGround) { const d = faceDir(f.face); f.vel.x += d.x * m.lunge; f.vel.z += d.z * m.lunge; }
-  SFX.whoosh();
+  ownSfx(f, 'whoosh');
 }
 function release(holder) {
   const t = holder.holding;
@@ -2378,6 +2378,8 @@ function separate(a, b) {
     collide(a); collide(b);
   }
 }
+// online, the friend's phone plays its own jump/whoosh the moment it moves, so the host doesn't send those
+function ownSfx(f, n) { if (NET.role === 'host' && f === C) { NET.quiet = true; SFX[n](); NET.quiet = false; } else SFX[n](); }
 function clearPresses(c) { c.jump = c.light = c.heavy = c.grab = false; }
 
 function stepFighter(f, dt) {
@@ -3136,7 +3138,8 @@ function tick(now) {
    Contributor access). Opened outside claude.ai, `?localnet` fakes the room between tabs. */
 const NET = { role: null, r: null, unsub: null, code: '', other: null, peerName: '', inp: null, seen: [0, 0, 0, 0],
   snap: null, snapAt: 0, k: 0, ev: [], seq: 0, lastSeq: 0, quiet: false, cnt: [0, 0, 0, 0], again: 0, seenAgain: 0,
-  myChar: 0, overShown: false, left: false };
+  myChar: 0, overShown: false, left: false,
+  iseq: 0, sentAt: new Map(), lastSendT: 0, inSeq: 0, inSeqAt: 0, hist: [], err: new V3(), predicting: false, recAt: 0 };
 const LOCALNET = /[?&]localnet\b/.test(location.search);
 const NET_KEYS = ['jump', 'light', 'heavy', 'grab'];
 const r2 = v => Math.round(v * 100) / 100;
@@ -3185,8 +3188,9 @@ async function netJoin(role, code) {
   Object.assign(NET, { role, code, other: null, peerName: '', inp: null, snap: null, snapAt: 0, ev: [], seq: 0, lastSeq: 0, cnt: [0, 0, 0, 0], again: 0, seenAgain: 0, myChar: sel.char, overShown: false, left: false });
   // Supabase free plan: 100 messages a second for the whole project, each one counted when sent and
   // again when received. Host 20/s + friend at most 15/s (only when its keys change) = 70 at worst.
-  if (NET.r.setGap) NET.r.setGap(role === 'host' ? 50 : 66);
+  if (NET.r.setGap) NET.r.setGap(role === 'host' ? 50 : 0);
   NET.inpAt = performance.now(); NET.lastInp = ''; NET.stallShown = false;
+  NET.iseq = 0; NET.sentAt.clear(); NET.inSeq = 0; NET.inSeqAt = performance.now(); NET.hist.length = 0; NET.err.set(0, 0, 0); NET.predicting = false;
   NET.r.presence(role === 'host' ? { role, name: myName(), hc: sel.char } : { role, name: myName(), inp: [0, 0, 0, 0, 0, 0, 0], again: 0 });
   NET.unsub = NET.r.onPeers(netPeers, () => { if (NET.role) netLost('الاتصال فصل.'); });
   return true;
@@ -3227,6 +3231,7 @@ function netPeers(ch) {
   if (NET.role === 'host') {
     NET.inp = Array.isArray(pr.inp) ? pr.inp : null;
     NET.inpAt = performance.now();
+    if (NET.inp && +NET.inp[7] !== NET.inSeq) { NET.inSeq = +NET.inp[7] || 0; NET.inSeqAt = NET.inpAt; }
     if (typeof pr.again === 'number' && pr.again > NET.seenAgain) {
       NET.seenAgain = pr.again;
       if (mode === 'over') popup(NET.peerName + ' عايز جولة كمان!', P, 'move');
@@ -3281,7 +3286,7 @@ function hostSend() {
   if (!NET.r) return;
   if (mode !== 'fight' && NET.inp) NET.seen = NET.inp.slice(3, 7);   // presses outside the fight don't count later
   NET.r.presence({ g: {
-    k: NET.k, m: mode, t: r2(matchT), ct: r2(countT), won: P.won ? 1 : 0, sh: r2(shake), hc: sel.char, n: P.name,
+    k: NET.k, m: mode, t: r2(matchT), as: NET.inSeq, ag: Math.round(performance.now() - NET.inSeqAt), ct: r2(countT), won: P.won ? 1 : 0, sh: r2(shake), hc: sel.char, n: P.name,
     tr: [TR_STATES.indexOf(train.state), r2(train.head), train.side, train.dir, r2(train.t)],
     f: [fs(P), fs(C)], ev: NET.ev.slice(-18) } }).catch(() => {});
 }
@@ -3346,6 +3351,59 @@ function applyFighter(f, s, age, dt) {
   f.onGround = !!s[10]; f.dmg = s[11]; f.lives = s[12]; f.guard = s[13]; f.lastHitT = s[14]; f.dance = !!s[15];
   f.stats.hits = s[16]; f.stats.maxCombo = s[17]; f.stats.kos = s[18]; f.inv = s[19] ? 1 : 0;
 }
+// Our own fighter, on our phone: while it is free to move (not hit, grabbed or knocked out) it is
+// moved right here from our keys, the same way the host moves it, so a press shows at once instead
+// of after a round trip. The host still decides hits, damage and lives. Each snapshot says which of
+// our inputs the host had (as) and for how long (ag); we compare the host's position with where we
+// were at that moment and slide the difference in, so the two copies don't drift apart.
+const FREE = new Set(['idle', 'guard', 'attack']);
+function histAt(t) {
+  const h = NET.hist;
+  if (!h.length || t < h[0].t || t > h[h.length - 1].t + 40) return null;
+  for (let i = h.length - 1; i > 0; i--) if (h[i - 1].t <= t) {
+    const a = h[i - 1], b = h[i], k = b.t > a.t ? Math.min(1, (t - a.t) / (b.t - a.t)) : 1;
+    return [a.x + (b.x - a.x) * k, a.y + (b.y - a.y) * k, a.z + (b.z - a.z) * k];
+  }
+  return [h[0].x, h[0].y, h[0].z];
+}
+function shiftMe(dx, dy, dz) {
+  P.pos.x += dx; P.pos.y += dy; P.pos.z += dz;
+  for (const e of NET.hist) { e.x += dx; e.y += dy; e.z += dz; }
+}
+function predictMe(g, age, dt) {
+  const s = g.f[1], now = performance.now();
+  if (!NET.predicting) {   // taking over from the host's copy (start, after a hit, after a respawn)
+    NET.predicting = true; NET.hist.length = 0; NET.err.set(0, 0, 0); NET.recAt = NET.snapAt;
+    P.pos.set(s[0] + s[3] * age, s[1] + s[4] * age, s[2] + s[5] * age); P.vel.set(s[3], s[4], s[5]);
+    P.face = s[6]; P.state = s[7]; P.onGround = !!s[10]; P.pit = Math.abs(P.pos.z) > PZ && P.pos.y < -0.02;
+    P.atk = s[8] && MOVES[s[8]] ? { name: s[8], t: s[9] + age, m: MOVES[s[8]], hit: true } : null;
+    if (P.state === 'attack' && !P.atk) P.state = 'idle';
+  }
+  // what only the host knows
+  P.dmg = s[11]; P.lives = s[12]; P.guard = s[13]; P.lastHitT = s[14]; P.dance = !!s[15];
+  P.stats.hits = s[16]; P.stats.maxCombo = s[17]; P.stats.kos = s[18]; P.inv = s[19] ? 1 : 0;
+  stepFighter(P, dt);
+  if (P.atk) P.atk.hit = true;   // hits are the host's call
+  // don't walk through the other fighter (only we move)
+  if (C.state !== 'ko' && C.state !== 'grabbed') {
+    const dx = P.pos.x - C.pos.x, dz = P.pos.z - C.pos.z, d = Math.hypot(dx, dz), min = R * 1.7;
+    if (d < min && d > 1e-4 && Math.abs(P.pos.y - C.pos.y) < 1.5) { P.pos.x += dx / d * (min - d); P.pos.z += dz / d * (min - d); collide(P); }
+  }
+  // a new snapshot: how far is the host's copy from ours at the same moment?
+  if (NET.recAt !== NET.snapAt) {
+    NET.recAt = NET.snapAt;
+    const t0 = NET.sentAt.get(g.as), h = t0 != null && typeof g.ag === 'number' ? histAt(t0 + g.ag) : null;
+    if (h) {
+      const ex = s[0] - h[0], ey = s[1] - h[1], ez = s[2] - h[2];
+      if (Math.hypot(ex, ey, ez) > 2.5) { shiftMe(ex, ey, ez); NET.err.set(0, 0, 0); }
+      else NET.err.set(ex, Math.abs(ey) > 0.6 ? ey : 0, ez);
+    }
+  }
+  const k = 1 - Math.exp(-dt * 6), e = NET.err;
+  if (e.lengthSq() > 1e-6) { const dx = e.x * k, dy = e.y * k, dz = e.z * k; shiftMe(dx, dy, dz); e.x -= dx; e.y -= dy; e.z -= dz; collide(P); }
+  NET.hist.push({ t: now, x: P.pos.x, y: P.pos.y, z: P.pos.z });
+  while (NET.hist.length && now - NET.hist[0].t > 2000) NET.hist.shift();
+}
 function guestEvents(g) {
   const me = i => (i === 1 ? P : C);       // host's C is us
   for (const e of g.ev) {
@@ -3365,18 +3423,25 @@ function guestStep(dt) {
   if (g.k !== NET.k) guestBegin(g);
   // our keys -> presence: held ones as they are, presses as running counters (a dropped update loses nothing)
   if (g.m === 'fight') readPlayer(); else { P.ctrl.mx = P.ctrl.mz = 0; P.ctrl.guard = false; }
-  NET_KEYS.forEach((key, i) => { if (P.ctrl[key]) NET.cnt[i]++; });
-  clearPresses(P.ctrl);
-  const r1 = v => Math.round(v * 10) / 10;
+  let pressed = false;
+  NET_KEYS.forEach((key, i) => { if (P.ctrl[key]) { NET.cnt[i]++; pressed = true; } });
+  const r1 = v => Math.round(v * 10) / 10, now = performance.now();
   const inp = [r1(P.ctrl.mx), r1(P.ctrl.mz), P.ctrl.guard ? 1 : 0, ...NET.cnt], key = inp.join();
-  if (key !== NET.lastInp) { NET.lastInp = key; NET.r.presence({ inp }).catch(() => {}); }
+  // a changed joystick goes out at most 15 times a second, a button press at once
+  if (key !== NET.lastInp && (pressed || now - NET.lastSendT >= 66)) {
+    NET.lastInp = key; NET.lastSendT = now; NET.iseq++;
+    NET.sentAt.set(NET.iseq, now);
+    if (NET.sentAt.size > 120) NET.sentAt.delete(NET.sentAt.keys().next().value);
+    NET.r.presence({ inp: [...inp, NET.iseq] }).catch(() => {});
+  }
   const quiet = performance.now() - NET.snapAt;
   const age = Math.min(0.15, quiet / 1000);
   if (quiet > 15000) return netLost('الاتصال بصاحبك فصل.');
   netStall(quiet);
   mode = g.m; matchT = g.t; countT = g.ct; shake = Math.max(shake, g.sh);
   applyFighter(C, g.f[0], age, dt);
-  applyFighter(P, g.f[1], age, dt);
+  if (mode === 'fight' && FREE.has(g.f[1][7])) predictMe(g, age, dt);
+  else { applyFighter(P, g.f[1], age, dt); clearPresses(P.ctrl); NET.predicting = false; }
   // the train, as the host sees it
   const ts = TR_STATES[g.tr[0]] || 'idle';
   train.state = ts; train.side = g.tr[2]; train.dir = g.tr[3]; train.t = g.tr[4];
