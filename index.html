@@ -3102,7 +3102,7 @@ function tick(now) {
     if (overT > 1.4 && el.result.hidden) { el.result.hidden = false; el.touch.hidden = true; el.hud.classList.add('over'); }
   }
 
-  if (NET.role === 'host' && mode !== 'menu') hostSend();
+  if (NET.role === 'host' && mode !== 'menu') { hostSend(); if (mode === 'fight') netStall(performance.now() - NET.inpAt, 2500); }
   animate(P, dt);
   if (mode !== 'menu') animate(C, dt);
   updateParts(dt);
@@ -3183,6 +3183,10 @@ async function netJoin(role, code) {
   try { NET.r = await room.join('otman-' + code.toLowerCase()); }
   catch (e) { onStatus('معرفناش نفتح الأوضة، جرب تاني كمان شوية.', true); return false; }
   Object.assign(NET, { role, code, other: null, peerName: '', inp: null, snap: null, snapAt: 0, ev: [], seq: 0, lastSeq: 0, cnt: [0, 0, 0, 0], again: 0, seenAgain: 0, myChar: sel.char, overShown: false, left: false });
+  // Supabase free plan: 100 messages a second for the whole project, each one counted when sent and
+  // again when received. Host 20/s + friend at most 15/s (only when its keys change) = 70 at worst.
+  if (NET.r.setGap) NET.r.setGap(role === 'host' ? 50 : 66);
+  NET.inpAt = performance.now(); NET.lastInp = ''; NET.stallShown = false;
   NET.r.presence(role === 'host' ? { role, name: myName(), hc: sel.char } : { role, name: myName(), inp: [0, 0, 0, 0, 0, 0, 0], again: 0 });
   NET.unsub = NET.r.onPeers(netPeers, () => { if (NET.role) netLost('الاتصال فصل.'); });
   return true;
@@ -3222,6 +3226,7 @@ function netPeers(ch) {
   NET.peerName = cleanName(pr.name);
   if (NET.role === 'host') {
     NET.inp = Array.isArray(pr.inp) ? pr.inp : null;
+    NET.inpAt = performance.now();
     if (typeof pr.again === 'number' && pr.again > NET.seenAgain) {
       NET.seenAgain = pr.again;
       if (mode === 'over') popup(NET.peerName + ' عايز جولة كمان!', P, 'move');
@@ -3294,6 +3299,13 @@ function netEv(...e) { if (NET.role !== 'host' || NET.quiet || mode === 'menu') 
   }
 }
 
+// a word on screen while nothing arrives from the other side (Supabase reconnects by itself)
+function netStall(quiet, lim = 1500) {
+  if (quiet > lim) {
+    if (!NET.stallShown || bigTimer <= 0) { NET.stallShown = true; bigText('النت بيقطع... استنى', 2); }
+  } else if (quiet < 500 && NET.stallShown) { NET.stallShown = false; bigText('رجعنا!', 0.9); }
+}
+
 // ---- guest: draw the host's match, send our keys ----
 function guestBegin(g) {
   NET.k = g.k; NET.overShown = false; overT = 0;
@@ -3355,9 +3367,13 @@ function guestStep(dt) {
   if (g.m === 'fight') readPlayer(); else { P.ctrl.mx = P.ctrl.mz = 0; P.ctrl.guard = false; }
   NET_KEYS.forEach((key, i) => { if (P.ctrl[key]) NET.cnt[i]++; });
   clearPresses(P.ctrl);
-  NET.r.presence({ inp: [r2(P.ctrl.mx), r2(P.ctrl.mz), P.ctrl.guard ? 1 : 0, ...NET.cnt] }).catch(() => {});
-  const age = Math.min(0.12, (performance.now() - NET.snapAt) / 1000);
-  if (performance.now() - NET.snapAt > 8000) return netLost('الاتصال بصاحبك فصل.');
+  const r1 = v => Math.round(v * 10) / 10;
+  const inp = [r1(P.ctrl.mx), r1(P.ctrl.mz), P.ctrl.guard ? 1 : 0, ...NET.cnt], key = inp.join();
+  if (key !== NET.lastInp) { NET.lastInp = key; NET.r.presence({ inp }).catch(() => {}); }
+  const quiet = performance.now() - NET.snapAt;
+  const age = Math.min(0.15, quiet / 1000);
+  if (quiet > 15000) return netLost('الاتصال بصاحبك فصل.');
+  netStall(quiet);
   mode = g.m; matchT = g.t; countT = g.ct; shake = Math.max(shake, g.sh);
   applyFighter(C, g.f[0], age, dt);
   applyFighter(P, g.f[1], age, dt);
@@ -3498,7 +3514,8 @@ function supaRoom() {
     const sb = await getSupa();
     const ch = sb.channel('otman:' + name, { config: { broadcast: { self: false, ack: false }, presence: { key: me } } });
     const objs = new Map(), here = new Set(), hs = [];
-    let mine = {}, dirty = false, lastSent = 0, closed = false;
+    let mine = {}, dirty = false, lastSent = 0, closed = false, gap = 50;
+    const seenAt = new Map();   // last message from each peer: a dropped connection is not a leave
     const fire = () => {
       const peers = [{ peer: me, isMe: true, sameTab: true, presence: mine },
         ...[...here].map(p => ({ peer: p, isMe: false, sameTab: false, presence: objs.get(p) || {} }))];
@@ -3507,11 +3524,13 @@ function supaRoom() {
     const send = () => { if (closed) return; dirty = false; lastSent = performance.now(); ch.send({ type: 'broadcast', event: 'p', payload: { peer: me, pr: mine } }); };
     ch.on('broadcast', { event: 'p' }, ({ payload }) => {
       if (!payload || payload.peer === me) return;
-      here.add(payload.peer); objs.set(payload.peer, Object.freeze(payload.pr || {})); fire();
+      here.add(payload.peer); seenAt.set(payload.peer, performance.now()); objs.set(payload.peer, Object.freeze(payload.pr || {})); fire();
     });
-    ch.on('broadcast', { event: 'bye' }, ({ payload }) => { if (payload && payload.peer !== me) { here.delete(payload.peer); objs.delete(payload.peer); fire(); } });
+    ch.on('broadcast', { event: 'bye' }, ({ payload }) => { if (payload && payload.peer !== me) { seenAt.delete(payload.peer); here.delete(payload.peer); objs.delete(payload.peer); fire(); } });
     ch.on('presence', { event: 'join' }, ({ key }) => { if (key !== me) { here.add(key); send(); fire(); } });
-    ch.on('presence', { event: 'leave' }, ({ key }) => { if (key !== me) { here.delete(key); objs.delete(key); fire(); } });
+    // Supabase reports a leave when a connection drops for a moment too (it reconnects by itself),
+    // so a peer that left without "bye" is only dropped if nothing comes from it for 10 s
+    ch.on('presence', { event: 'leave' }, ({ key }) => { if (key !== me && !seenAt.has(key)) { here.delete(key); objs.delete(key); fire(); } });
     await new Promise((res, rej) => {
       const to = setTimeout(() => rej(new Error('timeout')), 10000);
       ch.subscribe(st => {
@@ -3519,9 +3538,14 @@ function supaRoom() {
         else if (st === 'CHANNEL_ERROR' || st === 'TIMED_OUT') { clearTimeout(to); rej(new Error(st)); }
       });
     });
-    const iv = setInterval(() => { const t = performance.now() - lastSent; if ((dirty && t >= 33) || t > 1000) send(); }, 15);
+    const iv = setInterval(() => {
+      const now = performance.now(), t = now - lastSent;
+      if ((dirty && t >= gap) || t > 1000) send();
+      for (const [p, at] of seenAt) if (now - at > 10000) { seenAt.delete(p); here.delete(p); objs.delete(p); fire(); }
+    }, 15);
     return { name,
-      presence: async patch => { mine = { ...mine }; for (const k in patch) { if (patch[k] === null) delete mine[k]; else mine[k] = patch[k]; } dirty = true; if (performance.now() - lastSent >= 33) send(); },
+      presence: async patch => { mine = { ...mine }; for (const k in patch) { if (patch[k] === null) delete mine[k]; else mine[k] = patch[k]; } dirty = true; if (performance.now() - lastSent >= gap) send(); },
+      setGap: ms => { gap = ms; },
       onPeers: h => { hs.push(h); setTimeout(fire, 0); return () => { const i = hs.indexOf(h); if (i >= 0) hs.splice(i, 1); }; },
       peers: () => [], connected: () => true,
       leave: async () => {
