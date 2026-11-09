@@ -279,6 +279,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .mi.tkt.cur,.mi.tiers.cur{background-color:inherit;color:var(--tk-ink);box-shadow:5px 6px 0 rgba(0,0,0,.6),0 0 0 3px var(--tk-ink),0 0 0 6px var(--tk-neon)}
 .mi.tkt.tkt-y.cur{background-color:var(--tk-y)}.mi.tkt.tkt-g.cur{background-color:var(--tk-g)}.mi.tkt.tkt-s.cur{background-color:var(--tk-s)}.mi.tkt.tkt-p.cur{background-color:var(--tk-p)}
 .tkt-char{display:flex;align-items:center;gap:10px;height:clamp(72px,12vh,88px);padding:0 10px;transform:rotate(1.2deg)}
+.tkt-char.locked .tkt-body{opacity:.62}.tkt-char.locked small{color:#a8231a;font-weight:700}
+.tkt-char.nope{animation:nope .38s}@keyframes nope{20%,60%{translate:-7px 0}40%,80%{translate:7px 0}}
 .tkt-char .tkt-body{flex:1;display:flex;flex-direction:column;align-items:flex-start;min-width:0}
 .tkt-char b{font:400 clamp(26px,5vh,36px)/1.1 var(--rk);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .tarr{width:44px;height:44px;flex:none;display:grid;place-items:center;background:var(--tk-ink);border:0;border-radius:3px;color:var(--tk-y);padding:0}
@@ -2110,8 +2112,18 @@ const CHARS = [
   // art: where this fighter's head is in the menu key art (assets/ui/keyart.webp), in % of the picture
   { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/game/otman.glb', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
   { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'assets/models/game/kofeyya.glb', cape: null, art: { x: 35.6, y: 26 } },
+  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/game/karate.glb', cape: null, art: { x: 18.5, y: 34 } },
+  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/game/robin.glb', cape: null, art: { x: 7, y: 33 } },
+  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/game/satohy.glb', cape: null, art: { x: 47.5, y: 33 } },
+  // lock: 'premium' = only by buying it, 'ramadan' = earned in Ramadan (lockOf)
+  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/game/ankh.glb', cape: null, lock: 'premium' },
+  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/game/abubakarir.glb', cape: null, lock: 'ramadan' },
+  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/game/abushogy.glb', cape: null },
+  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/game/arees.glb', cape: null },
 ];
-const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false };
+const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {} };
+// the CPU's (or the online friend's) character, an index into CHARS
+let cpuChar = 1;
 // game move -> clip, and where in the clip (seconds) the strike lands (hit) and where to stop (end).
 // The move's own timing is kept: the clip is stretched so its hit falls in the move's active window.
 const CLIP_MOVE = {
@@ -2136,25 +2148,54 @@ function pinClip(c) {
   }
   return c;
 }
+let glbGet = null;
+// load one character's model (once); resolves when it can be built
+function loadChar(i) {
+  const c = CHARS[i];
+  if (GLB.models[c.id]) return Promise.resolve();
+  return GLB.loading[c.id] || (GLB.loading[c.id] = glbGet(c.src).then(g => {
+    g.scene.traverse(o => {
+      // the user asked to drop the capes altogether (the re-tied ones still looked torn)
+      if (o.isSkinnedMesh && window.fixCape && c.cape) fixCape(o, c.cape);
+      // game textures are drawn without colour management, so read the model's the same way
+      if (o.isMesh && o.material.map) { o.material.map.encoding = THREE.LinearEncoding; o.material.map.needsUpdate = true; }
+    });
+    GLB.models[c.id] = g;
+  }));
+}
+const charReady = i => !!GLB.models[CHARS[i].id];
+// ---- locked fighters: lock 'premium' = bought only (no payments yet), 'ramadan' = earned in Ramadan ----
+// Ramadan dates (approximate, from the moon calendar); wins vs the CPU on عادي/صعب in them count
+const RAMADAN = [['2027-02-07', '2027-03-09'], ['2028-01-27', '2028-02-26'], ['2029-01-15', '2029-02-14'], ['2030-01-04', '2030-02-03']];
+const RAMADAN_WINS = 10;
+const UNLOCKS = 'otman-helwan-unlocks';
+function inRamadan(d = new Date()) { return RAMADAN.some(([a, b]) => d >= new Date(a + 'T00:00:00') && d <= new Date(b + 'T23:59:59')); }
+function unlocks() { try { return JSON.parse(localStorage.getItem(UNLOCKS) || '{}') || {}; } catch (e) { return {}; } }
+function ramadanWins() { try { return JSON.parse(localStorage.getItem(CPU_REC) || '{}').rw | 0; } catch (e) { return 0; } }
+// why this fighter can't be played yet, or '' when it can
+function lockOf(i) {
+  const c = CHARS[i];
+  if (!c.lock || unlocks()[c.id]) return '';
+  if (c.lock === 'premium') return 'بريميم · قريب هتقدر تشتريها';
+  if (c.lock === 'ramadan') {
+    if (!inRamadan()) return 'بتتفتح في رمضان بس';
+    return `اكسب ${RAMADAN_WINS - ramadanWins()} ماتش في رمضان وتتفتح`;
+  }
+  return '';
+}
 async function loadGlb() {
   const base = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/';
   await loadScript(base + 'loaders/GLTFLoader.js');
   await loadScript(base + 'utils/SkeletonUtils.js');
   const ld = new THREE.GLTFLoader();
-  const get = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
-  const [moves, ...models] = await Promise.all([get('assets/models/game/moves.glb'), ...CHARS.map(c => get(c.src))]);
+  glbGet = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
+  // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
+  if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
+  const [moves] = await Promise.all([glbGet('assets/models/game/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
   moves.animations.forEach(c => { GLB.clips[c.name] = pinClip(c); });
-  models.forEach((g, i) => {
-    g.scene.traverse(o => {
-      // the user asked to drop the capes altogether (the re-tied ones still looked torn)
-      if (o.isSkinnedMesh && window.fixCape && CHARS[i].cape) fixCape(o, CHARS[i].cape);
-      // game textures are drawn without colour management, so read the model's the same way
-      if (o.isMesh && o.material.map) { o.material.map.encoding = THREE.LinearEncoding; o.material.map.needsUpdate = true; }
-    });
-    GLB.models[CHARS[i].id] = g;
-  });
   GLB.ready = true;
-  console.info('[glb] ready:', CHARS.map(c => c.id).join(', '), '| clips:', Object.keys(GLB.clips).join(', '));
+  console.info('[glb] ready:', CHARS[sel.char].id, CHARS[cpuChar].id, '| clips:', Object.keys(GLB.clips).join(', '));
+  (async () => { for (let i = 0; i < CHARS.length; i++) await loadChar(i).catch(e => console.warn('[glb] no', CHARS[i].id, e)); })();
 }
 function findBone(model, re) { let b = null; model.traverse(o => { if (!b && o.isBone && re.test(o.name)) b = o; }); return b; }
 // put a child on a bone at a world position/rotation, cancelling the bone's own scale
@@ -2262,9 +2303,14 @@ function glbAnim(f, r, dt, sp) {
   next.time = t;
   G.mixer.update(dt);
 }
-function charOf(isCPU) { return CHARS[isCPU ? 1 - sel.char : sel.char]; }
+function charOf(isCPU) { return CHARS[isCPU ? cpuChar : sel.char]; }
 function makeRig(o, ringColor, emblemColor, isCPU) {
-  return GLB.ready ? buildGlbFighter(charOf(isCPU), ringColor) : buildFighter(o, ringColor, emblemColor);
+  return GLB.ready && GLB.models[charOf(isCPU).id] ? buildGlbFighter(charOf(isCPU), ringColor) : buildFighter(o, ringColor, emblemColor);
+}
+// a random opponent for the CPU: never your own fighter, and one that has already loaded
+function pickCpuChar() {
+  const ok = CHARS.map((c, i) => i).filter(i => i !== sel.char && charReady(i) && !lockOf(i));
+  return ok.length ? pick(ok) : (sel.char === 0 ? 1 : 0);
 }
 
 /* ---------------- moves ---------------- */
@@ -2486,8 +2532,16 @@ const sel = { mask: 0, chest: 0, cape: 0, legs: 0, char: 0 };
 const train = { state: 'idle', t: 5, side: 1, dir: 1, head: 0, horn2: false };
 
 function outfitFrom(s) { return { mask: OPTS.mask[s.mask].id, chest: OPTS.chest[s.chest].id, cape: OPTS.cape[s.cape].id, legs: OPTS.legs[s.legs].id }; }
-function rebuildPlayer() { P.setRig(makeRig(outfitFrom(sel), P.color, '#ffb23e', false)); }
+function rebuildPlayer() {
+  // a fighter still loading: keep the current one on screen and swap when it arrives
+  if (GLB.ready && !charReady(sel.char)) { const want = sel.char; loadChar(want).then(() => { if (sel.char === want) rebuildPlayer(); }); return; }
+  P.setRig(makeRig(outfitFrom(sel), P.color, '#ffb23e', false));
+}
 function rebuildCPU() {
+  // online, the host's opponent is the friend's own pick (the friend sets cpuChar to the host's)
+  if (NET.role === 'host') cpuChar = Number.isInteger(NET.peerChar) ? NET.peerChar : (sel.char === 0 ? 1 : 0);
+  else if (NET.role !== 'guest') cpuChar = pickCpuChar();
+  if (GLB.ready && !charReady(cpuChar)) { const want = cpuChar; loadChar(want).then(() => { if (cpuChar === want) rebuildCPU(); }); return; }
   let cs;
   do { cs = { mask: rand(0, 4) | 0, chest: rand(0, 4) | 0, cape: rand(0, 4) | 0, legs: rand(0, 4) | 0 }; }
   while (['mask', 'chest', 'cape', 'legs'].filter(k => cs[k] === sel[k]).length > 2);
@@ -3117,6 +3171,7 @@ function placeForFight() {
 }
 function startMatch() {
   if (NET.role === 'guest') return guestAgain();   // only the room's host starts a match
+  if (GLB.ready && lockOf(sel.char)) { renderChar(); $('#charB').classList.remove('nope'); void $('#charB').offsetWidth; $('#charB').classList.add('nope'); SFX.init(); SFX.ui(false); return; }
   SFX.init();
   savePrefs();
   P.name = myName();
@@ -3250,8 +3305,10 @@ function renderDiff() {
 function renderChar() {
   const on = GLB.ready;
   $('#charB').hidden = !on; $('#tailorB').hidden = on;
-  $('#charV').textContent = CHARS[sel.char].n;
-  $('#charN').textContent = `شخصيتك · ${sel.char + 1} من ${CHARS.length}`;
+  const lk = lockOf(sel.char);
+  $('#charV').textContent = (lk ? '🔒 ' : '') + CHARS[sel.char].n;
+  $('#charN').textContent = lk || `شخصيتك · ${sel.char + 1} من ${CHARS.length}`;
+  $('#charB').classList.toggle('locked', !!lk);
   const art = CHARS[sel.char].art, you = $('#kartYou');
   you.hidden = !on || !art;
   if (art) { you.style.left = art.x + '%'; you.style.top = art.y + '%'; }
@@ -3504,13 +3561,14 @@ async function netJoin(role, code) {
   if (!room) { onStatus('الأونلاين مش متاح هنا. لو فاتحها من claude.ai لازم تكون داخل بحسابك.', true); return false; }
   try { NET.r = await room.join('otman-' + code.toLowerCase()); }
   catch (e) { onStatus('معرفناش نفتح الأوضة، جرب تاني كمان شوية.', true); return false; }
-  Object.assign(NET, { role, code, other: null, peerName: '', inp: null, snap: null, snapAt: 0, ev: [], seq: 0, lastSeq: 0, cnt: [0, 0, 0, 0], again: 0, seenAgain: 0, myChar: sel.char, overShown: false, left: false });
+  Object.assign(NET, { role, code, other: null, peerName: '', inp: null, snap: null, snapAt: 0, ev: [], seq: 0, lastSeq: 0, cnt: [0, 0, 0, 0], again: 0, seenAgain: 0, myChar: sel.char, peerChar: null, overShown: false, left: false });
   // Supabase free plan: 100 messages a second for the whole project, each one counted when sent and
   // again when received. Host 20/s + friend at most 15/s (only when its keys change) = 70 at worst.
   if (NET.r.setGap) NET.r.setGap(role === 'host' ? 50 : 0);
   NET.inpAt = performance.now(); NET.lastInp = ''; NET.stallShown = false;
   NET.iseq = 0; NET.sentAt.clear(); NET.inSeq = 0; NET.inSeqAt = performance.now(); NET.hist.length = 0; NET.err.set(0, 0, 0); NET.predicting = false;
-  NET.r.presence(role === 'host' ? { role, name: myName(), hc: sel.char } : { role, name: myName(), inp: [0, 0, 0, 0, 0, 0, 0], again: 0 });
+  const myPick = lockOf(sel.char) ? 0 : sel.char;
+  NET.r.presence(role === 'host' ? { role, name: myName(), hc: myPick } : { role, name: myName(), gc: myPick, inp: [0, 0, 0, 0, 0, 0, 0], again: 0 });
   NET.unsub = NET.r.onPeers(netPeers, () => { if (NET.role) netLost('الاتصال فصل.'); });
   return true;
 }
@@ -3548,6 +3606,7 @@ function netPeers(ch) {
   const pr = o.presence;
   NET.peerName = cleanName(pr.name);
   if (NET.role === 'host') {
+    NET.peerChar = Number.isInteger(pr.gc) && pr.gc >= 0 && pr.gc < CHARS.length ? pr.gc : null;
     NET.inp = Array.isArray(pr.inp) ? pr.inp : null;
     NET.inpAt = performance.now();
     if (NET.inp && +NET.inp[7] !== NET.inSeq) { NET.inSeq = +NET.inp[7] || 0; NET.inSeqAt = NET.inpAt; }
@@ -3605,7 +3664,7 @@ function hostSend() {
   if (!NET.r) return;
   if (mode !== 'fight' && NET.inp) NET.seen = NET.inp.slice(3, 7);   // presses outside the fight don't count later
   NET.r.presence({ g: {
-    k: NET.k, m: mode, t: r2(matchT), as: NET.inSeq, ag: Math.round(performance.now() - NET.inSeqAt), ct: r2(countT), won: P.won ? 1 : 0, sh: r2(shake), hc: sel.char, n: P.name,
+    k: NET.k, m: mode, t: r2(matchT), as: NET.inSeq, ag: Math.round(performance.now() - NET.inSeqAt), ct: r2(countT), won: P.won ? 1 : 0, sh: r2(shake), hc: sel.char, cc: cpuChar, n: P.name,
     tr: [TR_STATES.indexOf(train.state), r2(train.head), train.side, train.dir, r2(train.t)],
     f: [fs(P), fs(C)], ev: NET.ev.slice(-18) } }).catch(() => {});
 }
@@ -3634,7 +3693,9 @@ function netStall(quiet, lim = 1500) {
 function guestBegin(g) {
   NET.k = g.k; NET.overShown = false; overT = 0;
   SFX.init();
-  const want = 1 - g.hc;                  // we play the host's C, which is the other character
+  // we play the host's C (our own pick, sent as gc); our C is the host's fighter
+  const want = Number.isInteger(g.cc) && g.cc < CHARS.length ? g.cc : (g.hc === 0 ? 1 : 0);
+  cpuChar = Number.isInteger(g.hc) && g.hc < CHARS.length ? g.hc : 0;
   if (sel.char !== want) { sel.char = want; rebuildPlayer(); }
   rebuildCPU();
   placeForFight();
@@ -3800,7 +3861,20 @@ async function netRecord(win) {
 }
 const CPU_REC = 'otman-helwan-cpu';
 function cpuRecord(won) {
-  try { const r = JSON.parse(localStorage.getItem(CPU_REC) || '{"w":0,"l":0}'); r[won ? 'w' : 'l']++; localStorage.setItem(CPU_REC, JSON.stringify(r)); } catch (e) {}
+  try {
+    const r = JSON.parse(localStorage.getItem(CPU_REC) || '{"w":0,"l":0}'); r[won ? 'w' : 'l']++;
+    // Ramadan fighters: wins on عادي/صعب during Ramadan count; at RAMADAN_WINS they unlock for good
+    if (won && diff !== 'easy' && inRamadan()) {
+      r.rw = (r.rw | 0) + 1;
+      if (r.rw >= RAMADAN_WINS) {
+        const u = unlocks(); let got = '';
+        CHARS.forEach(c => { if (c.lock === 'ramadan' && !u[c.id]) { u[c.id] = Date.now(); got = c.n; } });
+        localStorage.setItem(UNLOCKS, JSON.stringify(u));
+        if (got) setTimeout(() => bigText(got + ' اتفتح!', 2.2), 900);
+      }
+    }
+    localStorage.setItem(CPU_REC, JSON.stringify(r));
+  } catch (e) {}
 }
 async function loadScores() {
   const list = $('#scoreList');
@@ -4015,7 +4089,7 @@ function boot(data) {
   try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => ({ sel: { ...sel }, diff, name: el.nm.value, muted: SFX.muted })); } catch (e) {}
   // dev aid: open with ?debug to poke the game from the console (window.__otman)
   if (/[?&]debug\b/.test(location.search)) {
-    window.__otman = { P, C, scene, camera, sel, OPTS, train, trainObj, GLB, rebuildPlayer, startMatch, endMatch, toMenu, cam: null, spin: null, pause: false,
+    window.__otman = { P, C, scene, camera, sel, OPTS, train, trainObj, GLB, CHARS, buildGlbFighter, loadChar, lockOf, rebuildPlayer, startMatch, endMatch, toMenu, cam: null, spin: null, pause: false,
       get mode() { return mode; },
       // run n frames by hand (a hidden tab gets no rAF)
       step(n = 20) { for (let i = 0; i < n; i++) { last = performance.now() - 33; tick(performance.now()); } } };
