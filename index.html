@@ -3744,7 +3744,8 @@ function tick(now) {
   else if (mode === 'menu') {
     const tailor = mscreen === 'tailor';
     const want = tailor && tailSlot === 'cape' ? Math.PI - 0.6 + Math.sin(clock * 0.8) * 0.25 : tailor ? Math.sin(clock * 0.7) * 0.4 : Math.sin(clock * 0.55) * 1.15;
-    if (mscreen === 'char') P.face = (P.face + dt * 0.7) % (Math.PI * 2);    // the picked fighter turns slowly all the way round
+    // the picked fighter stands still facing the camera, turned a little toward the ticket (user: no spinning)
+    if (mscreen === 'char') P.face = turnTo(P.face, 0.3, dt * 6);
     else P.face = window.__otman && window.__otman.spin != null ? window.__otman.spin : turnTo(P.face, want, dt * 4);
     P.vel.set(0, 0, 0); P.pos.set(0, 0, 1.0); P.onGround = true; P.state = 'idle';
     updateTrain(dt, false);
