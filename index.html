@@ -733,7 +733,8 @@ const PLAT_L = PLAY_X * 2 + 2;   // the main platform slab (the decks carry on p
 const R = 0.36;          // fighter radius
 const G = 30;            // gravity
 const SPEED = 6.6;
-const TRAIN_SPEED = 46, TRAIN_CARS = 4, TRAIN_LEN = TRAIN_CARS * 12.05;
+// 7 cars at 30 m/s: the train stays in front of any spot ~2.8 s, time to knock someone onto it (user, 9 Nov 2026)
+const TRAIN_SPEED = 30, TRAIN_CARS = 7, TRAIN_LEN = TRAIN_CARS * 12.05;
 
 /* ---------------- renderer ---------------- */
 const canvas = $('#c');
@@ -1760,13 +1761,15 @@ function buildOutside() {
 }
 
 /* ================= TRAIN ================= */
-// line-1 style set: rounded body (extruded profile), light-blue paint with a white band and
-// two dark-blue lines under the windows, louvred windows, grey double doors, a sloped cab
-// front with a dark windscreen and an orange "المرج" display, bogies, gangways, roof gear
+// line-1 set drawn after the user's sheet (design/train-sheet-user.webp): light-blue body, a navy
+// window belt, a white waist stripe with a thin blue line, silver louvred windows, double doors,
+// a near-upright cab with a big windscreen, two black lamp boxes and OUR badge (never the real
+// metro logo), grey bumpers, coupler and lattice pilot, three roof units per car
 const trainObj = new THREE.Group();
 const CAR = 11.6, CAR_GAP = 0.45, CAR_W = 3.1, CAR_H = 2.75, CAR_Y = PIT_Y + 0.75;
+const TR_SKY = '#3d9be6', TR_NAVY = '#1e4c98', TR_WHITE = '#f1f4f6', TR_GREY = '#9aa3ab';
 function trainBodyGeo(slantFront, slantBack) {
-  const hw = CAR_W / 2, h = CAR_H, r = 0.5;
+  const hw = CAR_W / 2, h = CAR_H, r = 0.45;
   const s = new THREE.Shape();
   s.moveTo(-hw + 0.08, 0); s.lineTo(hw - 0.08, 0); s.lineTo(hw, 0.9); s.lineTo(hw - 0.03, h - r);
   s.quadraticCurveTo(hw - 0.08, h, hw - r, h); s.lineTo(-hw + r, h); s.quadraticCurveTo(-hw + 0.08, h, -hw + 0.03, h - r);
@@ -1774,9 +1777,9 @@ function trainBodyGeo(slantFront, slantBack) {
   const geo = new THREE.ExtrudeGeometry(s, { depth: CAR, bevelEnabled: false, curveSegments: 8 });
   geo.rotateY(Math.PI / 2); geo.translate(-CAR / 2, 0, 0);
   const p = geo.attributes.position;
-  // cab ends lean back above the waist
+  // the cab front leans back only a little above the windscreen sill (the sheet's cab is near upright)
   for (let i = 0; i < p.count; i++) {
-    const x = p.getX(i), y = p.getY(i), k = Math.max(0, y - 1.35) * 0.32;
+    const x = p.getX(i), y = p.getY(i), k = Math.max(0, y - 1.5) * 0.14;
     if (slantFront && x > CAR / 2 - 0.01) p.setX(i, x - k);
     if (slantBack && x < -CAR / 2 + 0.01) p.setX(i, x + k);
   }
@@ -1792,94 +1795,118 @@ function trainBodyGeo(slantFront, slantBack) {
 function buildTrain() {
   const H = CAR_H;
   const Y = y => (1 - y / H);                       // body height (m) -> canvas fraction from the top
+  // the paint bands shared by the sides and the cab
+  const bands = (g, w, h) => {
+    const fill = (col, a, b) => { g.fillStyle = col; g.fillRect(0, Y(b) * h, w, (Y(a) - Y(b)) * h); };
+    fill(TR_SKY, 0, H);
+    fill(TR_WHITE, 0.9, 0.96); fill(TR_SKY, 0.96, 1.02); fill(TR_WHITE, 1.02, 1.38);
+    fill(TR_NAVY, 1.38, 2.36);
+    const grad = g.createLinearGradient(0, 0, 0, Y(2.6) * h);
+    grad.addColorStop(0, '#aab2b8'); grad.addColorStop(1, '#c2c9ce');
+    g.fillStyle = grad; g.fillRect(0, 0, w, Y(2.6) * h);                // roof
+    fill('rgba(0,0,0,.22)', 0, 0.08);                                   // grime along the sill
+  };
   const drawSide = (g, w, h, emis) => {
     const u = w / CAR, row = (a, b) => [Y(b) * h, (Y(a) - Y(b)) * h];
-    const fill = (col, a, b) => { const [y0, hh] = row(a, b); g.fillStyle = col; g.fillRect(0, y0, w, hh); };
-    g.fillStyle = emis ? '#000' : '#5fb0de'; g.fillRect(0, 0, w, h);
-    if (!emis) {
-      const grad = g.createLinearGradient(0, 0, 0, Y(2.2) * h);
-      grad.addColorStop(0, '#9aa3aa'); grad.addColorStop(1, '#b7c0c6');
-      g.fillStyle = grad; g.fillRect(0, 0, w, Y(2.2) * h);              // roof
-      fill('#eef2f3', 1.08, 1.42);                                      // white band
-      fill('#1d56a8', 1.36, 1.41); fill('#1d56a8', 1.1, 1.15);
-      fill('#4a98c8', 0.3, 1.08);                                       // lower body
-      fill('#2a2d31', 0, 0.3);                                          // skirt
-      noise(g, w, h, 1800, 0.05, 2, false);
-      g.fillStyle = 'rgba(0,0,0,.18)'; for (let x = 0; x < w; x += u * 1.45) g.fillRect(x, Y(2.2) * h, 2, (Y(0.3) - Y(2.2)) * h); // panel seams
-    }
-    const doorX = [1.7, 5.1, 8.5], winX = [0.32, 3.0, 6.4, 9.82];
-    for (const x of winX) {
-      const [y0, wh] = row(1.48, 2.18), x0 = x * u, ww = 1.36 * u;
-      g.fillStyle = emis ? '#6a5734' : '#ffeec2'; g.fillRect(x0, y0, ww, wh);
+    if (emis) { g.fillStyle = '#000'; g.fillRect(0, 0, w, h); } else { bands(g, w, h); noise(g, w, h, 1800, 0.04, 2, false); }
+    // silver window frames with horizontal louvres; the glass glows warm at night
+    const pane = (x, ww) => {
+      const [y0, wh] = row(1.52, 2.24), x0 = x * u, pw = ww * u;
+      g.fillStyle = emis ? '#3b3020' : '#e8d2a0'; g.fillRect(x0, y0, pw, wh);
       if (!emis) {
-        g.strokeStyle = '#6f7c86'; g.lineWidth = 6; g.strokeRect(x0, y0, ww, wh);
-        g.fillStyle = 'rgba(55,65,75,.8)'; for (let i = 0; i < 4; i++) g.fillRect(x0 + 5, y0 + 6 + i * 8, ww - 10, 4);
-        g.fillStyle = 'rgba(255,255,255,.16)'; g.fillRect(x0 + 6, y0 + wh * 0.55, ww * 0.35, wh * 0.35);
-      } else { g.fillStyle = '#000'; for (let i = 0; i < 4; i++) g.fillRect(x0 + 5, y0 + 6 + i * 8, ww - 10, 4); }
-    }
-    for (const x of doorX) {
-      const [y0, dh] = row(0.86, 2.22), x0 = x * u, dw = 1.3 * u;
+        g.fillStyle = 'rgba(18,26,36,.72)'; g.fillRect(x0, y0, pw, wh);
+        g.strokeStyle = '#d3d9de'; g.lineWidth = 5; g.strokeRect(x0, y0, pw, wh);
+        g.fillStyle = '#c9d0d6'; for (let i = 1; i < 6; i++) g.fillRect(x0 + 3, y0 + i * wh / 6 - 1.5, pw - 6, 3);
+      } else { g.fillStyle = '#000'; for (let i = 1; i < 6; i++) g.fillRect(x0 + 3, y0 + i * wh / 6 - 1.5, pw - 6, 3); }
+    };
+    for (const x of [0.38, 2.98, 3.98, 6.58, 7.58, 10.28]) pane(x, 0.92);
+    // double doors: seams through the paint, two tall narrow windows, a grab rail beside each
+    for (const x of [1.55, 5.15, 8.75]) {
+      const [y0, dh] = row(0.12, 2.3), x0 = x * u, dw = 1.3 * u;
       if (!emis) {
-        g.fillStyle = '#b6c6d3'; g.fillRect(x0, y0, dw, dh);
-        g.strokeStyle = '#56636e'; g.lineWidth = 4; g.strokeRect(x0, y0, dw, dh);
-        g.fillStyle = '#56636e'; g.fillRect(x0 + dw / 2 - 2, y0, 4, dh);
-        g.fillStyle = 'rgba(0,0,0,.25)'; g.fillRect(x0 - 3, y0, 3, dh); g.fillRect(x0 + dw, y0, 3, dh);
+        g.fillStyle = 'rgba(15,35,80,.28)'; g.fillRect(x0, y0, dw, dh);
+        g.strokeStyle = '#173a74'; g.lineWidth = 4; g.strokeRect(x0, y0, dw, dh);
+        g.fillStyle = '#173a74'; g.fillRect(x0 + dw / 2 - 2, y0, 4, dh);
+        g.fillStyle = '#cfd6db'; g.fillRect(x0 - 9, row(1.0, 2.0)[0], 4, row(1.0, 2.0)[1]); g.fillRect(x0 + dw + 5, row(1.0, 2.0)[0], 4, row(1.0, 2.0)[1]);
       }
-      const [wy, wh] = row(1.5, 2.12);
-      g.fillStyle = emis ? '#6a5734' : '#ffeec2';
-      g.fillRect(x0 + dw * 0.12, wy, dw * 0.27, wh); g.fillRect(x0 + dw * 0.61, wy, dw * 0.27, wh);
+      const [wy, wh] = row(1.45, 2.18);
+      g.fillStyle = emis ? '#3b3020' : '#e8d2a0';
+      g.fillRect(x0 + dw * 0.13, wy, dw * 0.25, wh); g.fillRect(x0 + dw * 0.62, wy, dw * 0.25, wh);
+      if (!emis) { g.fillStyle = 'rgba(18,26,36,.72)'; g.fillRect(x0 + dw * 0.13, wy, dw * 0.25, wh); g.fillRect(x0 + dw * 0.62, wy, dw * 0.25, wh); }
     }
   };
-  const sideMap = tex(1024, 256, (g, w, h) => drawSide(g, w, h, false));
-  const sideEm = tex(1024, 256, (g, w, h) => drawSide(g, w, h, true));
+  const sideMap = tex(2048, 256, (g, w, h) => drawSide(g, w, h, false));
+  const sideEm = tex(2048, 256, (g, w, h) => drawSide(g, w, h, true));
   const cab = tex(256, 256, (g, w, h) => {
     const row = (a, b) => [Y(b) * h, (Y(a) - Y(b)) * h];
-    const fill = (col, a, b, x0 = 0, ww = w) => { const [y0, hh] = row(a, b); g.fillStyle = col; g.fillRect(x0, y0, ww, hh); };
-    g.fillStyle = '#5fb0de'; g.fillRect(0, 0, w, h);
-    fill('#a7b0b6', 2.45, H);
-    { const [y0, hh] = row(1.5, 2.3); g.fillStyle = '#0d1720'; g.beginPath(); g.moveTo(26, y0); g.lineTo(w - 26, y0); g.lineTo(w - 34, y0 + hh); g.lineTo(34, y0 + hh); g.closePath(); g.fill();
-      const gr = g.createLinearGradient(0, y0, w, y0 + hh); gr.addColorStop(0, 'rgba(255,255,255,.14)'); gr.addColorStop(0.5, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(30, y0, w - 60, hh); }
-    fill('#050505', 2.32, 2.46, 64, w - 128);
-    { const [y0, hh] = row(2.32, 2.46); rtext(g, 'المرج', w / 2, y0 + hh / 2, 16, '#ff9b2e'); }
-    fill('#eef2f3', 1.08, 1.42); fill('#1d56a8', 1.36, 1.41); fill('#1d56a8', 1.1, 1.15);
-    fill('#1b2026', 1.16, 1.36, 26, 66); fill('#1b2026', 1.16, 1.36, w - 92, 66);
-    { const [y0, hh] = row(1.16, 1.36); g.fillStyle = '#fff6d6'; for (const x of [44, 74, w - 74, w - 44]) { g.beginPath(); g.arc(x, y0 + hh / 2, 9, 0, 7); g.fill(); }
-      if (badgeOk()) g.drawImage(badgeImg, w / 2 - 26, y0 + hh / 2 - 26, 52, 52); }
-    fill('#4a98c8', 0.3, 1.08); fill('#2a2d31', 0, 0.3);
-    fill('#8f979e', 0.3, 0.62, 16, w - 32); fill('#3a3f45', 0.3, 0.6, w / 2 - 20, 40);
-    noise(g, w, h, 500, 0.05, 2, false);
+    bands(g, w, h);
+    // the light-blue frame around the windscreen (the navy belt stops at the cab)
+    { const [y0, hh] = row(1.38, 2.6); g.fillStyle = TR_SKY; g.fillRect(0, y0, w, hh); }
+    { const [y0, hh] = row(1.56, 2.46), x0 = 18, ww = w - 36, r = 14;
+      g.fillStyle = '#0c141c'; g.beginPath(); g.moveTo(x0 + r, y0); g.lineTo(x0 + ww - r, y0); g.quadraticCurveTo(x0 + ww, y0, x0 + ww, y0 + r);
+      g.lineTo(x0 + ww, y0 + hh - r); g.quadraticCurveTo(x0 + ww, y0 + hh, x0 + ww - r, y0 + hh); g.lineTo(x0 + r, y0 + hh); g.quadraticCurveTo(x0, y0 + hh, x0, y0 + hh - r);
+      g.lineTo(x0, y0 + r); g.quadraticCurveTo(x0, y0, x0 + r, y0); g.fill();
+      g.strokeStyle = '#1b2733'; g.lineWidth = 5; g.stroke();
+      const gr = g.createLinearGradient(x0, y0, x0 + ww, y0 + hh); gr.addColorStop(0, 'rgba(255,255,255,.18)'); gr.addColorStop(0.45, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(x0 + 4, y0 + 4, ww - 8, hh - 8);
+      g.strokeStyle = '#05080b'; g.lineWidth = 3; g.beginPath(); g.moveTo(w * 0.62, y0 + hh - 6); g.lineTo(w * 0.32, y0 + hh * 0.18); g.stroke(); }   // wiper
+    // two black lamp boxes with two round lamps each, our badge between them
+    { const [y0, hh] = row(1.06, 1.34);
+      g.fillStyle = '#121519'; g.fillRect(22, y0, 70, hh); g.fillRect(w - 92, y0, 70, hh);
+      g.fillStyle = '#fff3cf'; for (const x of [42, 72, w - 72, w - 42]) { g.beginPath(); g.arc(x, y0 + hh / 2, 11, 0, 7); g.fill(); }
+      if (badgeOk()) g.drawImage(badgeImg, w / 2 - 22, y0 + hh / 2 - 22, 44, 44); }
+    noise(g, w, h, 500, 0.04, 2, false);
   }, { font: true });
-  const paint = { roughness: 0.36, metalness: 0.3, envMapIntensity: 0.6 };
+  const paint = { roughness: 0.34, metalness: 0.3, envMapIntensity: 0.6 };
   const sideMat = new THREE.MeshStandardMaterial({ map: sideMap, emissive: 0xffffff, emissiveMap: sideEm, emissiveIntensity: 0.85, ...paint });
   const cabMat = new THREE.MeshStandardMaterial({ map: cab, ...paint });
-  const plainCab = new THREE.MeshStandardMaterial({ color: 0x5fb0de, ...paint });
-  const dark = steelM(0x24272b, 0.7, 0.5), gear = steelM(0xb9c0c6, 0.45, 0.6);
+  const plainCab = new THREE.MeshStandardMaterial({ color: TR_SKY, ...paint });
+  const dark = steelM(0x24272b, 0.7, 0.5), gear = steelM(0xb9c0c6, 0.45, 0.6), grey = steelM(0x8d959c, 0.55, 0.45);
+  // lattice pilot under each cab: a grey frame with dark openings
+  const pilotT = tex(256, 64, (g, w, h) => {
+    g.fillStyle = '#8d959c'; g.fillRect(0, 0, w, h);
+    g.fillStyle = '#2a2e33'; for (let i = 0; i < 6; i++) g.fillRect(14 + i * 39, 10, 28, 20);
+    for (let i = 0; i < 5; i++) g.fillRect(30 + i * 42, 38, 26, 18);
+    noise(g, w, h, 200, 0.06, 2, true);
+  });
+  const pilotM = L({ map: pilotT });
+  const cabEnd = (cx, sgn) => {
+    const fx = cx + sgn * CAR / 2;                   // the car's end face (x)
+    const pilot = mesh(box(0.5, 0.62, 2.7), pilotM); pilot.position.set(fx + sgn * 0.05, CAR_Y - 0.26, 0); trainObj.add(pilot);
+    for (const z of [-1.05, 1.05]) {                 // rounded grey bumpers
+      const bp = mesh(cyl(0.2, 0.2, 0.62, 12), grey); bp.rotation.z = Math.PI / 2; bp.position.set(fx + sgn * 0.22, CAR_Y + 0.2, z); trainObj.add(bp);
+    }
+    const cp = mesh(box(0.55, 0.32, 0.42), grey); cp.position.set(fx + sgn * 0.3, CAR_Y + 0.12, 0); trainObj.add(cp);   // coupler
+    const cam = mesh(box(0.5, 0.26, 0.62), grey); cam.position.set(cx + sgn * (CAR / 2 - 0.4), CAR_Y + H + 0.13, 0); trainObj.add(cam);
+    const lens = mesh(box(0.04, 0.12, 0.16), B({ color: 0x0b0d10 })); lens.position.set(cx + sgn * (CAR / 2 - 0.13), CAR_Y + H + 0.14, 0); trainObj.add(lens);
+  };
   for (let i = 0; i < TRAIN_CARS; i++) {
     const cx = -CAR / 2 - i * (CAR + CAR_GAP);
-    const end = i === 0 || i === TRAIN_CARS - 1;
-    const body = mesh(trainBodyGeo(i === 0, i === TRAIN_CARS - 1), [end ? cabMat : plainCab, sideMat]);
+    const first = i === 0, last = i === TRAIN_CARS - 1;
+    const body = mesh(trainBodyGeo(first, last), [first || last ? cabMat : plainCab, sideMat]);
     body.position.set(cx, CAR_Y, 0); trainObj.add(body);
-    // bogies with wheels on the rails
+    if (first) cabEnd(cx, 1);
+    if (last) cabEnd(cx, -1);
+    // bogies with wheels on the rails, grey equipment boxes between them
     for (const bx of [-3.9, 3.9]) {
       const fr = mesh(box(2.6, 0.32, 2.2), dark); fr.position.set(cx + bx, PIT_Y + 0.62, 0); trainObj.add(fr);
       for (const wx of [-0.8, 0.8]) for (const wz of [-0.72, 0.72]) {
         const wh = mesh(cyl(0.42, 0.42, 0.12, 18), gear); wh.rotation.x = Math.PI / 2; wh.position.set(cx + bx + wx, PIT_Y + 0.69, wz); trainObj.add(wh);
       }
     }
-    const box2 = mesh(box(3.2, 0.42, 2.4), dark); box2.position.set(cx, PIT_Y + 0.6, 0); trainObj.add(box2);
-    // roof: air-con units, and a pantograph on the end cars
-    for (const ax of [-3.2, 3.2]) { const ac = mesh(box(2.3, 0.28, 1.6), gear); ac.position.set(cx + ax, CAR_Y + H + 0.12, 0); trainObj.add(ac); }
-    if (end) {
-      const px = cx + (i === 0 ? -1.5 : 1.5), py = CAR_Y + H, wireY = PIT_Y + 5.6;
+    for (const [ex, ew] of [[-1.3, 1.6], [0.9, 2.2]]) { const eq = mesh(box(ew, 0.46, 2.5), grey); eq.position.set(cx + ex, PIT_Y + 0.58, 0); trainObj.add(eq); }
+    // roof: three air-con units (a pantograph on the end cars reaches the contact wire)
+    for (const ax of [-3.6, 0, 3.6]) { const ac = mesh(box(1.9, 0.3, 1.5), gear); ac.position.set(cx + ax, CAR_Y + H + 0.13, 0); trainObj.add(ac); }
+    if (first || last) {
+      const px = cx + (first ? -1.8 : 1.8), py = CAR_Y + H, wireY = PIT_Y + 5.6;
       const base = mesh(box(1.2, 0.12, 1.2), dark); base.position.set(px, py + 0.06, 0); trainObj.add(base);
       const armL = (wireY - py) * 0.62;
       const a1 = mesh(box(0.05, armL, 0.05), dark); a1.position.set(px - 0.35, py + armL * 0.42, 0); a1.rotation.z = 0.55; trainObj.add(a1);
       const a2 = mesh(box(0.05, armL, 0.05), dark); a2.position.set(px - 0.35, py + armL * 1.15, 0); a2.rotation.z = -0.55; trainObj.add(a2);
       const head = mesh(box(0.08, 0.06, 1.6), gear); head.position.set(px, wireY - 0.04, 0); trainObj.add(head);
     }
-    if (i < TRAIN_CARS - 1) { const gw = mesh(box(CAR_GAP + 0.3, 2.3, 2.3), dark); gw.position.set(cx - CAR / 2 - CAR_GAP / 2, CAR_Y + 1.3, 0); trainObj.add(gw); }
+    if (!last) { const gw = mesh(box(CAR_GAP + 0.3, 2.3, 2.3), dark); gw.position.set(cx - CAR / 2 - CAR_GAP / 2, CAR_Y + 1.3, 0); trainObj.add(gw); }
   }
-  for (const z of [-1.1, 1.1]) { const h = glow(0xfff6d0, 2.6, 1); h.position.set(CAR / 2 * 0 + 0.15, CAR_Y + 1.26, z); trainObj.add(h); }
+  for (const z of [-1.05, 1.05]) { const h = glow(0xfff6d0, 2.4, 1); h.position.set(0.2, CAR_Y + 1.2, z); trainObj.add(h); }
   const beam = glow(0xfff3c8, 9, 0.35); beam.position.set(4, PIT_Y + 1.2, 0); trainObj.add(beam);
   trainObj.traverse(o => { if (o.isMesh) o.castShadow = true; });
   trainObj.visible = false;
@@ -2922,7 +2949,7 @@ function updateTrain(dt, live) {
     train.head += train.dir * TRAIN_SPEED * dt;
     trainObj.position.x = train.head;
     const tail = train.head - train.dir * TRAIN_LEN;
-    if (Math.abs(train.head) < 16 || Math.abs(tail) < 16) shake = Math.max(shake, live ? 0.08 : 0);
+    if (Math.min(train.head, tail) < 16 && Math.max(train.head, tail) > -16) shake = Math.max(shake, live ? 0.08 : 0);
     if ((train.dir > 0 && tail > 80) || (train.dir < 0 && tail < -80)) {
       train.state = 'idle'; train.t = rand(7, 11); trainObj.visible = false;
       el.warn.hidden = true; SFX.rumble(false);
