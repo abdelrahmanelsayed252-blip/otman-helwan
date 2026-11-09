@@ -133,6 +133,9 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .ltag{font-size:11px;color:var(--muted)}
 #topbar{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px}
 #timer{font:400 36px/1 var(--rk);background:var(--paper);color:var(--ink);padding:7px 18px 5px;min-width:104px;text-align:center;box-shadow:4px 4px 0 var(--ink);font-variant-numeric:tabular-nums}
+.hbtns{display:flex;gap:6px;align-items:center}
+.hsnd{pointer-events:auto;background:var(--tk-ink,#1a120c);border:2px solid var(--tk-s,#e3bb93);border-radius:3px;color:var(--tk-s,#e3bb93);min-height:36px;min-width:36px;padding:0 8px;display:flex;align-items:center;justify-content:center}
+.hsnd.off{opacity:.5;text-decoration:line-through}.hsnd.off svg{stroke-dasharray:2 2}
 #quit{pointer-events:auto;background:rgba(12,7,4,.65);border:1.5px solid rgba(241,230,207,.4);border-radius:0;color:var(--paper);padding:3px 12px;font:600 12px var(--body)}
 #warn{background:var(--signal);color:#fff;padding:3px 16px 6px;font:400 28px/1.2 var(--rk);-webkit-text-stroke:.05em var(--ink);paint-order:stroke fill;border:2px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-2deg);animation:blink .45s steps(2) infinite;white-space:nowrap}
 #warn small{font:600 13px var(--body);-webkit-text-stroke:0;margin-inline-start:6px}
@@ -161,6 +164,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .tb[data-b="heavy"]{right:96px;bottom:2px;width:68px;height:68px}
 .tb[data-b="jump"]{right:14px;bottom:100px;width:68px;height:68px}
 .tb[data-b="grab"]{right:94px;bottom:82px;width:58px;height:58px;font-size:16px}
+.tb[data-b="shot"]{right:84px;bottom:150px;width:52px;height:52px;font-size:14px}
+.tb.cd{opacity:.45;filter:grayscale(.6)}
 .tb[data-b="guard"]{right:166px;bottom:28px;width:58px;height:58px;font-size:16px}
 
 /* ---------- result (poster: "عتمان الحقيقي هو" strip, winner name with the logo's extrude, three metro tickets) ---------- */
@@ -172,6 +177,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 #rName{font:400 clamp(52px,12vh,104px)/1.15 var(--rk);color:var(--sodium);-webkit-text-stroke:.045em var(--ink);paint-order:stroke fill;text-shadow:var(--extrude);max-width:100%;overflow-wrap:anywhere;transform:rotate(-2deg);padding:0 .1em .1em 0;margin-top:-.15em}
 #result.lose #rName{color:var(--cpu)}
 #rSub{margin:0;font:600 15px/1.6 var(--body);color:#e6dac0;text-wrap:balance}
+.spts{font:400 22px/1 var(--rk);font-style:normal;color:#a8231a;margin-inline-start:auto;padding:0 8px}
+.rpts{margin:4px 0 0;font:400 26px/1.1 var(--rk);color:#a8231a}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;width:100%;max-width:450px}
 .stats div{background:var(--paper);color:var(--ink);padding:8px 6px 10px;box-shadow:4px 4px 0 var(--ink);border-top:2px dashed rgba(22,17,10,.35)}
 .stats div:nth-child(1){transform:rotate(-2deg)}
@@ -336,7 +343,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 #you{background:var(--tk-y);border:2px solid var(--tk-ink);border-radius:4px;font-size:18px;padding:1px 12px 3px;box-shadow:2px 3px 0 var(--tk-ink)}
 #help{background:rgba(22,17,10,.8);color:var(--paper);border-radius:3px}
 .tb{border-radius:6px;border:2px solid var(--tk-ink);box-shadow:3px 4px 0 rgba(12,7,4,.7)}
-.tb[data-b="light"]{background:var(--tk-y)}.tb[data-b="heavy"]{background:var(--tk-p)}.tb[data-b="jump"]{background:var(--tk-g)}.tb[data-b="grab"],.tb[data-b="guard"]{background:var(--tk-s)}
+.tb[data-b="light"]{background:var(--tk-y)}.tb[data-b="heavy"]{background:var(--tk-p)}.tb[data-b="jump"]{background:var(--tk-g)}.tb[data-b="grab"],.tb[data-b="guard"],.tb[data-b="shot"]{background:var(--tk-s)}
 
 /* result: no dark wash, so the winner dancing in 3D on the left stays in view; tickets on the right */
 #result{display:block;background:none;padding:0}
@@ -422,6 +429,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .ostatus.bad{color:var(--tk-p)}
 #sOnline .mlist,#sScores .combo{gap:12px}
 #scoreList li b{font:400 22px/1.2 var(--rk);font-weight:400}
+#scoreList li{grid-template-columns:1fr auto;align-items:baseline}#scoreList li span{grid-column:1/-1}
 #scoreList li.me{outline:3px solid var(--tk-ink)}
 @media (max-height:450px){
   .tonline{padding:4px 10px}.tonline b{font-size:18px}.tonline svg{width:18px;height:18px}
@@ -518,6 +526,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   #timer{font-size:17px;padding:3px 9px;min-width:0;box-shadow:2px 2px 0 rgba(0,0,0,.5)}
   #timer::before{display:none}
   #quit{font-size:11px;padding:3px 8px;min-height:0;border-width:1.5px}
+  .hsnd{min-height:24px;min-width:26px;padding:0 4px;border-width:1.5px}
   #warn{position:absolute;top:32px;left:50%;transform:translateX(-50%) rotate(-2deg);font-size:14px;line-height:1.2;padding:2px 9px 3px;gap:6px;white-space:nowrap;border-width:2px;box-shadow:3px 3px 0 #16110a}
   #warn::before{width:20px;height:20px;font-size:14px}
   #warn small{font-size:10px}
@@ -532,6 +541,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   .tb[data-b="heavy"]{right:68px;bottom:0;width:50px;height:50px}
   .tb[data-b="jump"]{right:8px;bottom:70px;width:50px;height:50px}
   .tb[data-b="grab"]{right:66px;bottom:58px;width:44px;height:44px;font-size:12px}
+  .tb[data-b="shot"]{right:62px;bottom:108px;width:40px;height:40px;font-size:11px}
   .tb[data-b="guard"]{right:118px;bottom:16px;width:44px;height:44px;font-size:12px}
 }
 </style>
@@ -578,7 +588,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <div class="trow">
             <label class="tkt tkt-p tname"><small id="nmNote">اسم الراكب</small><input id="nm" maxlength="18" value="عتمان حلوان" autocomplete="off" spellcheck="false"></label>
             <button class="mi tkt tkt-g tstub" type="button" data-to="moves"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"></path><path d="M8 9h6M8 13h6"></path></svg><small>الكومبوهات</small></button>
-            <button class="mi tkt tkt-s tstub" type="button" id="mute"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l4 4H7v6h4l4 4V5H11"></path><path d="M3 9v6h4"></path><path d="M19 9a4 4 0 0 1 0 6"></path></svg><small>الصوت <span id="muteV">شغال</span></small></button>
+            <button class="mi tkt tkt-s tstub" type="button" id="mute"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l4 4H7v6h4l4 4V5H11"></path><path d="M3 9v6h4"></path><path d="M19 9a4 4 0 0 1 0 6"></path></svg><small>الضرب <span id="muteV">شغال</span></small></button>
+            <button class="mi tkt tkt-s tstub" type="button" id="muteM"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="17" cy="16" r="3"></circle></svg><small>المزيكا <span id="muteMV">شغالة</span></small></button>
           </div>
         </div>
       </section>
@@ -603,7 +614,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <li><b>الدفاع</b><span>بيصد الضرب والمسك، بس بيخلص لو استحملت كتير</span></li>
         </ul>
         <p class="keys">كل ما نسبة الضرر تزيد، الخصم بيطير أبعد. اللي يقع على القضبان يلحق يطلع بنطة أو نطتين قبل القطر.</p>
-        <p class="keys" data-kb><kbd>WASD</kbd> حركة · <kbd>Space</kbd> نط · <kbd>J</kbd> خفيفة · <kbd>K</kbd> تقيلة · <kbd>L</kbd> مسك · <kbd>Shift</kbd> دفاع</p>
+        <p class="keys" data-kb><kbd>WASD</kbd> حركة · <kbd>Space</kbd> نط · <kbd>J</kbd> خفيفة · <kbd>K</kbd> تقيلة · <kbd>L</kbd> مسك · <kbd>U</kbd> نبلة · <kbd>Shift</kbd> دفاع · <kbd>N</kbd> صوت الضرب · <kbd>M</kbd> المزيكا</p>
         <div class="mrow"><button class="mi sm go" type="button" data-to="main">رجوع</button></div>
       </section>
 
@@ -632,7 +643,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 
       <section class="mscr" id="sScores" aria-label="الأسكورات" hidden>
         <h2 class="mh">الأسكورات</h2>
-        <p class="onote">ماتشات الأونلاين: مين كسب أكتر على رصيف حلوان.</p>
+        <p class="onote">ماتشات الأونلاين بالنقط: الكسبة 100، الخسارة 20، كل واحد تطيّره 30، وكل ضربة في أطول كومبو 5.</p>
         <ul class="combo" id="scoreList"><li><b>بنحمّل...</b><span></span></li></ul>
         <p class="keys" id="cpuRec"></p>
         <div class="mrow"><button class="mi sm go" type="button" data-to="main">رجوع</button></div>
@@ -659,11 +670,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     <div id="topbar">
       <div id="timer">3:00</div>
       <div id="warn" hidden>القطر جاي!<small id="warnSide"></small></div>
-      <button id="quit" type="button">خروج</button>
+      <div class="hbtns"><button id="quit" type="button">خروج</button><button class="hsnd" id="hMute" type="button" aria-label="صوت الضرب"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l4 4H7v6h4l4 4V5H11"></path><path d="M3 9v6h4"></path><path d="M19 9a4 4 0 0 1 0 6"></path></svg></button><button class="hsnd" id="hMuteM" type="button" aria-label="المزيكا"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="17" cy="16" r="3"></circle></svg></button></div>
     </div>
     <div id="pops"></div>
     <div id="you" hidden>إنت</div>
-    <div id="help">تحرك <kbd>WASD</kbd> · نط <kbd>Space</kbd> · خفيفة <kbd>J</kbd> · تقيلة <kbd>K</kbd> · مسك <kbd>L</kbd> · دفاع <kbd>Shift</kbd></div>
+    <div id="help">تحرك <kbd>WASD</kbd> · نط <kbd>Space</kbd> · خفيفة <kbd>J</kbd> · تقيلة <kbd>K</kbd> · مسك <kbd>L</kbd> · نبلة <kbd>U</kbd> · دفاع <kbd>Shift</kbd></div>
   </div>
 
   <div id="big"></div>
@@ -677,6 +688,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <button type="button" class="tb" data-b="heavy">تقيلة</button>
       <button type="button" class="tb" data-b="jump">نط</button>
       <button type="button" class="tb" data-b="grab">مسك</button>
+      <button type="button" class="tb" data-b="shot">نبلة</button>
       <button type="button" class="tb" data-b="guard">دفاع</button>
     </div>
   </div>
@@ -690,6 +702,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
         <img class="rbadge" src="assets/ui/badge.png" alt="">
         <div id="rName"></div>
         <p id="rSub"></p>
+        <p id="rPts" class="rpts"></p>
       </div>
       <div class="stats">
         <div><b id="sHits">0</b><span>ضربات جت فيه</span></div>
@@ -2162,6 +2175,7 @@ const CLIP_MOVE = {
   air: { c: 'Spartan_Kick', start: 0.2, hit: 0.68, end: 1.1 },
   spike: { c: 'Jump_and_Slam_Back_Down', start: 0.85, hit: 1.6, end: 1.95 },
   grab: { c: 'Left_Jab_from_Guard', hit: 0.55, end: 0.6 },
+  shot: { c: 'Right_Jab_from_Guard', hit: 0.63, end: 1.0 },
 };
 function loadScript(u) { return new Promise((ok, no) => { const s = document.createElement('script'); s.src = u; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
 // clips carry root motion; the game's physics moves the fighter, so pin the hips over one spot
@@ -2191,6 +2205,28 @@ function loadChar(i) {
   }));
 }
 const charReady = i => !!GLB.models[CHARS[i].id];
+// The clips set each bone's rotation as it was on Otman's skeleton. Meshy rigs other fighters with
+// bones resting at other angles (Robin's head bone points forward), so the same numbers bent them
+// wrong (his head hung down). Re-express every rotation relative to this fighter's own rest pose:
+// q' = rest_this * rest_otman^-1 * q. Built once per fighter.
+GLB.rclips = {};
+function clipsFor(ch) {
+  if (GLB.rclips[ch.id]) return GLB.rclips[ch.id];
+  const rest = {}; GLB.models[ch.id].scene.traverse(o => { if (o.isBone) rest[o.name] = o.quaternion; });
+  const out = {}, q = new THREE.Quaternion(), d = new THREE.Quaternion();
+  for (const n in GLB.clips) {
+    const c = GLB.clips[n];
+    const tracks = c.tracks.map(t => {
+      const m = /^(.+)\.quaternion$/.exec(t.name), bn = m && m[1], S = bn && GLB.srcRest[bn], T = bn && rest[bn];
+      if (!S || !T || S.angleTo(T) < 1e-3) return t;
+      const fix = T.clone().multiply(S.clone().invert()), v = t.values.slice();
+      for (let i = 0; i < v.length; i += 4) { q.fromArray(v, i); d.copy(fix).multiply(q); d.toArray(v, i); }
+      return new THREE.QuaternionKeyframeTrack(t.name, t.times, v);
+    });
+    out[n] = new THREE.AnimationClip(c.name, c.duration, tracks);
+  }
+  return (GLB.rclips[ch.id] = out);
+}
 // ---- locked fighters: lock 'premium' = bought only (no payments yet), 'ramadan' = earned in Ramadan ----
 // Ramadan dates (approximate, from the moon calendar); wins vs the CPU on عادي/صعب in them count
 const RAMADAN = [['2027-02-07', '2027-03-09'], ['2028-01-27', '2028-02-26'], ['2029-01-15', '2029-02-14'], ['2030-01-04', '2030-02-03']];
@@ -2219,7 +2255,15 @@ async function loadGlb() {
   // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
   if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
   const [moves] = await Promise.all([glbGet('assets/models/game/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
-  moves.animations.forEach(c => { GLB.clips[c.name] = pinClip(c); });
+  // the clips were made on Otman's skeleton and also carry his bone lengths (every bone's position);
+  // played on a fighter with other proportions they dragged his head points ~20 cm (Robin's warped
+  // face, سطوحي's long neck). Keep only the rotations (+ the hips' height), so each keeps its own lengths.
+  moves.animations.forEach(c => {
+    c.tracks = c.tracks.filter(t => !/\.(position|scale)$/.test(t.name) || t.name === 'Hips.position');
+    GLB.clips[c.name] = pinClip(c);
+  });
+  // (moves.glb has no mesh, so its joints load as plain nodes, not bones: read them by name)
+  GLB.srcRest = {}; moves.scene.traverse(o => { if (o.name && !GLB.srcRest[o.name]) GLB.srcRest[o.name] = o.quaternion.clone(); });
   GLB.ready = true;
   console.info('[glb] ready:', CHARS[sel.char].id, CHARS[cpuChar].id, '| clips:', Object.keys(GLB.clips).join(', '));
   (async () => { for (let i = 0; i < CHARS.length; i++) await loadChar(i).catch(e => console.warn('[glb] no', CHARS[i].id, e)); })();
@@ -2232,6 +2276,38 @@ function attachAt(bone, obj, wpos, wquat) {
   obj.quaternion.copy(bq.invert().multiply(wquat || new THREE.Quaternion()));
   obj.scale.set(1 / bs.x, 1 / bs.y, 1 / bs.z);
   bone.add(obj);
+}
+// the shoma: a slightly tapered wooden club with a darker grip and two bands
+const STICK_LEN = 1.05;
+// the نبلة: a forked wooden handle with a rubber band, held like the stick
+function makeSling() {
+  const g = new THREE.Group(), wood = L({ color: 0x8a5a2e }), rub = L({ color: 0x9b1c1c });
+  const h = mesh(cyl(0.022, 0.026, 0.16, 8), wood); g.add(h);
+  for (const sx of [-1, 1]) { const pr = mesh(cyl(0.016, 0.02, 0.13, 6), wood); pr.position.set(sx * 0.035, 0.13, 0); pr.rotation.z = -sx * 0.45; g.add(pr); }
+  const band = mesh(box(0.13, 0.012, 0.012), rub); band.position.y = 0.19; g.add(band);
+  return g;
+}
+function makeStick() {
+  const g = new THREE.Group();
+  const wood = L({ color: 0x7a5530 }), grip = L({ color: 0x3b2716 }), band = L({ color: 0x2a2018 });
+  const shaft = mesh(cyl(0.042, 0.03, STICK_LEN, 10), wood); g.add(shaft);           // thick end up (+Y)
+  const wrap = mesh(cyl(0.036, 0.034, 0.26, 10), grip); wrap.position.y = -STICK_LEN / 2 + 0.2; g.add(wrap);
+  for (const y of [0.18, 0.36]) { const b = mesh(cyl(0.045, 0.045, 0.025, 10), band); b.position.y = y; g.add(b); }
+  return g;
+}
+// world centre of the mesh points that follow this bone most (the palm, for a hand bone)
+function palmCentre(model, bone) {
+  let sm = null; model.traverse(o => { if (!sm && o.isSkinnedMesh) sm = o; });
+  if (!sm) return null;
+  const bi = sm.skeleton.bones.indexOf(bone); if (bi < 0) return null;
+  const P = sm.geometry.attributes.position, SI = sm.geometry.attributes.skinIndex.array, SW = sm.geometry.attributes.skinWeight.array;
+  const v = new V3(), sum = new V3(); let n = 0;
+  for (let i = 0; i < P.count; i++) {
+    let w = 0; for (let j = 0; j < 4; j++) if (SI[i * 4 + j] === bi) w += SW[i * 4 + j];
+    if (w < 0.6) continue;
+    sm.boneTransform(i, v); v.applyMatrix4(sm.matrixWorld); sum.add(v); n++;
+  }
+  return n > 10 ? sum.multiplyScalar(1 / n) : null;
 }
 function buildGlbFighter(ch, ringColor) {
   const root = new THREE.Group(), body = new THREE.Group();
@@ -2269,19 +2345,25 @@ function buildGlbFighter(ch, ringColor) {
     em.matrixAutoUpdate = false; scene.add(em);
     badge = { m: em, sm, ids: [near(x - 0.06, y - 0.02), near(x + 0.06, y - 0.02), near(x, y + 0.05)], r: ch.badge.r };
   }
-  // shoma for the heavy moves, in the right hand
+  // shoma for the heavy moves, gripped in the right hand. In the rest pose (T-pose, palms down, facing +Z)
+  // a fist holds a club along +Z (out of the thumb side): it goes through the middle of the palm, found as
+  // the centre of the skin points that move with the hand bone, with ~25 cm of butt out of the little-finger side.
   const hand = findBone(model, /^righthand$/i);
-  const stick = mesh(cyl(0.04, 0.032, 1.05, 8), L({ color: 0x7a5530 }));
+  const stick = makeStick();
   stick.visible = false;
-  const hg = new THREE.Group(); attachAt(hand, hg, hand.getWorldPosition(new V3()), new THREE.Quaternion());
-  // in the rest pose the fist is palm-down, so a club held in it stands up (+Y) out of the fist
-  stick.position.y = 0.38; hg.add(stick);
+  const palm = palmCentre(model, hand) || hand.getWorldPosition(new V3());
+  palm.y -= 0.025 * k;                                     // just under the palm, where curled fingers would hold it
+  const hg = new THREE.Group(); attachAt(hand, hg, palm, new THREE.Quaternion());
+  stick.rotation.x = Math.PI / 2;                          // the cylinder's length (Y) now runs along +Z
+  stick.position.z = STICK_LEN / 2 - 0.22; hg.add(stick);
+  const sling = makeSling(); sling.rotation.x = Math.PI / 2; sling.position.z = 0.02; sling.visible = false; hg.add(sling);
   const mixer = new THREE.AnimationMixer(model), actions = {};
-  for (const n in GLB.clips) { const a = mixer.clipAction(GLB.clips[n]); a.paused = true; actions[n] = a; }
+  const clips = clipsFor(ch);
+  for (const n in clips) { const a = mixer.clipAction(clips[n]); a.paused = true; actions[n] = a; }
   actions.Combat_Stance.play(); mixer.update(0);
   const dummy = () => new THREE.Group();
   return { root, body, legL: dummy(), legR: dummy(), armL: dummy(), armR: dummy(), head: dummy(), torso: dummy(), cape: null, capeBase: null, stick,
-    glb: { mixer, actions, cur: actions.Combat_Stance, key: '', ph: 0, ot: 0 }, badge, ...fighterExtras(root, body, ringColor) };
+    sling, glb: { mixer, actions, cur: actions.Combat_Stance, key: '', ph: 0, ot: 0 }, badge, ...fighterExtras(root, body, ringColor) };
 }
 const bv = [new V3(), new V3(), new V3()], bx = new V3(), by = new V3(), bz = new V3(), bm = new THREE.Matrix4();
 function placeBadge(r) {
@@ -2350,6 +2432,8 @@ const MOVES = {
   air: { dur: .36, act: [.06, .24], range: .55, rad: .95, hy: 1.0, dmg: 6, kb: 3.8, kbg: .06, up: .35, stun: .35, anim: 'airspin' },
   spike: { dur: .5, act: [.16, .32], range: .6, rad: 1.0, hy: .4, dmg: 10, kb: 5, kbg: .07, up: -1, stun: .5, anim: 'slam', stick: true, name: 'نزلة المرج!' },
   grab: { dur: .42, act: [.08, .18], range: .8, rad: .55, hy: 1.1, grab: true, anim: 'grab' },
+  // نبلة: fires a pebble at act[0] (see fireShot); no melee hit of its own
+  shot: { dur: .4, act: [.16, .17], range: 0, rad: 0, hy: 1.35, shot: true, anim: 'punchR', name: 'نبلة!' },
 };
 const DIFF = {
   easy: { react: .5, guard: .12, aggro: .6 },
@@ -2363,7 +2447,7 @@ class Fighter {
   constructor(isCPU) {
     this.isCPU = isCPU;
     this.pos = new V3(); this.vel = new V3();
-    this.ctrl = { mx: 0, mz: 0, guard: false, jump: false, light: false, heavy: false, grab: false };
+    this.ctrl = { mx: 0, mz: 0, guard: false, jump: false, light: false, heavy: false, grab: false, shot: false };
     this.anim = { t: 0, phase: 0 };
     this.reset();
   }
@@ -2372,6 +2456,7 @@ class Fighter {
     this.dmg = 0; this.lives = 3; this.guard = 100; this.atk = null; this.buffer = null; this.bufferT = 0;
     this.chain = 0; this.chainT = 0; this.stunT = 0; this.inv = 0; this.combo = 0; this.comboT = 0;
     this.holding = null; this.heldBy = null; this.holdT = 0; this.koT = 0; this.lastHitBy = null; this.lastHitT = -1e9;
+    this.grabCd = 0; this.grabMsgT = -9; this.shotCd = 0;
     this.stats = { hits: 0, maxCombo: 0, kos: 0 };
     this.aiT = 0; this.guardT = 0; this.queue = []; this.dance = false;
     this.vel.set(0, 0, 0);
@@ -2440,7 +2525,7 @@ const SFX = {
 /* ---------------- music ---------------- */
 // menu.mp3 plays on the main screen, fight.mp3 from the countdown on; tracks crossfade
 const Music = {
-  tracks: {}, level: { menu: 0.42, fight: 0.9 }, vol: { menu: 0, fight: 0 }, want: 'menu', unlocked: false,
+  tracks: {}, level: { menu: 0.42, fight: 0.9 }, vol: { menu: 0, fight: 0 }, want: 'menu', unlocked: false, off: false,
   init() {
     for (const k of ['menu', 'fight']) {
       try {
@@ -2457,7 +2542,7 @@ const Music = {
     this.kick();
   },
   kick() {
-    if (!this.unlocked || SFX.muted || document.hidden) return;
+    if (!this.unlocked || this.off || document.hidden) return;
     const a = this.tracks[this.want];
     if (a && a.paused) { const p = a.play(); if (p && p.catch) p.catch(() => {}); }
   },
@@ -2465,7 +2550,7 @@ const Music = {
   update(dt) {
     for (const k in this.tracks) {
       const a = this.tracks[k];
-      const target = (k === this.want && !SFX.muted) ? this.level[k] * (mode === 'over' ? 0.55 : 1) : 0;
+      const target = (k === this.want && !this.off) ? this.level[k] * (mode === 'over' ? 0.55 : 1) : 0;
       const step = dt * (target > this.vol[k] ? 0.9 : 1.6);
       this.vol[k] = target > this.vol[k] ? Math.min(target, this.vol[k] + step) : Math.max(target, this.vol[k] - step);
       try { a.volume = clamp(this.vol[k], 0, 1); } catch (e) {}
@@ -2643,7 +2728,21 @@ function doJump(f) {
 }
 function lightName(f) { return f.chainT > 0 && f.chain === 1 ? 'jab2' : f.chainT > 0 && f.chain === 2 ? 'kick' : 'jab1'; }
 function heavyName(f) { return f.onGround ? (f.chainT > 0 && f.chain === 2 ? 'fin' : 'heavy') : 'spike'; }
+// a grab (hit or miss) can't be tried again for GRAB_CD seconds (user, 10 Nov 2026: grabbing and
+// throwing was too easy)
+const GRAB_CD = 5;
 function startAttack(f, name) {
+  if (name === 'grab') {
+    if (f.grabCd > 0) {
+      if (f === P && clock - f.grabMsgT > 0.9) { f.grabMsgT = clock; popup('المسكة بعد ' + Math.ceil(f.grabCd), P, 'move'); }
+      return;
+    }
+    f.grabCd = GRAB_CD;
+  }
+  if (name === 'shot') {
+    if (f.shotCd > 0) return;
+    f.shotCd = SHOT_CD;
+  }
   const m = MOVES[name];
   f.state = 'attack'; f.atk = { name, m, t: 0, hit: false }; f.buffer = null;
   f.chain = m.chain || 0;
@@ -2739,6 +2838,7 @@ function checkHit(f, t) {
   const a = f.atk;
   if (f.state !== 'attack' || !a || a.hit) return;
   const m = a.m;
+  if (m.shot) return;
   if (a.t < m.act[0] || a.t > m.act[1]) return;
   if (t.state === 'ko' || t.state === 'grabbed' || t.inv > 0) return;
   const fd = faceDir(f.face);
@@ -2780,11 +2880,44 @@ function separate(a, b) {
 }
 // online, the friend's phone plays its own jump/whoosh the moment it moves, so the host doesn't send those
 function ownSfx(f, n) { if (NET.role === 'host' && f === C) { NET.quiet = true; SFX[n](); NET.quiet = false; } else SFX[n](); }
-function clearPresses(c) { c.jump = c.light = c.heavy = c.grab = false; }
+function clearPresses(c) { c.jump = c.light = c.heavy = c.grab = c.shot = false; }
 
+// ---- نبلة (slingshot): a pebble flies from the hand; light damage, a guard facing it blocks it ----
+const SHOT_CD = 3, SHOT_SPEED = 19, SHOT_HIT = { dmg: 5, kb: 4.5, kbg: .05, up: .25, stun: .3 };
+const shots = [];
+const stoneGeo = new THREE.IcosahedronGeometry(0.09, 0), stoneMat = L({ color: 0xa69d8f, emissive: 0x2a2620 });
+function fireShot(f) {
+  const d = faceDir(f.face), m = mesh(stoneGeo, stoneMat);
+  const p = new V3(f.pos.x + d.x * 0.55, f.pos.y + 1.35, f.pos.z + d.z * 0.55);
+  m.position.copy(p); scene.add(m);
+  shots.push({ m, p, v: new V3(d.x * SHOT_SPEED, 1.2, d.z * SHOT_SPEED), owner: f, t: 0 });
+  SFX.whoosh();
+}
+function dropShot(i) { scene.remove(shots[i].m); shots.splice(i, 1); }
+function updateShots(dt) {
+  for (let i = shots.length - 1; i >= 0; i--) {
+    const s = shots[i]; s.t += dt;
+    s.v.y -= 7 * dt; s.p.addScaledVector(s.v, dt); s.m.position.copy(s.p); s.m.rotation.x += dt * 20;
+    const t = s.owner.foe;
+    const dx = s.p.x - t.pos.x, dz = s.p.z - t.pos.z, dy = s.p.y - t.pos.y;
+    if (t.state !== 'ko' && t.state !== 'grabbed' && t.inv <= 0 && Math.hypot(dx, dz) < 0.5 && dy > 0.15 && dy < 2.0) {
+      applyHit(s.owner, t, SHOT_HIT, s.p.clone()); dropShot(i); continue;
+    }
+    if (s.t > 1.4 || s.p.y < PIT_Y) dropShot(i);
+  }
+}
+function clearShots() { while (shots.length) dropShot(0); guestStones([]); }
+// the online friend only draws the host's pebbles
+const gStones = [];
+function guestStones(list) {
+  while (gStones.length < list.length) { const m = mesh(stoneGeo, stoneMat); scene.add(m); gStones.push(m); }
+  gStones.forEach((m, i) => { m.visible = i < list.length; if (m.visible) m.position.fromArray(list[i]); });
+}
 function stepFighter(f, dt) {
   const c = f.ctrl;
+  if (f.state === 'attack' && f.atk && f.atk.m.shot && !f.atk.fired && f.atk.t >= f.atk.m.act[0]) { f.atk.fired = true; if (NET.role !== 'guest') fireShot(f); }
   f.inv = Math.max(0, f.inv - dt);
+  f.grabCd = Math.max(0, f.grabCd - dt); f.shotCd = Math.max(0, f.shotCd - dt);
   if (f.state !== 'guard' && f.state !== 'dizzy') f.guard = Math.min(100, f.guard + 14 * dt);
   f.comboT -= dt; f.chainT -= dt; f.bufferT -= dt;
   if (f.bufferT <= 0) f.buffer = null;
@@ -2834,6 +2967,7 @@ function stepFighter(f, dt) {
     if (c.light) startAttack(f, f.onGround ? lightName(f) : 'air');
     else if (c.heavy) startAttack(f, heavyName(f));
     else if (c.grab && f.onGround) startAttack(f, 'grab');
+    else if (c.shot) startAttack(f, 'shot');
   }
 
   const ml = Math.hypot(c.mx, c.mz);
@@ -2897,6 +3031,10 @@ function aiThink(ai, foe, dt) {
     c.mx = 0; c.mz = -train.side; return;
   }
   if (foe.state === 'ko') { c.mx = -ai.pos.x * 0.1; c.mz = -ai.pos.z * 0.2; return; }
+  // from a distance, now and then, a pebble from the نبلة (facing the foe, on the same platform)
+  if (dist > 3.5 && dist < 10 && ai.shotCd <= 0 && ai.onGround && Math.abs(foe.pos.y - ai.pos.y) < 1 && ai.state === 'idle' && Math.random() < D.aggro * 0.35) {
+    ai.face = Math.atan2(dx, dz); c.shot = true; return;
+  }
   if (Math.abs(foe.pos.z) > PZ && foe.pos.y < 0.3) {
     // edge-guard: wait at the edge above the climber
     const ex = foe.pos.x, ez = Math.sign(foe.pos.z) * (PZ - 0.7);
@@ -2915,7 +3053,7 @@ function aiThink(ai, foe, dt) {
     if (foe.state === 'guard') { if (r < 0.65) c.heavy = true; else { c.mx = -dx / dist; c.mz = -dz / dist; } }
     else if (r < D.aggro * 0.55) { c.light = true; ai.queue = pick([[], ['light'], ['light', 'light'], ['light', 'heavy']]).slice(); }
     else if (r < D.aggro * 0.8) c.heavy = true;
-    else if (r < D.aggro * 0.92) c.grab = foe.state !== 'guard';
+    else if (r < D.aggro * 0.92) c.grab = foe.state !== 'guard' && ai.grabCd <= 0;
     else { c.mx = -dx / dist; c.mz = -dz / dist; }
     return;
   }
@@ -3015,6 +3153,7 @@ function animate(f, dt) {
   r.body.rotation.y = (s === 'attack' && f.atk && f.atk.m.anim === 'airspin') ? spin : lr(r.body.rotation.y, spin);
   if (r.glb) glbAnim(f, r, dt, sp);
   r.stick.visible = stickOn;
+  if (r.sling) r.sling.visible = s === 'attack' && !!f.atk && !!f.atk.m.shot;
   r.stars.visible = s === 'dizzy';
   if (s === 'dizzy') r.stars.rotation.y += dt * 6;
   r.bubble.visible = s === 'guard';
@@ -3060,7 +3199,7 @@ function animate(f, dt) {
 const keys = new Set();
 const joy = { x: 0, y: 0 };
 let touchGuard = false;
-const KEYMAP = { Space: 'jump', KeyJ: 'light', KeyK: 'heavy', KeyL: 'grab', KeyZ: 'light', KeyX: 'heavy', KeyC: 'grab' };
+const KEYMAP = { Space: 'jump', KeyJ: 'light', KeyK: 'heavy', KeyL: 'grab', KeyZ: 'light', KeyX: 'heavy', KeyC: 'grab', KeyU: 'shot', KeyV: 'shot' };
 addEventListener('keydown', e => {
   if (e.target && e.target.tagName === 'INPUT') return;
   if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
@@ -3132,6 +3271,11 @@ function updateHUD() {
     gb.classList.toggle('broken', f.state === 'dizzy');
     if (hudCache[k + 'l'] !== f.lives) { hudCache[k + 'l'] = f.lives; renderLives(l, f.lives); }
   }
+  // the grab button shows its countdown
+  const gcd = Math.ceil(P.grabCd);
+  if (hudCache.gcd !== gcd) { hudCache.gcd = gcd; const b = el.tGrab || (el.tGrab = document.querySelector('.tb[data-b="grab"]')); if (b) { b.textContent = gcd ? AR(gcd) : 'مسك'; b.classList.toggle('cd', gcd > 0); } }
+  const scd = Math.ceil(P.shotCd);
+  if (hudCache.scd !== scd) { hudCache.scd = scd; const b = el.tShot || (el.tShot = document.querySelector('.tb[data-b="shot"]')); if (b) { b.textContent = scd ? AR(scd) : 'نبلة'; b.classList.toggle('cd', scd > 0); } }
   const s = Math.max(0, Math.ceil(matchT));
   setText(el.timer, 't', AR(Math.floor(s / 60)) + ':' + AR(s % 60).padStart(2, '0'));
 }
@@ -3203,9 +3347,9 @@ function startMatch() {
   savePrefs();
   P.name = myName();
   C.name = NET.role === 'host' ? NET.peerName : pick(CPU_NAMES);
-  if (NET.role === 'host') { NET.k++; NET.ev = []; NET.seen = (NET.inp || [0, 0, 0, 0, 0, 0, 0]).slice(3, 7); }
+  if (NET.role === 'host') { NET.k++; NET.ev = []; NET.seen = (NET.inp || [0, 0, 0, 0, 0, 0, 0]).slice(3, 7); NET.seenShot = NET.inp ? +NET.inp[8] || 0 : 0; }
   rebuildCPU();
-  placeForFight();
+  placeForFight(); clearShots();
   C.rig.root.visible = true;
   el.nP.textContent = P.name; el.nC.textContent = C.name;
   for (const k in hudCache) delete hudCache[k];
@@ -3250,6 +3394,7 @@ function fillResult(win) {
   $('#sHits').textContent = AR(P.stats.hits);
   $('#sCombo').textContent = AR(P.stats.maxCombo);
   $('#sKO').textContent = AR(P.stats.kos);
+  $('#rPts').textContent = '+' + fmtN(matchPoints(win === P, P.stats.kos, P.stats.maxCombo, !NET.role)) + ' نقطة';
 }
 function toMenu() {
   if (NET.role) netLeave();
@@ -3342,7 +3487,15 @@ function renderChar() {
   $('#back').textContent = on ? 'غيّر الشخصية' : 'غيّر البدلة';
 }
 function cycleChar(d) { sel.char = (sel.char + d + CHARS.length) % CHARS.length; renderChar(); rebuildPlayer(); savePrefs(); P.anim.t = 0; SFX.ui(true); }
-function renderMute() { $('#muteV').textContent = SFX.muted ? 'مقفول' : 'شغال'; }
+function renderMute() {
+  $('#muteV').textContent = SFX.muted ? 'مقفول' : 'شغال';
+  $('#muteMV').textContent = Music.off ? 'مقفولة' : 'شغالة';
+  $('#hMute').classList.toggle('off', SFX.muted); $('#hMuteM').classList.toggle('off', Music.off);
+  $('#mute').classList.toggle('off', SFX.muted); $('#muteM').classList.toggle('off', Music.off);
+}
+// hit/effect sounds and the music switch apart, from the menu, the in-game buttons or N / M
+function toggleSfx() { SFX.setMute(!SFX.muted); renderMute(); savePrefs(); }
+function toggleMusic() { Music.off = !Music.off; renderMute(); savePrefs(); Music.kick(); }
 
 el.menu.addEventListener('click', e => {
   SFX.init(); Music.kick();
@@ -3366,7 +3519,11 @@ $('#rnd').addEventListener('click', () => {
   for (const k of SLOTS) sel[k] = rand(0, OPTS[k].length) | 0;
   markOpts(); rebuildPlayer(); savePrefs(); P.anim.t = 0;
 });
-el.mute.addEventListener('click', () => { SFX.setMute(!SFX.muted); renderMute(); savePrefs(); Music.kick(); });
+el.mute.addEventListener('click', toggleSfx);
+$('#muteM').addEventListener('click', toggleMusic);
+$('#hMute').addEventListener('click', e => { e.currentTarget.blur(); toggleSfx(); });
+$('#hMuteM').addEventListener('click', e => { e.currentTarget.blur(); toggleMusic(); });
+addEventListener('keydown', e => { if (e.target && e.target.tagName === 'INPUT') return; if (e.code === 'KeyN') toggleSfx(); else if (e.code === 'KeyM') toggleMusic(); });
 el.nm.addEventListener('change', savePrefs);
 el.nm.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === 'Escape') el.nm.blur(); });
 
@@ -3389,7 +3546,7 @@ function menuKey(e) {
 
 const PREF_KEY = 'otman-helwan-v1';
 function savePrefs() {
-  try { localStorage.setItem(PREF_KEY, JSON.stringify({ sel, diff, name: el.nm.value, muted: SFX.muted })); } catch (e) {}
+  try { localStorage.setItem(PREF_KEY, JSON.stringify({ sel, diff, name: el.nm.value, muted: SFX.muted, musicOff: Music.off })); } catch (e) {}
 }
 function loadPrefs(extra) {
   let p = extra && extra.sel ? extra : null;
@@ -3398,7 +3555,9 @@ function loadPrefs(extra) {
   if (p.sel) for (const k in sel) if (Number.isInteger(p.sel[k]) && p.sel[k] >= 0 && p.sel[k] < (k === 'char' ? CHARS.length : OPTS[k].length)) sel[k] = p.sel[k];
   if (DIFF[p.diff]) diff = p.diff;
   if (typeof p.name === 'string' && p.name.trim()) el.nm.value = p.name.slice(0, 18);
-  if (p.muted) { SFX.muted = true; renderMute(); }
+  if (p.muted) SFX.muted = true;
+  if (p.musicOff) Music.off = true;
+  renderMute();
   renderName();
 }
 
@@ -3479,6 +3638,7 @@ function tick(now) {
       stepFighter(P, dt); stepFighter(C, dt);
       separate(P, C);
       checkHit(P, C); checkHit(C, P);
+      updateShots(dt);
       for (const f of [P, C]) {
         if (f.state === 'ko' && f.koT > 1.5) { if (f.lives > 0) respawn(f); }
         else if (f.state !== 'ko' && f.pos.y < -12) knockOut(f, 1);
@@ -3679,6 +3839,7 @@ function hostInput(f) {
   if (!i) { c.mx = c.mz = 0; c.guard = false; return; }
   c.mx = clamp(+i[0] || 0, -1, 1); c.mz = clamp(+i[1] || 0, -1, 1); c.guard = !!i[2];
   for (let k = 0; k < 4; k++) { const n = +i[3 + k] || 0; if (n > NET.seen[k]) { c[NET_KEYS[k]] = true; NET.seen[k] = n; } }
+  { const n = +i[8] || 0; if (n > (NET.seenShot | 0)) { c.shot = true; NET.seenShot = n; } }
 }
 function fs(f) {
   const a = f.atk;
@@ -3689,11 +3850,11 @@ function fs(f) {
 const TR_STATES = ['idle', 'warn', 'run'];
 function hostSend() {
   if (!NET.r) return;
-  if (mode !== 'fight' && NET.inp) NET.seen = NET.inp.slice(3, 7);   // presses outside the fight don't count later
+  if (mode !== 'fight' && NET.inp) { NET.seen = NET.inp.slice(3, 7); NET.seenShot = +NET.inp[8] || 0; }   // presses outside the fight don't count later
   NET.r.presence({ g: {
     k: NET.k, m: mode, t: r2(matchT), as: NET.inSeq, ag: Math.round(performance.now() - NET.inSeqAt), ct: r2(countT), won: P.won ? 1 : 0, sh: r2(shake), hc: sel.char, cc: cpuChar, n: P.name,
     tr: [TR_STATES.indexOf(train.state), r2(train.head), train.side, train.dir, r2(train.t)],
-    f: [fs(P), fs(C)], ev: NET.ev.slice(-18) } }).catch(() => {});
+    f: [fs(P), fs(C)], ev: NET.ev.slice(-18), pj: shots.map(q => [r2(q.p.x), r2(q.p.y), r2(q.p.z)]) } }).catch(() => {});
 }
 // everything the friend should hear or see happen goes into the event ring
 function netEv(...e) { if (NET.role !== 'host' || NET.quiet || mode === 'menu') return; NET.ev.push([++NET.seq, ...e]); if (NET.ev.length > 40) NET.ev.splice(0, 20); }
@@ -3833,13 +3994,14 @@ function guestStep(dt) {
   let pressed = false;
   NET_KEYS.forEach((key, i) => { if (P.ctrl[key]) { NET.cnt[i]++; pressed = true; } });
   const r1 = v => Math.round(v * 10) / 10, now = performance.now();
-  const inp = [r1(P.ctrl.mx), r1(P.ctrl.mz), P.ctrl.guard ? 1 : 0, ...NET.cnt], key = inp.join();
+  if (P.ctrl.shot) { NET.shotCnt = (NET.shotCnt | 0) + 1; pressed = true; }
+  const inp = [r1(P.ctrl.mx), r1(P.ctrl.mz), P.ctrl.guard ? 1 : 0, ...NET.cnt], key = inp.join() + '|' + (NET.shotCnt | 0);
   // a changed joystick goes out at most 15 times a second, a button press at once
   if (key !== NET.lastInp && (pressed || now - NET.lastSendT >= 66)) {
     NET.lastInp = key; NET.lastSendT = now; NET.iseq++;
     NET.sentAt.set(NET.iseq, now);
     if (NET.sentAt.size > 120) NET.sentAt.delete(NET.sentAt.keys().next().value);
-    NET.r.presence({ inp: [...inp, NET.iseq] }).catch(() => {});
+    NET.r.presence({ inp: [...inp, NET.iseq, NET.shotCnt | 0] }).catch(() => {});
   }
   const quiet = performance.now() - NET.snapAt;
   const age = Math.min(0.15, quiet / 1000);
@@ -3849,6 +4011,7 @@ function guestStep(dt) {
   applyFighter(C, g.f[0], age, dt);
   if (mode === 'fight' && FREE.has(g.f[1][7])) predictMe(g, age, dt);
   else { applyFighter(P, g.f[1], age, dt); clearPresses(P.ctrl); NET.predicting = false; }
+  guestStones(g.pj || []);
   // the train, as the host sees it
   const ts = TR_STATES[g.tr[0]] || 'idle';
   train.state = ts; train.side = g.tr[2]; train.dir = g.tr[3]; train.t = g.tr[4];
@@ -3887,9 +4050,18 @@ async function netRecord(win) {
   } catch (e) { /* a lost score is not worth an error on the result screen */ }
 }
 const CPU_REC = 'otman-helwan-cpu';
+// points (user, 10 Nov 2026: "the scores should count numbers"): a win 100, a loss 20 for playing,
+// +30 per knock-out you caused, +5 per hit of your longest combo; vs the CPU scaled by difficulty
+const PTS_DIFF = { easy: 0.4, normal: 0.7, hard: 1 };
+function matchPoints(won, kos, combo, vsCpu) {
+  const p = (won ? 100 : 20) + (+kos || 0) * 30 + (+combo || 0) * 5;
+  return Math.round(vsCpu ? p * (PTS_DIFF[diff] || 0.7) : p);
+}
+const fmtN = n => Number(n || 0).toLocaleString('en-US');
 function cpuRecord(won) {
   try {
     const r = JSON.parse(localStorage.getItem(CPU_REC) || '{"w":0,"l":0}'); r[won ? 'w' : 'l']++;
+    r.p = (r.p | 0) + matchPoints(won, P.stats.kos, P.stats.maxCombo, true);
     // Ramadan fighters: wins on عادي/صعب during Ramadan count; at RAMADAN_WINS they unlock for good
     if (won && diff !== 'easy' && inRamadan()) {
       r.rw = (r.rw | 0) + 1;
@@ -3906,7 +4078,7 @@ function cpuRecord(won) {
 async function loadScores() {
   const list = $('#scoreList');
   const row = (b, s, me) => { const li = document.createElement('li'); if (me) li.className = 'me'; const x = document.createElement('b'); x.textContent = b; const y = document.createElement('span'); y.textContent = s; li.append(x, y); return li; };
-  try { const r = JSON.parse(localStorage.getItem(CPU_REC) || 'null'); $('#cpuRec').textContent = r ? `إنت ضد الكمبيوتر: كسبت ${r.w} وخسرت ${r.l}` : ''; } catch (e) {}
+  try { const r = JSON.parse(localStorage.getItem(CPU_REC) || 'null'); $('#cpuRec').textContent = r ? `إنت ضد الكمبيوتر: ${fmtN(r.p)} نقطة · كسبت ${r.w} وخسرت ${r.l}` : ''; } catch (e) {}
   list.replaceChildren(row('بنحمّل...', ''));
   const db = await getDb();
   if (!db) { list.replaceChildren(row('الأسكورات مش متاحة هنا', 'لو فاتحها من claude.ai لازم تكون داخل بحسابك')); return; }
@@ -3915,12 +4087,16 @@ async function loadScores() {
     snap = await Promise.race([db.collection('matches').orderBy('at', 'desc').limit(500).get(), new Promise((_, no) => setTimeout(() => no(new Error('timeout')), 10000))]);
   } catch (e) { list.replaceChildren(row('معرفناش نجيب الأسكورات دلوقتي', 'جرب تاني كمان شوية')); return; }
   const t = {};
-  const add = (n, won, combo, ko) => { n = cleanName(n, '؟'); const r = t[n] || (t[n] = { n, w: 0, l: 0, c: 0, k: 0 }); won ? r.w++ : r.l++; r.c = Math.max(r.c, +combo || 0); r.k += +ko || 0; };
+  const add = (n, won, combo, ko) => { n = cleanName(n, '؟'); const r = t[n] || (t[n] = { n, w: 0, l: 0, c: 0, k: 0, p: 0 }); won ? r.w++ : r.l++; r.c = Math.max(r.c, +combo || 0); r.k += +ko || 0; r.p += matchPoints(won, ko, combo, false); };
   for (const d of snap.docs) { const m = d.data() || {}; add(m.a, m.w === m.a, m.ca, m.ka); add(m.b, m.w === m.b, m.cb, m.kb); }
-  const rows = Object.values(t).sort((x, y) => y.w - x.w || x.l - y.l || y.c - x.c).slice(0, 10);
+  const rows = Object.values(t).sort((x, y) => y.p - x.p || y.w - x.w || x.l - y.l).slice(0, 10);
   if (!rows.length) { list.replaceChildren(row('مفيش ماتشات أونلاين لسه', 'العب مع صاحبك والنتيجة تتسجل هنا')); return; }
   const me = myName();
-  list.replaceChildren(...rows.map((r, i) => row(`${i + 1}. ${r.n}`, `كسب ${r.w} · خسر ${r.l} · أطول كومبو ${r.c} · طيّر ${r.k}`, r.n === me)));
+  list.replaceChildren(...rows.map((r, i) => {
+    const li = row(`${i + 1}. ${r.n}`, `كسب ${r.w} · خسر ${r.l} · أطول كومبو ${r.c} · طيّر ${r.k}`, r.n === me);
+    const pt = document.createElement('em'); pt.className = 'spts'; pt.textContent = fmtN(r.p) + ' نقطة'; li.insertBefore(pt, li.children[1]);
+    return li;
+  }));
 }
 
 
