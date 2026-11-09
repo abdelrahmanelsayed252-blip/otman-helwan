@@ -791,8 +791,10 @@ function rtext(g, txt, x, y, size, color, font = DISPLAY, align = 'center') {
 }
 
 /* ---------------- wall ads: hand-painted like Egyptian street walls ----------------
-   Whitewashed patch with a ragged edge, a wobbly black frame, big black brush letters with
-   coloured halos or a paint splash behind, small lines in Ruqaa, a phone number. Each ad is
+   Painted straight onto the brick (user, 9 Nov 2026: no white patch, no frame): big black brush
+   letters with coloured halos or a paint splash behind, small lines, drawings, a phone number;
+   the canvas is transparent everywhere else. Only تحيا مصر has a white ground, at 60% so the
+   bricks show through. Each ad is
    one canvas, painted with its own seeded random so it looks the same on every redraw.
    Fonts are the game's own (user, 9 Nov 2026): Rakkas for the big words, IBM Plex Sans Arabic
    for the small lines, like the tickets. */
@@ -875,7 +877,7 @@ function wallPhone(g, num, x, y, size, color = '#16110a', rot = 0) {
 const WALL_ADS = {
   // تحيا مصر: sun, pyramids, the Nile with feluccas, the flag's waves
   tahya(g, w, h, r) {
-    wallWash(g, w, h, r, '#efece4');
+    wallWash(g, w, h, r, 'rgba(241,238,230,0.6)');
     const wave = (y0, amp, col, hgt) => {
       g.fillStyle = col; g.beginPath(); g.moveTo(40, y0);
       for (let x = 40; x <= w - 40; x += 8) g.lineTo(x, y0 + Math.sin(x / 120) * amp);
@@ -915,14 +917,12 @@ const WALL_ADS = {
   },
   // فضل النقاش: broker, painter and contractor, next to تحيا مصر
   fadl(g, w, h, r) {
-    wallWash(g, w, h, r);
-    wallFrame(g, w, h, r, { cloud: 9, lw: 8 });
     wallSplash(g, 650, 200, 420, 110, '#f26a2e', r, 16);
     wallSplash(g, 860, 175, 170, 80, '#5fd46a', r, 10);
     wallBrush(g, 'فضل النقاش', 650, 196, 168, { halo: [['#8fe07a', 38], ['#16110a', 10]], fill: '#16110a', rot: -0.03 });
-    wallPhone(g, '0112 000 0000', 210, 82, 40, '#7a2d1a', 'center', -0.08);
+    wallPhone(g, '0112 000 0000', 210, 82, 40, '#a8231a', 'center', -0.08);
     wallHand(g, 'سمسار · نقاش · مقاول', 650, 330, 60, '#16110a');
-    wallHand(g, 'دهانات وتشطيبات · شقق إيجار وتمليك', 650, 400, 46, '#7a2d1a');
+    wallHand(g, 'دهانات وتشطيبات · شقق إيجار وتمليك', 650, 400, 46, '#a8231a');
     wallHand(g, 'تحت أمرك في أي وقت', 650, 452, 36, '#c0392b');
     // paint roller
     g.save(); g.translate(1110, 300); g.rotate(-0.4);
@@ -934,22 +934,18 @@ const WALL_ADS = {
   },
   // كبريتاج عين حلوان: the sulphur springs
   kebritag(g, w, h, r) {
-    wallWash(g, w, h, r, '#ecefe9');
-    wallFrame(g, w, h, r, { lw: 9, color: '#1d4f8f', split: 330 });
     wallBrush(g, 'كبريتاج', 790, 160, 180, { halo: [['#38b6d8', 40], ['#f2d22e', 22]], fill: '#16110a' });
     wallBrush(g, 'عين حلوان', 790, 305, 104, { fill: '#d0332b', stroke: ['#16110a', 4] });
-    wallHand(g, 'مفتوح من 7 الصبح لـ 10 بالليل', 790, 418, 42, '#7a2d1a');
+    wallHand(g, 'مفتوح من 7 الصبح لـ 10 بالليل', 790, 418, 42, '#a8231a');
     // left box: hot water with steam
     g.fillStyle = '#3b8fd0'; g.beginPath(); g.ellipse(180, 330, 110, 34, 0, 0, 7); g.fill();
     g.strokeStyle = '#9fb8c8'; g.lineWidth = 7; g.lineCap = 'round';
     for (let i = 0; i < 3; i++) { g.beginPath(); for (let y = 0; y < 150; y += 6) g.lineTo(130 + i * 50 + Math.sin(y / 16 + i) * 12, 300 - y); g.stroke(); }
     wallHand(g, 'مية كبريت سخنة', 180, 400, 36, '#16110a');
-    wallHand(g, 'للروماتيزم والضهر', 180, 446, 32, '#7a2d1a');
+    wallHand(g, 'للروماتيزم والضهر', 180, 446, 32, '#a8231a');
   },
   // سنتر الإسماعيلية التعليمي: rainbow letters and price boxes, like the school-tutoring walls
   center(g, w, h, r) {
-    wallWash(g, w, h, r);
-    wallFrame(g, w, h, r, { lw: 8 });
     wallHand(g, 'سنتر تعليمي', 640, 88, 58, '#16110a');
     wallBrush(g, 'الإسماعيلية', 650, 220, 170, { rainbow: true, stroke: ['#16110a', 7] });
     // left box: the stages
@@ -960,14 +956,12 @@ const WALL_ADS = {
     wallHand(g, 'ثانوي عام', 210, 430, 38, '#16110a');
     wallHand(g, 'الحصة بـ', w - 180, 335, 38, '#16110a');
     wallBrush(g, '50ج', w - 180, 410, 92, { fill: '#16110a' });
-    wallHand(g, 'مجموعات تقوية لكل المواد', 650, 340, 44, '#7a2d1a');
+    wallHand(g, 'مجموعات تقوية لكل المواد', 650, 340, 44, '#a8231a');
     wallHand(g, 'بنين / بنات', 650, 395, 40, '#16110a');
     wallPhone(g, '0100 000 0000', 650, 448, 36, '#16110a');
   },
   // ونش إنقاذ: a donkey cart towing a broken tuk-tuk, a 24h badge and a tow-truck hazard stripe
   winch(g, w, h, r) {
-    wallWash(g, w, h, r, '#efeadf');
-    wallFrame(g, w, h, r, { lw: 8 });
     const ink = '#16110a';
     // yellow and black hazard stripe along the bottom
     g.save(); g.beginPath(); g.rect(40, 438, w - 80, 34); g.clip();
@@ -1055,13 +1049,11 @@ const WALL_ADS = {
   },
   // ميكانيكي: crossed wrenches, from Motobas
   mech(g, w, h, r) {
-    wallWash(g, w, h, r, '#ece6da');
-    wallFrame(g, w, h, r, { lw: 8 });
     wallSplash(g, 720, 170, 360, 90, '#f2c23a', r, 14);
     wallBrush(g, 'ميكانيكي', 720, 168, 172, { halo: [['#f26a2e', 26]], fill: '#16110a', rot: 0.03 });
     wallHand(g, 'مركز مطوبس · كفر الشيخ', 720, 300, 58, '#c0392b');
     wallHand(g, 'عمرة موتورات · كهربا · فرامل · سمكرة', 720, 372, 40, '#16110a');
-    wallPhone(g, '0128 000 0000', 720, 432, 38, '#7a2d1a');
+    wallPhone(g, '0128 000 0000', 720, 432, 38, '#a8231a');
     const wrench = (rot) => {
       g.save(); g.translate(190, 260); g.rotate(rot);
       g.fillStyle = '#8f9aa3'; g.strokeStyle = '#16110a'; g.lineWidth = 5;
