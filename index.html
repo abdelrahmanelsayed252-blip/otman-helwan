@@ -274,7 +274,13 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .kart-you{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;transition:left .25s ease-out,top .25s ease-out}
 .kart-you span{background:var(--tk-y);color:var(--tk-ink);padding:2px 14px 4px;font:400 clamp(16px,3.2vh,24px)/1.2 var(--rk);border-radius:4px;box-shadow:2px 3px 0 var(--tk-ink)}
 .kart-you::after{content:"";border:10px solid transparent;border-bottom:0;border-top:12px solid var(--tk-y)}
-#menu[data-screen="tailor"] .kart{display:none}
+#menu[data-screen="tailor"] .kart,#menu[data-screen="char"] .kart{display:none}
+.cpick{display:flex;align-items:center;gap:10px;padding:12px 10px;transform:rotate(-1deg)}
+.cpick .tkt-body{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
+.cpick b{font:400 clamp(30px,6vh,44px)/1.1 var(--rk)}
+.cpnote{font:600 14px/1.3 var(--body);opacity:.8}
+.cplock{margin:0;padding:8px 12px;background:var(--tk-p);color:#3a0d0d;font:700 15px var(--body);border-radius:3px;box-shadow:3px 3px 0 rgba(0,0,0,.5);text-align:center}
+#cpOk.nope{animation:nope .38s}
 #menu .logo--img{position:absolute;left:max(24px,2.6vw);top:max(14px,2.6vh);margin:0;font-size:clamp(60px,15vh,120px)}
 #menu .logo-img{height:1.7em}
 #menu[data-screen="main"] .mtag{display:none}
@@ -397,7 +403,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 /* main menu, user's call 7 Nov 2026: the key art shows exactly as drawn (nothing on top of it),
    the logo sits on the right above the options, and a light see-through brown panel holds them */
 .kart-you{display:none}
-#menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="scores"] .mcol{top:max(14px,2.4vh);bottom:auto;right:max(20px,2.4vw);width:min(470px,42vw);max-height:calc(100vh - 28px);box-sizing:border-box;padding:14px 26px 24px 26px;gap:12px;background:rgba(72,42,22,.62);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="scores"] .mcol,#menu[data-screen="char"] .mcol{top:max(14px,2.4vh);bottom:auto;right:max(20px,2.4vw);width:min(470px,42vw);max-height:calc(100vh - 28px);box-sizing:border-box;padding:14px 26px 24px 26px;gap:12px;background:rgba(72,42,22,.62);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 #menu[data-screen="main"] .logo--img{position:static;align-self:center;margin:0;font-size:clamp(56px,13vh,104px);transform:rotate(-2deg)}
 #menu[data-screen="main"] .logo-img{height:1.55em}
 #menu[data-screen="main"] ~ .mkeys,#menu[data-screen="main"] .mkeys{display:none}
@@ -477,12 +483,13 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 @media (orientation:portrait) and (max-width:700px){
   .kart{left:0;top:0;transform:none;height:44vh;width:calc(44vh * 1.777)}
   #rot{display:none!important}
-  #menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="scores"] .mcol{
+  #menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="scores"] .mcol,#menu[data-screen="char"] .mcol{
     left:0;right:0;top:auto;bottom:0;width:auto;max-height:calc(100% - 30vh);border-radius:0;box-shadow:none;
     -webkit-backdrop-filter:none;backdrop-filter:none;gap:12px;
     padding:30px 18px calc(18px + env(safe-area-inset-bottom,0px));
     background:linear-gradient(to bottom,rgba(58,34,18,0) 0,rgba(58,34,18,.94) 40px,#3a2212 90px)}
-  #menu:not([data-screen="tailor"]){background:#3a2212}
+  #menu:not([data-screen="tailor"]):not([data-screen="char"]){background:#3a2212}
+  #menu[data-screen="char"] .mcol{max-height:40vh}
   #menu[data-screen="main"] .logo--img{position:fixed;top:calc(6px + env(safe-area-inset-top,0px));left:50%;right:auto;translate:-50% 0;margin:0;font-size:16px;transform:rotate(-2deg)}
   #menu[data-screen="main"] .logo-img{height:auto;width:min(132px,34vw)}
   #menu[data-screen="main"] .mlist{gap:12px}
@@ -591,6 +598,20 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
             <button class="mi tkt tkt-s tstub" type="button" id="mute"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l4 4H7v6h4l4 4V5H11"></path><path d="M3 9v6h4"></path><path d="M19 9a4 4 0 0 1 0 6"></path></svg><small>الضرب <span id="muteV">شغال</span></small></button>
             <button class="mi tkt tkt-s tstub" type="button" id="muteM"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="17" cy="16" r="3"></circle></svg><small>المزيكا <span id="muteMV">شغالة</span></small></button>
           </div>
+        </div>
+      </section>
+
+      <!-- pick a fighter: the 3D fighter close up, turning on the platform, the ticket beside it -->
+      <section class="mscr" id="sChar" aria-label="اختار شخصيتك" hidden>
+        <h2 class="mh">اختار شخصيتك</h2>
+        <div class="tkt tkt-y cpick">
+          <button type="button" class="mi tarr" id="cpPrev" aria-label="الشخصية اللي قبل"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+          <span class="tkt-body"><small id="cpN">1 من 9</small><b id="cpV">عتمان</b><span class="cpnote" id="cpNote"></span></span>
+          <button type="button" class="mi tarr" id="cpNext" aria-label="الشخصية اللي بعد"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+        </div>
+        <p class="cplock" id="cpLock" hidden></p>
+        <div class="mrow">
+          <button class="mi sm go" type="button" id="cpOk">اختاره</button>
         </div>
       </section>
 
@@ -1477,7 +1498,8 @@ function buildWaitingArea(x0, x1, roofY = 3.0) {
     }
     for (const lx of [sx0 + 0.1, sx1 - 0.1]) { const leg = mesh(box(0.06, 0.38, 0.5), legM); leg.position.set(lx, 0.19, side * 0.3); g.add(leg); }
   }
-  TOPS.push({ x0: sx0, x1: sx1, z0: -0.56, z1: 0.56, y: 0.48, step: 0.55 });
+  // solid (user, 10 Nov 2026): the seats stop you; jump over them or onto them
+  TOPS.push({ x0: sx0, x1: sx1, z0: -0.56, z1: 0.56, y: 0.48, solid: true });
   // wooden slat benches near the edges of the area, facing the tracks
   const woodTex = tex(128, 32, (c, w, h) => {
     c.fillStyle = '#8a5a34'; c.fillRect(0, 0, w, h);
@@ -1489,7 +1511,7 @@ function buildWaitingArea(x0, x1, roofY = 3.0) {
     const top = mesh(box(1.6, 0.06, 0.42), woodM); top.position.set(bx, 0.45, bz); g.add(top);
     const bk = mesh(box(1.6, 0.36, 0.05), woodM); bk.position.set(bx, 0.7, bz - Math.sign(bz) * 0.2); g.add(bk);
     for (const lx of [-0.7, 0.7]) { const leg = mesh(box(0.06, 0.45, 0.4), legM); leg.position.set(bx + lx, 0.22, bz); g.add(leg); }
-    TOPS.push({ x0: bx - 0.8, x1: bx + 0.8, z0: bz - 0.22, z1: bz + 0.22, y: 0.48, step: 0.55 });
+    TOPS.push({ x0: bx - 0.8, x1: bx + 0.8, z0: bz - 0.22, z1: bz + 0.22, y: 0.48, solid: true });
   }
   // litter bins on the posts
   const binM = steelM(0x5f6b74, 0.45, 0.7);
@@ -1658,13 +1680,7 @@ function buildKiosk() {
   sg.position.set(0, 2.6, 1.12); g.add(sg);
   g.position.set(12.1 + 11.4, 0, -1.4);
   scene.add(g);
-  const vendor = buildFighter({ mask: 'face', chest: 'shirt', cape: 'none', legs: 'galabeya' }, null);
-  vendor.root.position.set(11.5 + 11.4, 0, 1.6);
-  vendor.root.rotation.y = -0.7;
-  vendor.armR.rotation.x = -1.1;
-  const tissues = mesh(box(0.34, 0.12, 0.22), L({ color: 0xf3f0e7 }));
-  tissues.position.set(0, -0.68, 0.1); vendor.armR.add(tissues);
-  scene.add(vendor.root);
+  ambient.kiosk = g;
 }
 
 function buildStairs() {
@@ -1691,7 +1707,7 @@ function buildStairs() {
 }
 
 /* outside the fence: Helwan street, apartment blocks, a minaret, a tuk-tuk and a ful cart */
-const ambient = { tuk: null, tukDir: 1 };
+const ambient = { tuk: null, tukDir: 1, bus: null, busDir: -1 };
 function facade(base) {
   const lit = [];
   for (let k = 0; k < 40; k++) lit.push(Math.random() < 0.35 ? 1 : (Math.random() < 0.15 ? 2 : 0));
@@ -1714,6 +1730,69 @@ function facade(base) {
   };
   return { map: tex(256, 512, (g, w, h) => draw(g, w, h, false)), em: tex(256, 512, (g, w, h) => draw(g, w, h, true)) };
 }
+// ---- the street's buildings: the user's 7 pictures made into Meshy models (design/buildings/) ----
+// Meshy gives each one 1 unit tall; h = metres (by floor count, a little under real), yaw = which way
+// its front faces. They load after the fighters and replace the code-built blocks.
+const streetBlocks = [];
+const BUILDINGS = [
+  { f: 'b1', h: 14, yaw: 0 },   // brick shell under construction, sand and bricks in front
+  { f: 'b2', h: 19, yaw: 0 },   // beige stone, balustrade balconies
+  { f: 'b3', h: 13, yaw: 0 },   // red brick and concrete frame, water tank
+  { f: 'b4', h: 18, yaw: 0 },   // striped modern block with a garden wall
+  { f: 'b5', h: 27, yaw: 0 },   // tall concrete tower, blue shutters, glass stair
+  { f: 'b6', h: 17, yaw: 0 },   // old corner block, satellite dishes and laundry
+  { f: 'b7', h: 17, yaw: 0 },   // half-plastered brick, shops below
+];
+// ---- street props from the user's pictures (design/props/): Meshy models, longest side = 1 unit.
+// len = metres along that side; yaw turns the model so its front looks down +x (vehicles) / +z (kiosk).
+const PROPS = { tuktuk: { len: 2.7, yaw: Math.PI }, microbus: { len: 5.0, yaw: Math.PI }, kiosk: { len: 3.4, yaw: -Math.PI / 2 } };   // yaws measured: the vehicles' noses are at -x, the kiosk's two open sides at +z and +x
+function propModel(g, p) {
+  const m = g.scene.clone();
+  m.traverse(o => {
+    if (!o.isMesh) return;
+    const map = o.material.map, em = o.material.emissiveMap;
+    for (const t of [map, em]) if (t) { t.encoding = THREE.LinearEncoding; t.needsUpdate = true; }
+    o.material = new THREE.MeshStandardMaterial({ map, roughness: 0.85, metalness: 0.05, envMapIntensity: 0.35, emissive: em ? 0xffffff : 0x000000, emissiveMap: em || null, emissiveIntensity: 0.9, side: THREE.DoubleSide });
+    o.castShadow = true;
+  });
+  m.scale.setScalar(p.len); m.rotation.y = p.yaw;
+  const bb = new THREE.Box3().setFromObject(m); m.position.y = -bb.min.y;   // wheels / floor on the ground
+  const w = new THREE.Group(); w.add(m); return w;
+}
+async function loadProps() {
+  const get = n => glbGet('assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
+  const [tuk, bus, kiosk] = await Promise.all([get('tuktuk'), get('microbus'), get('kiosk')]);
+  if (tuk && ambient.tuk) { ambient.tuk.children.slice().forEach(c => ambient.tuk.remove(c)); ambient.tuk.add(tuk); }
+  if (bus) { bus.position.set(30, 0, -11.4); bus.rotation.y = Math.PI; scene.add(bus); ambient.bus = bus; }
+  if (kiosk && ambient.kiosk) { ambient.kiosk.children.slice().forEach(c => ambient.kiosk.remove(c)); kiosk.position.set(0.2, 0, -0.2); ambient.kiosk.add(kiosk); }
+}
+async function loadBuildings() {
+  const got = await Promise.all(BUILDINGS.map(b => glbGet('assets/models/game/' + b.f + '.glb').then(g => ({ ...b, g })).catch(() => null)));
+  placeBuildings(got.filter(Boolean));
+}
+function placeBuildings(list) {
+  if (!list.length) return;
+  for (const o of streetBlocks) scene.remove(o);
+  streetBlocks.length = 0;
+  const order = [0, 5, 2, 4, 6, 1, 3], rnd = muralRng(7);
+  let x = -78;
+  for (let n = 0; x < 80; n++) {
+    const b = list[order[n % order.length] % list.length], m = b.g.scene.clone();
+    m.traverse(o => {
+      if (!o.isMesh) return;
+      const map = o.material.map, em = o.material.emissiveMap;
+      for (const t of [map, em]) if (t) { t.encoding = THREE.LinearEncoding; t.needsUpdate = true; }
+      // only the lit windows glow at night (their own map, made by tools/building-tex.py)
+      // per-pixel lighting: Lambert lights per corner, and on Meshy's big triangles that flared into white spots
+      o.material = new THREE.MeshStandardMaterial({ map, roughness: 1, metalness: 0, envMapIntensity: 0.25, emissive: em ? 0xffffff : 0x000000, emissiveMap: em || null, emissiveIntensity: 0.9, side: THREE.DoubleSide });
+    });
+    m.scale.setScalar(b.h); m.rotation.y = b.yaw + (rnd() - 0.5) * 0.12;
+    const bb = new THREE.Box3().setFromObject(m), w = bb.max.x - bb.min.x, d = bb.max.z - bb.min.z;
+    m.position.set(x + w / 2, b.h / 2, -20.5 - d / 2 - rnd() * 3);
+    scene.add(m); streetBlocks.push(m);
+    x += w + 1 + rnd() * 2;
+  }
+}
 function buildOutside() {
   const asphalt = mesh(new THREE.PlaneGeometry(200, 60), L({ color: 0x1d1f24 }));
   asphalt.rotation.x = -Math.PI / 2; asphalt.position.set(0, 0, -38); scene.add(asphalt);
@@ -1722,13 +1801,14 @@ function buildOutside() {
   const bases = ['#b9a27f', '#a88d6c', '#c4b28e', '#8f7a62', '#b39b7a'];
   const fac = bases.map(facade);
   const roof = L({ color: 0x2b2a28 });
+  // code-built blocks until the user's building models load (placeBuildings swaps them out)
   for (let i = -7; i <= 7; i++) {
     const w = rand(6, 8.5), h = rand(9, 17), f = fac[(i + 7) % fac.length];
     const m = L({ map: f.map, emissive: 0xffffff, emissiveMap: f.em, emissiveIntensity: 0.85 });
     const b = mesh(box(w, h, 7), [m, m, roof, roof, m, m]);
     b.position.set(i * 9 + rand(-1, 1), h / 2, -20 - rand(0, 7));
-    scene.add(b);
-    if (Math.random() < 0.6) { const tank = mesh(cyl(0.6, 0.6, 1, 10), L({ color: 0x3a6fb0 })); tank.position.set(b.position.x + rand(-2, 2), h + 0.5, b.position.z); scene.add(tank); }
+    scene.add(b); streetBlocks.push(b);
+    if (Math.random() < 0.6) { const tank = mesh(cyl(0.6, 0.6, 1, 10), L({ color: 0x3a6fb0 })); tank.position.set(b.position.x + rand(-2, 2), h + 0.5, b.position.z); scene.add(tank); streetBlocks.push(tank); }
   }
   // minaret with its green ring of lights
   const cream = L({ color: 0xd9cdb0 });
@@ -2160,6 +2240,8 @@ const CHARS = [
   { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/game/abubakarir.glb', cape: null, lock: 'ramadan' },
   { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/game/abushogy.glb', cape: null },
   { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/game/arees.glb', cape: null },
+  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/game/afaf.glb', cape: null },
+  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/game/feminist.glb', cape: null },
 ];
 const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {} };
 // the CPU's (or the online friend's) character, an index into CHARS
@@ -2266,7 +2348,7 @@ async function loadGlb() {
   GLB.srcRest = {}; moves.scene.traverse(o => { if (o.name && !GLB.srcRest[o.name]) GLB.srcRest[o.name] = o.quaternion.clone(); });
   GLB.ready = true;
   console.info('[glb] ready:', CHARS[sel.char].id, CHARS[cpuChar].id, '| clips:', Object.keys(GLB.clips).join(', '));
-  (async () => { for (let i = 0; i < CHARS.length; i++) await loadChar(i).catch(e => console.warn('[glb] no', CHARS[i].id, e)); })();
+  (async () => { for (let i = 0; i < CHARS.length; i++) await loadChar(i).catch(e => console.warn('[glb] no', CHARS[i].id, e)); loadProps(); loadBuildings(); })();
 }
 function findBone(model, re) { let b = null; model.traverse(o => { if (!b && o.isBone && re.test(o.name)) b = o; }); return b; }
 // put a child on a bone at a world position/rotation, cancelling the bone's own scale
@@ -2398,7 +2480,7 @@ function glbAnim(f, r, dt, sp) {
   else if (s === 'hitstun') { clip = 'Face_Punch_Reaction'; key = 'hit' + f.lastHitT; t = Math.min(1.5, G.ot * 1.6); }
   else if (s === 'ko') { clip = 'Knock_Down'; t = Math.min(2.4, 0.1 + G.ot * 1.4); }
   else if (!f.onGround) { clip = 'Regular_Jump'; key = 'air'; t = clamp(0.78 - f.vel.y * 0.03, 0.5, 1.05); }
-  else if (f.dance && s === 'idle' && G.actions.dance) clip = 'dance';
+  else if (f.dance && s === 'idle' && G.actions[f.dance]) clip = f.dance;
   else if (sp > 0.6) { clip = sp < 3.4 ? 'walk' : 'run'; rate = sp < 3.4 ? sp / 1.7 : sp / 6.4; }
   if (key !== G.key) { G.key = key; G.ot = 0; }
   G.ot += dt;
@@ -2677,6 +2759,20 @@ function pushFromPosts(f) {
     if (f.pos.y > p.h) continue;
     const dx = f.pos.x - p.x, dz = f.pos.z - p.z, d = Math.hypot(dx, dz), min = p.r + R * 0.8;
     if (d < min) { const k = d > 1e-4 ? (min - d) / d : 0; f.pos.x += dx * k; f.pos.z += (d > 1e-4 ? dz * k : min); }
+  }
+}
+// seats and benches are solid boxes: a fighter whose feet were below the top last frame is pushed out
+// sideways (the shortest way), so you have to jump over them or onto them to get past
+function pushFromBoxes(f) {
+  const py = f.prevY == null ? f.pos.y : f.prevY, m = R * 0.7;
+  for (const t of TOPS) {
+    if (!t.solid || py >= t.y - 0.08 || f.pos.y >= t.y) continue;
+    const x0 = t.x0 - m, x1 = t.x1 + m, z0 = t.z0 - m, z1 = t.z1 + m;
+    if (f.pos.x <= x0 || f.pos.x >= x1 || f.pos.z <= z0 || f.pos.z >= z1) continue;
+    const out = [[f.pos.x - x0, 'x', x0, -1], [x1 - f.pos.x, 'x', x1, 1], [f.pos.z - z0, 'z', z0, -1], [z1 - f.pos.z, 'z', z1, 1]].sort((a, b) => a[0] - b[0])[0];
+    f.pos[out[1]] = out[2];
+    if (f.vel[out[1]] * out[3] < 0) f.vel[out[1]] = 0;
+    f.blockedT = clock;
   }
 }
 // head bump: a fighter whose head was below a roof's underside last frame can't come up through it
@@ -2990,6 +3086,7 @@ function stepFighter(f, dt) {
   f.prevY = f.pos.y;
   f.pos.addScaledVector(f.vel, dt);
   pushFromPosts(f);
+  pushFromBoxes(f);
   collide(f);
 }
 
@@ -3031,6 +3128,7 @@ function aiThink(ai, foe, dt) {
     c.mx = 0; c.mz = -train.side; return;
   }
   if (foe.state === 'ko') { c.mx = -ai.pos.x * 0.1; c.mz = -ai.pos.z * 0.2; return; }
+  if (ai.onGround && clock - (ai.blockedT || -9) < 0.25) c.jump = true;   // a seat in the way: hop over it
   // from a distance, now and then, a pebble from the نبلة (facing the foe, on the same platform)
   if (dist > 3.5 && dist < 10 && ai.shotCd <= 0 && ai.onGround && Math.abs(foe.pos.y - ai.pos.y) < 1 && ai.state === 'idle' && Math.random() < D.aggro * 0.35) {
     ai.face = Math.atan2(dx, dz); c.shot = true; return;
@@ -3283,7 +3381,7 @@ function updateHUD() {
 /* ---------------- camera ---------------- */
 const camPos = new V3(0, 3, 8), camLook = new V3(0, 1, 0);
 // menu framing: y = height to look at, d = distance (main view, then a close-up per costume slot)
-const MENU_ZOOM = { main: { y: 1.15, d: 5.2 }, mask: { y: 1.95, d: 2.5 }, chest: { y: 1.3, d: 2.8 }, cape: { y: 1.2, d: 3.5 }, legs: { y: 0.6, d: 3.1 } };
+const MENU_ZOOM = { main: { y: 1.15, d: 5.2 }, char: { y: 1.05, d: 3.6 }, mask: { y: 1.95, d: 2.5 }, chest: { y: 1.3, d: 2.8 }, cape: { y: 1.2, d: 3.5 }, legs: { y: 0.6, d: 3.1 } };
 const CAM_DIR = new V3(0, Math.sin(48 * Math.PI / 180), Math.cos(48 * Math.PI / 180));
 function updateCamera(dt) {
   const w = canvas.clientWidth, h = canvas.clientHeight, asp = w / Math.max(1, h);
@@ -3291,7 +3389,7 @@ function updateCamera(dt) {
   let k = 1 - Math.exp(-dt * 4);
   if (mode === 'menu') {
     // s scales the whole framing, so a close-up keeps the fighter in the same spot beside the menu column
-    const z = MENU_ZOOM[mscreen === 'tailor' ? tailSlot : 'main'], Y = z.y, s = z.d / 5.2;
+    const z = MENU_ZOOM[mscreen === 'tailor' ? tailSlot : mscreen === 'char' ? 'char' : 'main'], Y = z.y, s = z.d / 5.2;
     const x = P.pos.x, pz = P.pos.z;
     if (w >= 700) {
       const side = Math.min(1.8, 1.1 * asp);
@@ -3370,8 +3468,11 @@ function updateCount(dt) {
   if (i !== countStep) { countStep = i; bigText(steps[i], i === 3 ? 0.8 : 0.75); SFX.beep(i === 3); }
   if (countT >= 2.4) mode = 'fight';
 }
+// the winner's dance alternates between the clips there are (Funny Dancing 1, Hip Hop Dance)
+let danceNow = 'dance', danceTurn = 0;
 function endMatch() {
   mode = 'over'; overT = 0;
+  { const d = ['dance', 'dance2'].filter(n => GLB.clips[n]); danceNow = d.length ? d[danceTurn++ % d.length] : 'dance'; }
   SFX.rumble(false);
   let win;
   if (P.lives !== C.lives) win = P.lives > C.lives ? P : C;
@@ -3423,7 +3524,7 @@ const OPT_NOTE = {
 };
 const SLOTS = ['mask', 'chest', 'cape', 'legs'];
 const DIFF_ORDER = ['easy', 'normal', 'hard'], DIFF_LABEL = { easy: 'سهل', normal: 'عادي', hard: 'صعب' };
-const scr = { main: $('#sMain'), tailor: $('#sTailor'), moves: $('#sMoves'), online: $('#sOnline'), scores: $('#sScores') };
+const scr = { main: $('#sMain'), char: $('#sChar'), tailor: $('#sTailor'), moves: $('#sMoves'), online: $('#sOnline'), scores: $('#sScores') };
 const tabsEl = $('#tabs'), optsEl = $('#opts');
 let mscreen = 'main', tailSlot = 'mask', cur = 0;
 tabsEl.innerHTML = SLOTS.map(k => `<button class="tab" type="button" role="tab" data-k="${k}">${SLOT_LABEL[k]}</button>`).join('');
@@ -3465,7 +3566,7 @@ function showScreen(s, kb) {
   mscreen = s; el.menu.dataset.screen = s;
   for (const k in scr) scr[k].hidden = k !== s;
   if (s === 'tailor') buildOpts();
-  setCur(s === 'tailor' ? sel[tailSlot] : 0, kb);
+  setCur(s === 'tailor' ? sel[tailSlot] : s === 'char' ? Math.max(0, items().indexOf($('#cpOk'))) : 0, kb);
   SFX.ui(true);
 }
 function cycleDiff(d) { diff = DIFF_ORDER[(DIFF_ORDER.indexOf(diff) + d + 3) % 3]; renderDiff(); savePrefs(); SFX.ui(true); }
@@ -3481,6 +3582,10 @@ function renderChar() {
   $('#charV').textContent = (lk ? '🔒 ' : '') + CHARS[sel.char].n;
   $('#charN').textContent = lk || `شخصيتك · ${sel.char + 1} من ${CHARS.length}`;
   $('#charB').classList.toggle('locked', !!lk);
+  $('#cpV').textContent = (lk ? '🔒 ' : '') + CHARS[sel.char].n;
+  $('#cpN').textContent = `${sel.char + 1} من ${CHARS.length}`;
+  $('#cpNote').textContent = CHARS[sel.char].note || '';
+  $('#cpLock').hidden = !lk; $('#cpLock').textContent = lk;
   const art = CHARS[sel.char].art, you = $('#kartYou');
   you.hidden = !on || !art;
   if (art) { you.style.left = art.x + '%'; you.style.top = art.y + '%'; }
@@ -3514,7 +3619,17 @@ $('#diff').addEventListener('click', e => {
   const t = e.target.closest('.tier');
   if (t) { diff = t.dataset.d; renderDiff(); savePrefs(); SFX.ui(true); } else cycleDiff(1);
 });
-$('#charB').addEventListener('click', e => cycleChar(e.target.closest('#charPrev') ? -1 : 1));
+$('#charB').addEventListener('click', e => {
+  const a = e.target.closest('#charPrev, #charNext');
+  if (a) cycleChar(a.id === 'charPrev' ? -1 : 1);
+  if (GLB.ready) showScreen('char', e.detail === 0);
+});
+$('#cpPrev').addEventListener('click', () => cycleChar(-1));
+$('#cpNext').addEventListener('click', () => cycleChar(1));
+$('#cpOk').addEventListener('click', () => {
+  if (lockOf(sel.char)) { const b = $('#cpOk'); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); SFX.ui(false); return; }
+  showScreen('main', true);
+});
 $('#rnd').addEventListener('click', () => {
   for (const k of SLOTS) sel[k] = rand(0, OPTS[k].length) | 0;
   markOpts(); rebuildPlayer(); savePrefs(); P.anim.t = 0;
@@ -3535,6 +3650,7 @@ function menuKey(e) {
     const d = c === 'ArrowLeft' || c === 'KeyA' ? 1 : -1; // RTL: left is "next"
     if (mscreen === 'tailor') { setSlot(SLOTS[(SLOTS.indexOf(tailSlot) + d + 4) % 4]); setCur(sel[tailSlot], true); }
     else if (it[cur] && it[cur].id === 'diff') cycleDiff(d);
+    else if (mscreen === 'char') cycleChar(d);
     else if (it[cur] && it[cur].id === 'charB') cycleChar(d);
   } else if (c === 'Enter' || c === 'Space' || c === 'NumpadEnter') {
     e.preventDefault(); SFX.init(); Music.kick();
@@ -3603,6 +3719,13 @@ function updateAmbient(dt) {
     if (tk.position.x < -45) { ambient.tukDir = 1; tk.rotation.y = 0; tk.position.z = -12.6; }
     tk.position.y = Math.abs(Math.sin(clock * 9)) * 0.04;
   }
+  const bs = ambient.bus;
+  if (bs) {
+    bs.position.x += ambient.busDir * 9 * dt;
+    if (bs.position.x > 55) { ambient.busDir = -1; bs.rotation.y = Math.PI; bs.position.z = -11.4; }
+    if (bs.position.x < -55) { ambient.busDir = 1; bs.rotation.y = 0; bs.position.z = -12.6; }
+    bs.position.y = Math.abs(Math.sin(clock * 6)) * 0.03;
+  }
 }
 
 let last = performance.now();
@@ -3621,7 +3744,8 @@ function tick(now) {
   else if (mode === 'menu') {
     const tailor = mscreen === 'tailor';
     const want = tailor && tailSlot === 'cape' ? Math.PI - 0.6 + Math.sin(clock * 0.8) * 0.25 : tailor ? Math.sin(clock * 0.7) * 0.4 : Math.sin(clock * 0.55) * 1.15;
-    P.face = window.__otman && window.__otman.spin != null ? window.__otman.spin : turnTo(P.face, want, dt * 4);
+    if (mscreen === 'char') P.face = (P.face + dt * 0.7) % (Math.PI * 2);    // the picked fighter turns slowly all the way round
+    else P.face = window.__otman && window.__otman.spin != null ? window.__otman.spin : turnTo(P.face, want, dt * 4);
     P.vel.set(0, 0, 0); P.pos.set(0, 0, 1.0); P.onGround = true; P.state = 'idle';
     updateTrain(dt, false);
   } else if (mode === 'count') {
@@ -3656,7 +3780,8 @@ function tick(now) {
         if (f.state === 'attack' || f.state === 'holding' || f.state === 'grabbed') { if (f.holding) release(f); f.state = 'idle'; f.atk = null; }
         const winner = (f === P) === P.won;
         // the winner turns to the camera and dances (the code-built fighter, which has no clip, hops instead)
-        f.dance = winner && overT > 0.5 && !!(f.rig && f.rig.glb);
+        // the winner's dance: one of the two, picked when the match ends (danceNow)
+        f.dance = winner && overT > 0.5 && !!(f.rig && f.rig.glb) ? danceNow : false;
         if (f.dance) f.face = turnTo(f.face, 0, dt * 6);
         else if (winner && f.onGround && overT > 0.6 && Math.random() < 0.02) f.ctrl.jump = true;
         stepFighter(f, dt);
@@ -3688,7 +3813,7 @@ function tick(now) {
   } else el.you.hidden = true;
 
   // the menu shows the key art over the whole canvas, so skip drawing the 3D scene under it
-  if (!(mode === 'menu' && mscreen !== 'tailor' && GLB.ready)) renderer.render(scene, camera);
+  if (!(mode === 'menu' && mscreen !== 'tailor' && mscreen !== 'char' && GLB.ready)) renderer.render(scene, camera);
 }
 
 
@@ -3845,7 +3970,7 @@ function fs(f) {
   const a = f.atk;
   return [r2(f.pos.x), r2(f.pos.y), r2(f.pos.z), r2(f.vel.x), r2(f.vel.y), r2(f.vel.z), r2(f.face), f.state,
     a ? a.name : 0, a ? r2(a.t) : 0, f.onGround ? 1 : 0, Math.round(f.dmg), f.lives, Math.round(f.guard),
-    r2(f.lastHitT), f.dance ? 1 : 0, f.stats.hits, f.stats.maxCombo, f.stats.kos, f.inv > 0 ? 1 : 0];
+    r2(f.lastHitT), f.dance === 'dance2' ? 2 : f.dance ? 1 : 0, f.stats.hits, f.stats.maxCombo, f.stats.kos, f.inv > 0 ? 1 : 0];
 }
 const TR_STATES = ['idle', 'warn', 'run'];
 function hostSend() {
@@ -3916,7 +4041,7 @@ function applyFighter(f, s, age, dt) {
     if (!f.atk || f.atk.name !== s[8] || f.atk.t > s[9] + 0.12) f.atk = { name: s[8], t: s[9], m: MOVES[s[8]] };
     else f.atk.t = Math.max(f.atk.t, s[9] + age);
   } else f.atk = null;
-  f.onGround = !!s[10]; f.dmg = s[11]; f.lives = s[12]; f.guard = s[13]; f.lastHitT = s[14]; f.dance = !!s[15];
+  f.onGround = !!s[10]; f.dmg = s[11]; f.lives = s[12]; f.guard = s[13]; f.lastHitT = s[14]; f.dance = s[15] === 2 ? 'dance2' : s[15] ? 'dance' : false;
   f.stats.hits = s[16]; f.stats.maxCombo = s[17]; f.stats.kos = s[18]; f.inv = s[19] ? 1 : 0;
 }
 // Our own fighter, on our phone: while it is free to move (not hit, grabbed or knocked out) it is
@@ -3948,7 +4073,7 @@ function predictMe(g, age, dt) {
     if (P.state === 'attack' && !P.atk) P.state = 'idle';
   }
   // what only the host knows
-  P.dmg = s[11]; P.lives = s[12]; P.guard = s[13]; P.lastHitT = s[14]; P.dance = !!s[15];
+  P.dmg = s[11]; P.lives = s[12]; P.guard = s[13]; P.lastHitT = s[14]; P.dance = s[15] === 2 ? 'dance2' : s[15] ? 'dance' : false;
   P.stats.hits = s[16]; P.stats.maxCombo = s[17]; P.stats.kos = s[18]; P.inv = s[19] ? 1 : 0;
   stepFighter(P, dt);
   if (P.atk) P.atk.hit = true;   // hits are the host's call
@@ -4292,7 +4417,7 @@ function boot(data) {
   try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => ({ sel: { ...sel }, diff, name: el.nm.value, muted: SFX.muted })); } catch (e) {}
   // dev aid: open with ?debug to poke the game from the console (window.__otman)
   if (/[?&]debug\b/.test(location.search)) {
-    window.__otman = { P, C, scene, camera, sel, OPTS, train, trainObj, GLB, CHARS, buildGlbFighter, loadChar, lockOf, rebuildPlayer, startMatch, endMatch, toMenu, cam: null, spin: null, pause: false,
+    window.__otman = { P, C, scene, camera, sel, OPTS, train, trainObj, GLB, CHARS, streetBlocks, BUILDINGS, ambient, PROPS, buildGlbFighter, loadChar, lockOf, rebuildPlayer, startMatch, endMatch, toMenu, cam: null, spin: null, pause: false,
       get mode() { return mode; },
       // run n frames by hand (a hidden tab gets no rAF)
       step(n = 20) { for (let i = 0; i < n; i++) { last = performance.now() - 33; tick(performance.now()); } } };
