@@ -279,6 +279,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .cpick .tkt-body{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
 .cpick b{font:400 clamp(30px,6vh,44px)/1.1 var(--rk)}
 .cpnote{font:600 14px/1.3 var(--body);opacity:.8}
+.cpdance{gap:10px}.cpdance .mi{background:var(--tk-s);color:#16110a;padding:7px 16px;border-radius:3px;box-shadow:3px 3px 0 rgba(0,0,0,.55)}
+.cpdance .mi.on{background:var(--tk-y);color:#16110a;transform:rotate(-2deg)}
 .cplock{margin:0;padding:8px 12px;background:var(--tk-p);color:#3a0d0d;font:700 15px var(--body);border-radius:3px;box-shadow:3px 3px 0 rgba(0,0,0,.5);text-align:center}
 #cpOk.nope{animation:nope .38s}
 #menu .logo--img{position:absolute;left:max(24px,2.6vw);top:max(14px,2.6vh);margin:0;font-size:clamp(60px,15vh,120px)}
@@ -610,6 +612,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <button type="button" class="mi tarr" id="cpNext" aria-label="الشخصية اللي بعد"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
         </div>
         <p class="cplock" id="cpLock" hidden></p>
+        <!-- try the winner's dances on the fighter before picking (tap again to stop) -->
+        <div class="mrow cpdance">
+          <button class="mi sm" type="button" id="cpD1" data-dance="dance">رقصة 1</button>
+          <button class="mi sm" type="button" id="cpD2" data-dance="dance2">رقصة 2</button>
+        </div>
         <div class="mrow">
           <button class="mi sm go" type="button" id="cpOk">اختاره</button>
         </div>
@@ -1730,22 +1737,25 @@ function facade(base) {
   };
   return { map: tex(256, 512, (g, w, h) => draw(g, w, h, false)), em: tex(256, 512, (g, w, h) => draw(g, w, h, true)) };
 }
-// ---- the street's buildings: the user's 7 pictures made into Meshy models (design/buildings/) ----
-// Meshy gives each one 1 unit tall; h = metres (by floor count, a little under real), yaw = which way
-// its front faces. They load after the fighters and replace the code-built blocks.
+// ---- the street's buildings: the user's 7 pictures (design/buildings/), cut out of their grey
+// backgrounds (assets/ui/bld/bN.webp) and stood up as flat backdrops facing the camera, like a film
+// set. The Meshy 3D models of them looked smeared and broken up close (the user's screenshot, 10 Nov
+// 2026); the pictures stay sharp, and the cameras only ever see this row from the front.
+// h = metres (by floor count, a little under real). They load after the fighters and replace the
+// code-built blocks.
 const streetBlocks = [];
 const BUILDINGS = [
-  { f: 'b1', h: 14, yaw: 0 },   // brick shell under construction, sand and bricks in front
-  { f: 'b2', h: 19, yaw: 0 },   // beige stone, balustrade balconies
-  { f: 'b3', h: 13, yaw: 0 },   // red brick and concrete frame, water tank
-  { f: 'b4', h: 18, yaw: 0 },   // striped modern block with a garden wall
-  { f: 'b5', h: 27, yaw: 0 },   // tall concrete tower, blue shutters, glass stair
-  { f: 'b6', h: 17, yaw: 0 },   // old corner block, satellite dishes and laundry
-  { f: 'b7', h: 17, yaw: 0 },   // half-plastered brick, shops below
+  { f: 'b1', h: 14 },   // brick shell under construction, sand and bricks in front
+  { f: 'b2', h: 19 },   // beige stone, balustrade balconies
+  { f: 'b3', h: 13 },   // red brick and concrete frame, water tank
+  { f: 'b4', h: 18 },   // striped modern block with a garden wall
+  { f: 'b5', h: 27 },   // tall concrete tower, blue shutters, glass stair
+  { f: 'b6', h: 17 },   // old corner block, satellite dishes and laundry
+  { f: 'b7', h: 17 },   // half-plastered brick, shops below
 ];
 // ---- street props from the user's pictures (design/props/): Meshy models, longest side = 1 unit.
 // len = metres along that side; yaw turns the model so its front looks down +x (vehicles) / +z (kiosk).
-const PROPS = { tuktuk: { len: 2.7, yaw: Math.PI }, microbus: { len: 5.0, yaw: Math.PI }, kiosk: { len: 3.4, yaw: -Math.PI / 2 } };   // yaws measured: the vehicles' noses are at -x, the kiosk's two open sides at +z and +x
+const PROPS = { tuktuk: { len: 2.7, yaw: Math.PI }, microbus: { len: 5.0, yaw: Math.PI }, kiosk: { len: 3.6, yaw: 0 } };   // yaws measured: the vehicles' noses are at -x; the high-quality kiosk (Meshy 7.1) opens to -x and -z, turned so it faces the camera (+z) and the fighters (-x)
 function propModel(g, p) {
   const m = g.scene.clone();
   m.traverse(o => {
@@ -1755,7 +1765,9 @@ function propModel(g, p) {
     o.material = new THREE.MeshStandardMaterial({ map, roughness: 0.85, metalness: 0.05, envMapIntensity: 0.35, emissive: em ? 0xffffff : 0x000000, emissiveMap: em || null, emissiveIntensity: 0.9, side: THREE.DoubleSide });
     o.castShadow = true;
   });
-  m.scale.setScalar(p.len); m.rotation.y = p.yaw;
+  // scale so the longest side is p.len metres, whatever size the model came in at
+  const bb0 = new THREE.Box3().setFromObject(m), sz = bb0.getSize(new V3());
+  m.scale.setScalar(p.len / Math.max(sz.x, sz.y, sz.z)); m.rotation.y = p.yaw;
   const bb = new THREE.Box3().setFromObject(m); m.position.y = -bb.min.y;   // wheels / floor on the ground
   const w = new THREE.Group(); w.add(m); return w;
 }
@@ -1764,11 +1776,12 @@ async function loadProps() {
   const [tuk, bus, kiosk] = await Promise.all([get('tuktuk'), get('microbus'), get('kiosk')]);
   if (tuk && ambient.tuk) { ambient.tuk.children.slice().forEach(c => ambient.tuk.remove(c)); ambient.tuk.add(tuk); }
   if (bus) { bus.position.set(30, 0, -11.4); bus.rotation.y = Math.PI; scene.add(bus); ambient.bus = bus; }
-  if (kiosk && ambient.kiosk) { ambient.kiosk.children.slice().forEach(c => ambient.kiosk.remove(c)); kiosk.position.set(0.2, 0, -0.2); ambient.kiosk.add(kiosk); }
+  if (kiosk && ambient.kiosk) { ambient.kiosk.children.slice().forEach(c => ambient.kiosk.remove(c)); kiosk.position.set(0.7, 0, -0.1); ambient.kiosk.add(kiosk); }
 }
-async function loadBuildings() {
-  const got = await Promise.all(BUILDINGS.map(b => glbGet('assets/models/game/' + b.f + '.glb').then(g => ({ ...b, g })).catch(() => null)));
-  placeBuildings(got.filter(Boolean));
+function loadBuildings() {
+  const ld = new THREE.TextureLoader();
+  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
+    .then(list => placeBuildings(list.filter(Boolean)));
 }
 function placeBuildings(list) {
   if (!list.length) return;
@@ -1777,20 +1790,13 @@ function placeBuildings(list) {
   const order = [0, 5, 2, 4, 6, 1, 3], rnd = muralRng(7);
   let x = -78;
   for (let n = 0; x < 80; n++) {
-    const b = list[order[n % order.length] % list.length], m = b.g.scene.clone();
-    m.traverse(o => {
-      if (!o.isMesh) return;
-      const map = o.material.map, em = o.material.emissiveMap;
-      for (const t of [map, em]) if (t) { t.encoding = THREE.LinearEncoding; t.needsUpdate = true; }
-      // only the lit windows glow at night (their own map, made by tools/building-tex.py)
-      // per-pixel lighting: Lambert lights per corner, and on Meshy's big triangles that flared into white spots
-      o.material = new THREE.MeshStandardMaterial({ map, roughness: 1, metalness: 0, envMapIntensity: 0.25, emissive: em ? 0xffffff : 0x000000, emissiveMap: em || null, emissiveIntensity: 0.9, side: THREE.DoubleSide });
-    });
-    m.scale.setScalar(b.h); m.rotation.y = b.yaw + (rnd() - 0.5) * 0.12;
-    const bb = new THREE.Box3().setFromObject(m), w = bb.max.x - bb.min.x, d = bb.max.z - bb.min.z;
-    m.position.set(x + w / 2, b.h / 2, -20.5 - d / 2 - rnd() * 3);
+    const b = list[order[n % order.length] % list.length], img = b.t.image;
+    const w = b.h * img.width / img.height;
+    // a touch darker than the pictures, which were lit for dusk, so they sit in the night
+    const m = mesh(new THREE.PlaneGeometry(w, b.h), B({ map: b.t, transparent: true, alphaTest: 0.35, color: 0xc9cad6 }));
+    m.position.set(x + w / 2, b.h / 2 - 0.2, -22 - rnd() * 5);
     scene.add(m); streetBlocks.push(m);
-    x += w + 1 + rnd() * 2;
+    x += w * 0.92 + rnd() * 1.5;                 // a little overlap, the deeper one hides behind
   }
 }
 function buildOutside() {
@@ -3561,6 +3567,7 @@ function setCur(i, kb) {
 }
 function showScreen(s, kb) {
   if (mscreen === 'online' && s !== 'online' && NET.role) netLeave();
+  if (mscreen === 'char' && s !== 'char') { P.dance = false; document.querySelectorAll('.cpdance .mi').forEach(b => b.classList.remove('on')); }
   if (s === 'online') netLobbyReset();
   if (s === 'scores') loadScores();
   mscreen = s; el.menu.dataset.screen = s;
@@ -3625,6 +3632,13 @@ $('#charB').addEventListener('click', e => {
   if (GLB.ready) showScreen('char', e.detail === 0);
 });
 $('#cpPrev').addEventListener('click', () => cycleChar(-1));
+function previewDance(name) {
+  P.dance = P.dance === name ? false : name;
+  if (P.rig && P.rig.glb) P.rig.glb.ph = 0;               // start the dance from its first step
+  document.querySelectorAll('.cpdance .mi').forEach(b => b.classList.toggle('on', b.dataset.dance === P.dance));
+}
+$('#cpD1').addEventListener('click', () => previewDance('dance'));
+$('#cpD2').addEventListener('click', () => previewDance('dance2'));
 $('#cpNext').addEventListener('click', () => cycleChar(1));
 $('#cpOk').addEventListener('click', () => {
   if (lockOf(sel.char)) { const b = $('#cpOk'); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); SFX.ui(false); return; }
