@@ -874,6 +874,23 @@ function wallPhone(g, num, x, y, size, color = '#16110a', rot = 0) {
   g.save(); g.font = `700 ${size}px ${AD_SMALL}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'ltr';
   g.translate(x, y); g.rotate(rot); g.fillStyle = color; g.fillText(num + ' /\u062a', 0, 0); g.restore();
 }
+// a number on a black painted strip, yellow digits (from the canvas artboards WallFadl / WallCenter)
+function wallStrip(g, num, cx, cy, rot = 0) {
+  g.save(); g.translate(cx, cy); g.rotate(rot);
+  g.fillStyle = '#16110a'; g.fillRect(-210, -28, 420, 56);
+  g.font = `40px ${AD_BIG}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'ltr';
+  g.fillStyle = '#f4d21f'; g.fillText(num + ' /ت', 0, 2);
+  g.restore();
+}
+// a painted plate: colour, black border, hard black shadow, text in the middle
+function wallPlate(g, cx, cy, pw, ph, rot, fill, txt, font, color = '#fff', radius = 0) {
+  g.save(); g.translate(cx, cy); g.rotate(rot);
+  const shape = () => { g.beginPath(); radius ? g.roundRect(-pw / 2, -ph / 2, pw, ph, radius) : g.rect(-pw / 2, -ph / 2, pw, ph); };
+  g.save(); g.translate(5, 5); shape(); g.fillStyle = '#16110a'; g.fill(); g.restore();
+  shape(); g.fillStyle = fill; g.fill(); g.lineWidth = 4; g.strokeStyle = '#16110a'; g.stroke();
+  g.font = font; g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'rtl'; g.fillStyle = color; g.fillText(txt, 0, 2);
+  g.restore();
+}
 const WALL_ADS = {
   // تحيا مصر: sun, pyramids, the Nile with feluccas, the flag's waves
   tahya(g, w, h, r) {
@@ -915,22 +932,41 @@ const WALL_ADS = {
     g.save(); g.strokeStyle = '#16110a'; g.lineWidth = 3; g.beginPath(); g.ellipse(225, 262, 78, 24, 0, 0, 7); g.stroke(); g.restore();
     wallHand(g, 'فضل النقاش', 225, 264, 30, '#16110a');
   },
-  // فضل النقاش: broker, painter and contractor, next to تحيا مصر
+  // فضل النقاش (canvas artboard "إعلان حيطة: فضل النقاش"): a paint bucket with a brush, the name
+  // with a white halo and a red shadow, his three jobs on plates
   fadl(g, w, h, r) {
-    wallSplash(g, 650, 200, 420, 110, '#f26a2e', r, 16);
-    wallSplash(g, 860, 175, 170, 80, '#5fd46a', r, 10);
-    wallBrush(g, 'فضل النقاش', 650, 196, 168, { halo: [['#8fe07a', 38], ['#16110a', 10]], fill: '#16110a', rot: -0.03 });
-    wallPhone(g, '0112 000 0000', 210, 82, 40, '#a8231a', 'center', -0.08);
-    wallHand(g, 'سمسار · نقاش · مقاول', 650, 330, 60, '#16110a');
-    wallHand(g, 'دهانات وتشطيبات · شقق إيجار وتمليك', 650, 400, 46, '#a8231a');
-    wallHand(g, 'تحت أمرك في أي وقت', 650, 452, 36, '#c0392b');
-    // paint roller
-    g.save(); g.translate(1110, 300); g.rotate(-0.4);
-    g.fillStyle = '#f26a2e'; g.strokeStyle = '#16110a'; g.lineWidth = 5;
-    g.beginPath(); g.roundRect(-70, -26, 140, 52, 16); g.fill(); g.stroke();
-    g.beginPath(); g.moveTo(70, 0); g.lineTo(96, 0); g.lineTo(96, 60); g.lineTo(10, 60); g.lineTo(10, 120); g.stroke();
-    g.lineWidth = 16; g.beginPath(); g.moveTo(10, 120); g.lineTo(10, 170); g.stroke();
+    const ink = '#16110a';
+    g.save(); g.translate(34, 150); g.lineJoin = 'round'; g.lineCap = 'round'; g.lineWidth = 6; g.strokeStyle = ink;
+    const P = (d, fill) => { const p = new Path2D(d); if (fill) { g.fillStyle = fill; g.fill(p); } g.stroke(p); };
+    P('M62 96 Q140 -12 218 96');
+    P('M60 92 L220 92 L204 276 L76 276 Z', '#9aa3ab');
+    g.fillStyle = '#c9d0d6'; g.beginPath(); g.ellipse(140, 92, 80, 18, 0, 0, 7); g.fill(); g.stroke();
+    g.fillStyle = '#f26a2e'; g.beginPath(); g.ellipse(140, 94, 68, 12, 0, 0, 7); g.fill(); g.stroke();
+    P('M88 98 L88 150 Q96 166 104 150 L104 104 Z', '#f26a2e');
+    P('M150 104 L150 196 Q160 214 170 196 L170 102 Z', '#f26a2e');
+    P('M194 98 L194 128 Q201 140 208 128 L208 96 Z', '#f26a2e');
+    g.fillStyle = '#f26a2e'; g.beginPath(); g.ellipse(120, 296, 44, 9, 0, 0, 7); g.fill(); g.stroke();
+    g.save(); g.translate(250, 170); g.rotate(28 * Math.PI / 180); g.translate(-250, -170);
+    g.fillStyle = '#a8692f'; g.beginPath(); g.roundRect(238, 40, 22, 150, 8); g.fill(); g.stroke();
+    g.fillStyle = '#9aa3ab'; g.beginPath(); g.rect(226, 186, 46, 26); g.fill(); g.stroke();
+    P('M226 212 L272 212 L268 262 Q249 276 230 262 Z', '#2a2420');
+    P('M230 250 Q249 270 268 250 L268 262 Q249 278 230 262 Z', '#f26a2e');
+    g.restore(); g.restore();
+    // the name: red shadow, white halo, black letters
+    g.save(); g.font = `168px ${AD_BIG}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'rtl'; g.lineJoin = 'round';
+    const nx = 790, ny = 126;
+    g.strokeStyle = '#d6302a'; g.lineWidth = 28; g.strokeText('فضل النقاش', nx + 7, ny + 7); g.fillStyle = '#d6302a'; g.fillText('فضل النقاش', nx + 7, ny + 7);
+    g.strokeStyle = '#f4f1e8'; g.strokeText('فضل النقاش', nx, ny);
+    g.fillStyle = ink; g.fillText('فضل النقاش', nx, ny);
     g.restore();
+    // three plates, right to left: سمسار, نقاش, مقاول
+    const plates = [['سمسار', '#2b6fd6', 2], ['نقاش', '#f26a2e', -2], ['مقاول', '#2f9e4f', 1.5]];
+    g.font = `48px ${AD_BIG}`;
+    const widths = plates.map(([t]) => g.measureText(t).width + 68), total = widths.reduce((a, c) => a + c, 0) + 52;
+    let xr = 800 + total / 2;
+    plates.forEach(([t, c, rot], i) => { const pw = widths[i]; wallPlate(g, xr - pw / 2, 300, pw, 72, rot * Math.PI / 180, c, t, `48px ${AD_BIG}`); xr -= pw + 26; });
+    wallHand(g, 'شقق إيجار وتمليك · دهانات · تشطيب سوبر لوكس', 800, 392, 30, ink);
+    wallStrip(g, '0112 000 0000', 800, 456, -0.0175);
   },
   // كبريتاج عين حلوان: the sulphur springs
   kebritag(g, w, h, r) {
@@ -944,21 +980,39 @@ const WALL_ADS = {
     wallHand(g, 'مية كبريت سخنة', 180, 400, 36, '#16110a');
     wallHand(g, 'للروماتيزم والضهر', 180, 446, 32, '#a8231a');
   },
-  // سنتر الإسماعيلية التعليمي: rainbow letters and price boxes, like the school-tutoring walls
+  // سنتر الإسماعيلية (canvas artboard "إعلان حيطة: سنتر الإسماعيلية"): a red ribbon, the name in
+  // rainbow letters on a white and black halo (no thin outline on top: it drew lines across the
+  // letters where Rakkas's strokes overlap), the stages as tags, the price as a round red stamp
   center(g, w, h, r) {
-    wallHand(g, 'سنتر تعليمي', 640, 88, 58, '#16110a');
-    wallBrush(g, 'الإسماعيلية', 650, 220, 170, { rainbow: true, stroke: ['#16110a', 7] });
-    // left box: the stages
-    g.save(); g.strokeStyle = '#16110a'; g.lineWidth = 6;
-    g.strokeRect(60, 300, 300, 160); g.strokeRect(w - 300, 300, 240, 160); g.restore();
-    wallHand(g, 'ابتدائي', 210, 330, 38, '#16110a');
-    wallHand(g, 'إعدادي', 210, 380, 38, '#16110a');
-    wallHand(g, 'ثانوي عام', 210, 430, 38, '#16110a');
-    wallHand(g, 'الحصة بـ', w - 180, 335, 38, '#16110a');
-    wallBrush(g, '50ج', w - 180, 410, 92, { fill: '#16110a' });
-    wallHand(g, 'مجموعات تقوية لكل المواد', 650, 340, 44, '#a8231a');
-    wallHand(g, 'بنين / بنات', 650, 395, 40, '#16110a');
-    wallPhone(g, '0100 000 0000', 650, 448, 36, '#16110a');
+    const ink = '#16110a';
+    // ribbon
+    g.fillStyle = '#d6302a'; g.beginPath();
+    g.moveTo(480, 20); g.lineTo(800, 20); g.lineTo(784, 49); g.lineTo(800, 78); g.lineTo(480, 78); g.lineTo(496, 49); g.closePath(); g.fill();
+    wallHand(g, 'سنتر تعليمي', 640, 50, 32, '#fff');
+    // the name: black outline, white halo, rainbow fill, thin black edge
+    g.save(); g.font = `176px ${AD_BIG}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'rtl'; g.lineJoin = 'round';
+    const t = 'الإسماعيلية', nx = 640, ny = 170, tw = g.measureText(t).width;
+    g.strokeStyle = ink; g.lineWidth = 36; g.strokeText(t, nx, ny);
+    g.strokeStyle = '#f4f1e8'; g.lineWidth = 26; g.strokeText(t, nx, ny);
+    const gr = g.createLinearGradient(nx - tw / 2, 0, nx + tw / 2, 0);
+    ['#e8322b', '#f28c1c', '#f4d21f', '#47b548', '#2b8fd6', '#8a4fc0'].forEach((c, i, l) => gr.addColorStop(i / (l.length - 1), c));
+    g.fillStyle = gr; g.fillText(t, nx, ny);
+    g.restore();
+    // the stages on the right
+    [['ابتدائي', '#f4e31c', -2], ['إعدادي', '#8fcfae', 1.5], ['ثانوي عام', '#f29db3', -1]].forEach(([s2, c, rot], i) =>
+      wallPlate(g, 1136, 146 + i * 84, 200, 68, rot * Math.PI / 180, c, s2, `36px ${AD_BIG}`, ink, 10));
+    // the price stamp on the left
+    g.save(); g.translate(161, 209); g.rotate(-10 * Math.PI / 180);
+    g.fillStyle = ink; g.beginPath(); g.arc(5, 5, 105, 0, 7); g.fill();
+    g.fillStyle = '#d6302a'; g.beginPath(); g.arc(0, 0, 103, 0, 7); g.fill(); g.lineWidth = 5; g.strokeStyle = ink; g.stroke();
+    g.setLineDash([10, 8]); g.lineWidth = 3; g.strokeStyle = 'rgba(255,255,255,.85)'; g.beginPath(); g.arc(0, 0, 86, 0, 7); g.stroke(); g.setLineDash([]);
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'rtl'; g.fillStyle = '#fff';
+    g.font = `700 28px ${AD_SMALL}`; g.fillText('الحصة بـ', 0, -34);
+    g.font = `80px ${AD_BIG}`; g.fillText('50ج', 0, 22);
+    g.restore();
+    wallHand(g, 'مجموعات صغيرة · مراجعات ليلة الامتحان', 640, 321, 32, ink);
+    wallBrush(g, 'بنين / بنات', 640, 374, 44, { fill: '#d6302a' });
+    wallStrip(g, '0100 000 0000', 640, 458, 0.0175);
   },
   // ونش إنقاذ: a donkey cart towing a broken tuk-tuk, a 24h badge and a tow-truck hazard stripe
   winch(g, w, h, r) {
@@ -1070,7 +1124,7 @@ function wallAdTex(kind, seed) {
 }
 
 if (document.fonts && document.fonts.load) {
-  Promise.all([document.fonts.load('80px Lalezar'), document.fonts.load('80px Rakkas'), document.fonts.load('600 40px "IBM Plex Sans Arabic"'), document.fonts.load('700 40px "IBM Plex Sans Arabic"'), document.fonts.load('700 80px "Aref Ruqaa"'), document.fonts.load('800 80px "Noto Kufi Arabic"')])
+  Promise.all([document.fonts.load('80px Lalezar'), document.fonts.load('80px Rakkas', 'عتمان'), document.fonts.load('700 40px "IBM Plex Sans Arabic"', 'عتمان'), document.fonts.load('600 40px "IBM Plex Sans Arabic"'), document.fonts.load('700 40px "IBM Plex Sans Arabic"'), document.fonts.load('700 80px "Aref Ruqaa"'), document.fonts.load('800 80px "Noto Kufi Arabic"')])
     .then(() => fontRedraws.forEach(f => f())).catch(() => {});
 }
 const glowTex = tex(64, 64, g => {
@@ -1331,8 +1385,21 @@ function buildStation() {
     for (let i = 0; i < 9; i++) g.fillRect(60 + Math.random() * 380, h * 0.68, 3, 12 + Math.random() * 30);
   }, { font: true });
   const gf = mesh(new THREE.PlaneGeometry(3.2, 1), B({ map: graffiti, transparent: true }));
-  gf.position.set(0, -0.6, -OUT_Z + 0.02);
+  gf.position.set(0, 0.55, -OUT_Z + 0.02);
   scene.add(gf);
+  // under it, an empty painted frame for advertisers (user, 9 Nov 2026)
+  const adHere = tex(768, 256, (g, w, h) => {
+    g.save(); g.lineJoin = 'round';
+    g.setLineDash([26, 16]); g.lineWidth = 9; g.strokeStyle = '#f4f1e8';
+    g.beginPath(); g.roundRect(18, 18, w - 36, h - 36, 14); g.stroke(); g.setLineDash([]);
+    g.font = `104px ${AD_BIG}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.direction = 'rtl';
+    g.strokeStyle = '#16110a'; g.lineWidth = 16; g.strokeText('أضف إعلانك هنا', w / 2, h / 2 + 4);
+    g.fillStyle = '#f4d21f'; g.fillText('أضف إعلانك هنا', w / 2, h / 2 + 4);
+    g.restore();
+  }, { font: true });
+  const ah = mesh(new THREE.PlaneGeometry(2.7, 0.9), B({ map: adHere, transparent: true, alphaTest: 0.3, color: 0xd6d0c4 }));
+  ah.position.set(0, -0.35, -OUT_Z + 0.02);
+  scene.add(ah);
 
   badgePole(-PLAY_X - 3.5, -2.4, 3.2, 0.75); badgePole(PLAY_X + 4.5, -1.8, 3.2, 0.75);
   badgePole(10.5, -11.6, 7.5, 1.7);
