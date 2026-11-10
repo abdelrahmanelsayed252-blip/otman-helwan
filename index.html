@@ -268,7 +268,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 
 /* menu: the user's key art behind, our mark over the building's metro logo, "you" over the pick */
 .mshade{display:none}
-.kart{position:absolute;left:50%;top:50%;width:max(100vw,177.7vh);height:max(56.28vw,100vh);transform:translate(-50%,-50%);pointer-events:none}
+.kart{background:#1b120c;position:absolute;left:50%;top:50%;width:max(100vw,177.7vh);height:max(56.28vw,100vh);transform:translate(-50%,-50%);pointer-events:none}
 .kart>img:first-child{position:absolute;inset:0;width:100%;height:100%;display:block}
 .kart-mark{position:absolute;left:57.2%;top:10%;width:7.2%;height:auto;filter:drop-shadow(0 3px 4px rgba(0,0,0,.5))}
 .kart-you{position:absolute;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;transition:left .25s ease-out,top .25s ease-out}
@@ -568,7 +568,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <div class="kart-you" id="kartYou"><span>إنت</span></div>
     </div>
     <div class="mcol">
-      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="assets/ui/logo.png" alt=""></h1>
+      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="assets/ui/logo.webp" alt=""></h1>
       <p class="mtag">اللي يفضل واقف على الرصيف ياخد اللقب.</p>
 
       <section class="mscr" id="sMain" aria-label="القايمة">
@@ -580,7 +580,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <div class="mi tkt tkt-y tkt-char" id="charB" tabindex="0" role="group" aria-label="شخصيتك" hidden>
             <button type="button" class="tarr" id="charPrev" aria-label="الشخصية اللي قبل"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
             <span class="tkt-body"><small id="charN">شخصيتك</small><b id="charV">عتمان</b></span>
-            <img class="stampimg" src="assets/ui/badge.png" alt="">
+            <img class="stampimg" src="assets/ui/badge.webp" alt="">
             <button type="button" class="tarr" id="charNext" aria-label="الشخصية اللي بعد"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
           </div>
           <!-- 3 · the opponent: the ticket tiers, yellow / green / pink -->
@@ -729,7 +729,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <div class="tkt rticket">
         <div class="rprint"><span>لقب · خط 1 · حلوان</span><span>رقم 0001</span></div>
         <div class="rtitle">عتمان الحقيقي هو</div>
-        <img class="rbadge" src="assets/ui/badge.png" alt="">
+        <img class="rbadge" src="assets/ui/badge.webp" alt="">
         <div id="rName"></div>
         <p id="rSub"></p>
         <p id="rPts" class="rpts"></p>
@@ -1204,11 +1204,11 @@ function signText(g, txt, x, y, size, color) { g.font = `800 ${size}px ${SIGN}`;
 // our round metro mark (the user's badge): drawn into sign textures once it loads, and as a texture for pole signs
 const badgeImg = new Image();
 badgeImg.onload = () => fontRedraws.forEach(f => f());
-badgeImg.src = 'assets/ui/badge.png';
+badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
 const badgeOk = () => badgeImg.complete && badgeImg.naturalWidth > 0;
 let badgeTex = null;
 function badgePole(x, z, h, r) {
-  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('assets/ui/badge.png');
+  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('assets/ui/badge.webp');
   const g = new THREE.Group();
   const pole = mesh(cyl(r * 0.09, r * 0.11, h, 14), steelM(BLUE, 0.4, 0.55)); pole.position.y = h / 2; g.add(pole);
   const collar = mesh(cyl(r * 0.14, r * 0.14, 0.3, 14), steelM(0xc0c6cc, 0.4, 0.7)); collar.position.y = h - 0.1; g.add(collar);
@@ -4022,7 +4022,7 @@ function tick(now) {
   } else el.you.hidden = true;
 
   // the menu shows the key art over the whole canvas, so skip drawing the 3D scene under it
-  if (!(mode === 'menu' && mscreen !== 'tailor' && mscreen !== 'char' && GLB.ready)) renderer.render(scene, camera);
+  if (!(mode === 'menu' && mscreen !== 'tailor' && mscreen !== 'char' && GLB.on)) renderer.render(scene, camera);
 }
 
 
