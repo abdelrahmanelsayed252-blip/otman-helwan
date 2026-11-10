@@ -279,6 +279,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .cpick .tkt-body{flex:1;display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0}
 .cpick b{font:400 clamp(30px,6vh,44px)/1.1 var(--rk)}
 .cpnote{font:600 14px/1.3 var(--body);opacity:.8}
+.cpspin{margin:0;font:600 13px/1.3 'IBM Plex Sans Arabic',sans-serif;color:#f3e6cf;opacity:.85;text-align:center}
 .cpdance{gap:10px}.cpdance .mi{background:var(--tk-s);color:#16110a;padding:7px 16px;border-radius:3px;box-shadow:3px 3px 0 rgba(0,0,0,.55)}
 .cpdance .mi.on{background:var(--tk-y);color:#16110a;transform:rotate(-2deg)}
 .cplock{margin:0;padding:8px 12px;background:var(--tk-p);color:#3a0d0d;font:700 15px var(--body);border-radius:3px;box-shadow:3px 3px 0 rgba(0,0,0,.5);text-align:center}
@@ -492,7 +493,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     background:linear-gradient(to bottom,rgba(58,34,18,0) 0,rgba(58,34,18,.94) 40px,#3a2212 90px)}
   #menu:not([data-screen="tailor"]):not([data-screen="char"]){background:#3a2212}
   #menu[data-screen="char"] .mcol{max-height:40vh}
-  #menu[data-screen="main"] .logo--img{position:fixed;top:calc(6px + env(safe-area-inset-top,0px));left:50%;right:auto;translate:-50% 0;margin:0;font-size:16px;transform:rotate(-2deg)}
+  #menu[data-screen="main"] .logo--img{position:fixed;top:calc(8px + env(safe-area-inset-top,0px));left:auto;right:calc(10px + env(safe-area-inset-right,0px));translate:0 0;margin:0;font-size:16px;transform:rotate(-2deg)}
   #menu[data-screen="main"] .logo-img{height:auto;width:min(132px,34vw)}
   #menu[data-screen="main"] .mlist{gap:12px}
   #go.mi.go{padding:5px 0 6px}
@@ -612,6 +613,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <button type="button" class="mi tarr" id="cpNext" aria-label="الشخصية اللي بعد"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
         </div>
         <p class="cplock" id="cpLock" hidden></p>
+        <p class="cpspin">اسحب على الشخصية عشان تلفها وتشوفها من كل ناحية</p>
         <!-- try the winner's dances on the fighter before picking (tap again to stop) -->
         <div class="mrow cpdance">
           <button class="mi sm" type="button" id="cpD1" data-dance="dance">رقصة 1</button>
@@ -642,7 +644,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <li><b>الدفاع</b><span>بيصد الضرب والمسك، بس بيخلص لو استحملت كتير</span></li>
         </ul>
         <p class="keys">كل ما نسبة الضرر تزيد، الخصم بيطير أبعد. اللي يقع على القضبان يلحق يطلع بنطة أو نطتين قبل القطر.</p>
-        <p class="keys" data-kb><kbd>WASD</kbd> حركة · <kbd>Space</kbd> نط · <kbd>J</kbd> خفيفة · <kbd>K</kbd> تقيلة · <kbd>L</kbd> مسك · <kbd>U</kbd> نبلة · <kbd>Shift</kbd> دفاع · <kbd>N</kbd> صوت الضرب · <kbd>M</kbd> المزيكا</p>
+        <p class="keys" data-kb><kbd>WASD</kbd> حركة · <kbd>Space</kbd> نط · <kbd>J</kbd> خفيفة · <kbd>K</kbd> تقيلة · <kbd>L</kbd> مسك · <kbd>U</kbd> نبلة/طوبة · <kbd>Shift</kbd> دفاع · <kbd>N</kbd> صوت الضرب · <kbd>M</kbd> المزيكا</p>
         <div class="mrow"><button class="mi sm go" type="button" data-to="main">رجوع</button></div>
       </section>
 
@@ -702,7 +704,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     </div>
     <div id="pops"></div>
     <div id="you" hidden>إنت</div>
-    <div id="help">تحرك <kbd>WASD</kbd> · نط <kbd>Space</kbd> · خفيفة <kbd>J</kbd> · تقيلة <kbd>K</kbd> · مسك <kbd>L</kbd> · نبلة <kbd>U</kbd> · دفاع <kbd>Shift</kbd></div>
+    <div id="help">تحرك <kbd>WASD</kbd> · نط <kbd>Space</kbd> · خفيفة <kbd>J</kbd> · تقيلة <kbd>K</kbd> · مسك <kbd>L</kbd> · نبلة/طوبة <kbd>U</kbd> · دفاع <kbd>Shift</kbd></div>
   </div>
 
   <div id="big"></div>
@@ -2236,20 +2238,20 @@ const GLB_Q = new URLSearchParams(location.search);
 const CHARS = [
   // cape: 'remove' drops the Meshy cape (cape-fix.js); null leaves the mesh as it is
   // art: where this fighter's head is in the menu key art (assets/ui/keyart.webp), in % of the picture
-  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/game/otman.glb', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
-  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'assets/models/game/kofeyya.glb', cape: null, art: { x: 35.6, y: 26 } },
-  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/game/karate.glb', cape: null, art: { x: 18.5, y: 34 } },
-  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/game/robin.glb', cape: null, art: { x: 7, y: 33 } },
-  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/game/satohy.glb', cape: null, art: { x: 47.5, y: 33 } },
+  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
+  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
+  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
+  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
+  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
   // lock: 'premium' = only by buying it, 'ramadan' = earned in Ramadan (lockOf)
-  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/game/ankh.glb', cape: null, lock: 'premium' },
-  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/game/abubakarir.glb', cape: null, lock: 'ramadan' },
-  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/game/abushogy.glb', cape: null },
-  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/game/arees.glb', cape: null },
-  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/game/afaf.glb', cape: null },
-  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/game/feminist.glb', cape: null },
+  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
+  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
+  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
+  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
+  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
+  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
 ];
-const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {} };
+const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {}, failed: {} };
 // the CPU's (or the online friend's) character, an index into CHARS
 let cpuChar = 1;
 // game move -> clip, and where in the clip (seconds) the strike lands (hit) and where to stop (end).
@@ -2285,6 +2287,15 @@ function loadChar(i) {
   return GLB.loading[c.id] || (GLB.loading[c.id] = glbGet(c.src).then(g => {
     g.scene.traverse(o => {
       // the user asked to drop the capes altogether (the re-tied ones still looked torn)
+      // packed files keep skin weights as 0-255 bytes; the GPU reads them right, but r128's
+      // boneTransform (badge, stick grip, bag, cape fix) reads the raw numbers, so make them floats
+      if (o.isMesh) for (const k in o.geometry.attributes) {
+        const at = o.geometry.attributes[k];
+        if (!at.normalized || at.array instanceof Float32Array) continue;
+        const mx = at.array instanceof Uint8Array ? 255 : at.array instanceof Uint16Array ? 65535 : at.array instanceof Int16Array ? 32767 : 127;
+        const f = new Float32Array(at.array.length); for (let i = 0; i < f.length; i++) f[i] = Math.max(-1, at.array[i] / mx);
+        o.geometry.setAttribute(k, new THREE.BufferAttribute(f, at.itemSize));
+      }
       if (o.isSkinnedMesh && window.fixCape && c.cape) fixCape(o, c.cape);
       // game textures are drawn without colour management, so read the model's the same way
       if (o.isMesh && o.material.map) { o.material.map.encoding = THREE.LinearEncoding; o.material.map.needsUpdate = true; }
@@ -2335,14 +2346,16 @@ function lockOf(i) {
   return '';
 }
 async function loadGlb() {
-  const base = 'https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/';
-  await loadScript(base + 'loaders/GLTFLoader.js');
-  await loadScript(base + 'utils/SkeletonUtils.js');
+  // kept next to the game (a second CDN was one more slow or blocked host before anything showed)
+  await Promise.all(['assets/js/GLTFLoader.js', 'assets/js/meshopt_decoder.js'].map(loadScript));
+  await loadScript('assets/js/SkeletonUtils.js');
   const ld = new THREE.GLTFLoader();
+  // the fighters are packed with gltfpack (tools/pack-models.sh): ~1/3 smaller, moves ~5x
+  await MeshoptDecoder.ready; ld.setMeshoptDecoder(MeshoptDecoder);
   glbGet = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
   // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
   if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
-  const [moves] = await Promise.all([glbGet('assets/models/game/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
+  const [moves] = await Promise.all([glbGet('assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
   // the clips were made on Otman's skeleton and also carry his bone lengths (every bone's position);
   // played on a fighter with other proportions they dragged his head points ~20 cm (Robin's warped
   // face, سطوحي's long neck). Keep only the rotations (+ the hips' height), so each keeps its own lengths.
@@ -2354,7 +2367,16 @@ async function loadGlb() {
   GLB.srcRest = {}; moves.scene.traverse(o => { if (o.name && !GLB.srcRest[o.name]) GLB.srcRest[o.name] = o.quaternion.clone(); });
   GLB.ready = true;
   console.info('[glb] ready:', CHARS[sel.char].id, CHARS[cpuChar].id, '| clips:', Object.keys(GLB.clips).join(', '));
-  (async () => { for (let i = 0; i < CHARS.length; i++) await loadChar(i).catch(e => console.warn('[glb] no', CHARS[i].id, e)); loadProps(); loadBuildings(); })();
+  (async () => {
+    await Music.ready(6000);
+    for (;;) {
+      // whoever you are looking at goes first, then the rest in order
+      const i = !charReady(sel.char) ? sel.char : CHARS.findIndex((c, j) => !charReady(j) && !GLB.failed[c.id]);
+      if (i < 0) break;
+      await loadChar(i).catch(e => { GLB.failed[CHARS[i].id] = 1; console.warn('[glb] no', CHARS[i].id, e); });
+    }
+    loadProps(); loadBuildings();
+  })();
 }
 function findBone(model, re) { let b = null; model.traverse(o => { if (!b && o.isBone && re.test(o.name)) b = o; }); return b; }
 // put a child on a bone at a world position/rotation, cancelling the bone's own scale
@@ -2375,13 +2397,148 @@ function makeSling() {
   const band = mesh(box(0.13, 0.012, 0.012), rub); band.position.y = 0.19; g.add(band);
   return g;
 }
-function makeStick() {
-  const g = new THREE.Group();
-  const wood = L({ color: 0x7a5530 }), grip = L({ color: 0x3b2716 }), band = L({ color: 0x2a2018 });
-  const shaft = mesh(cyl(0.042, 0.03, STICK_LEN, 10), wood); g.add(shaft);           // thick end up (+Y)
-  const wrap = mesh(cyl(0.036, 0.034, 0.26, 10), grip); wrap.position.y = -STICK_LEN / 2 + 0.2; g.add(wrap);
-  for (const y of [0.18, 0.36]) { const b = mesh(cyl(0.045, 0.045, 0.025, 10), band); b.position.y = y; g.add(b); }
+// Each fighter's own stick for the heavy moves (الشومة الطايرة etc.). Every builder puts the butt at
+// y = 0 and the tip up +Y; grip = how far up from the butt the fist holds it.
+const ring = (r, h, m, y) => { const b = mesh(cyl(r, r, h, 10), m); b.position.y = y; return b; };
+const WEAPONS = {
+  // عتمان: the classic shoma, tapered wood, dark grip, two bands
+  shoma: { grip: 0.22, make(g) {
+    const wood = L({ color: 0x7a5530 }), grip = L({ color: 0x3b2716 }), band = L({ color: 0x2a2018 });
+    const sh = mesh(cyl(0.042, 0.03, STICK_LEN, 10), wood); sh.position.y = STICK_LEN / 2; g.add(sh);
+    g.add(ring(0.035, 0.26, grip, 0.2)); for (const y of [0.7, 0.88]) g.add(ring(0.045, 0.025, band, y));
+  } },
+  // بطل السيدة زينب: a thin bamboo خيزرانة with darker knots
+  khayazan: { grip: 0.14, make(g) {
+    const cane = L({ color: 0xd8b466 }), knot = L({ color: 0x8c6a2e });
+    const sh = mesh(cyl(0.017, 0.02, 1.0, 8), cane); sh.position.y = 0.5; g.add(sh);
+    for (let y = 0.2; y < 1; y += 0.19) g.add(ring(0.022, 0.018, knot, y));
+  } },
+  // كابتن كراتيه: a long lacquered bo staff, held a third of the way up
+  bo: { grip: 0.5, make(g) {
+    const lac = L({ color: 0x6b2a17 }), tape = L({ color: 0x141414 });
+    const sh = mesh(cyl(0.024, 0.024, 1.6, 10), lac); sh.position.y = 0.8; g.add(sh);
+    for (const y of [0.42, 0.58, 1.02, 1.18]) g.add(ring(0.027, 0.04, tape, y));
+  } },
+  // روبن عبود: a rusty iron pipe with an elbow joint on the end
+  pipe: { grip: 0.18, make(g) {
+    const iron = L({ color: 0x8b9096, emissive: 0x111111 }), rust = L({ color: 0x8a4a22 });
+    const sh = mesh(cyl(0.028, 0.028, 0.95, 10), iron); sh.position.y = 0.475; g.add(sh);
+    const el = mesh(cyl(0.036, 0.036, 0.12, 10), iron); el.position.y = 0.95; g.add(el);
+    const out = mesh(cyl(0.028, 0.028, 0.16, 10), iron); out.rotation.z = Math.PI / 2; out.position.set(0.09, 0.97, 0); g.add(out);
+    for (const y of [0.4, 0.66]) g.add(ring(0.03, 0.05, rust, y));
+  } },
+  // سطوحي: a long Saidi نبوت, dark wood with a knob head and a brass ring
+  nabboot: { grip: 0.3, make(g) {
+    const wood = L({ color: 0x4a2e1a }), brass = L({ color: 0xc69a3a, emissive: 0x221500 });
+    const sh = mesh(cyl(0.032, 0.026, 1.3, 10), wood); sh.position.y = 0.65; g.add(sh);
+    const k = mesh(new THREE.SphereGeometry(0.075, 12, 8), wood); k.position.y = 1.33; g.add(k);
+    g.add(ring(0.036, 0.04, brass, 1.2));
+  } },
+  // العنخ: a golden pharaoh's staff, forked foot, angled head, blue bands
+  was: { grip: 0.35, make(g) {
+    const gold = L({ color: 0xd0a63c, emissive: 0x2a1c00 }), blue = L({ color: 0x2c5ea8 });
+    const sh = mesh(cyl(0.022, 0.022, 1.2, 8), gold); sh.position.y = 0.6; g.add(sh);
+    for (const sx of [-1, 1]) { const f = mesh(box(0.02, 0.12, 0.02), gold); f.position.set(sx * 0.025, 0.03, 0); f.rotation.z = sx * 0.35; g.add(f); }
+    const hd = mesh(box(0.2, 0.05, 0.05), gold); hd.position.set(0.06, 1.24, 0); hd.rotation.z = 0.5; g.add(hd);
+    for (const y of [0.5, 0.75, 1.0]) g.add(ring(0.026, 0.035, blue, y));
+  } },
+  // أبو البكارير: his mum's مقشة, straw bunch tied with red string
+  broom: { grip: 0.2, make(g) {
+    const wood = L({ color: 0x9c7a4c }), straw = L({ color: 0xcfae5c }), str = L({ color: 0xb02020 });
+    const sh = mesh(cyl(0.018, 0.018, 0.95, 8), wood); sh.position.y = 0.475; g.add(sh);
+    const br = mesh(cyl(0.035, 0.12, 0.38, 12), straw); br.position.y = 1.1; g.add(br);
+    g.add(ring(0.045, 0.025, str, 0.97));
+  } },
+  // أبو شوجي: a black club with iron studs round the head
+  studded: { grip: 0.2, make(g) {
+    const blk = L({ color: 0x1f1b19 }), iron = L({ color: 0xa0a0a0, emissive: 0x151515 });
+    const sh = mesh(cyl(0.05, 0.032, 1.0, 10), blk); sh.position.y = 0.5; g.add(sh);
+    const sg = new THREE.SphereGeometry(0.016, 6, 4);
+    for (let i = 0; i < 18; i++) { const a = i * 2.4, y = 0.66 + (i % 6) * 0.055, st = mesh(sg, iron); st.position.set(Math.cos(a) * 0.047, y, Math.sin(a) * 0.047); g.add(st); }
+  } },
+  // عريس الجنة: a زفة stick, white with red and green tape and ribbons at the tip
+  zaffa: { grip: 0.18, make(g) {
+    const wht = L({ color: 0xf1ede2 }), red = L({ color: 0xd2202a }), grn = L({ color: 0x1f9a4a }), yel = L({ color: 0xf2c230 });
+    const sh = mesh(cyl(0.026, 0.026, 1.0, 10), wht); sh.position.y = 0.5; g.add(sh);
+    for (let i = 0; i < 9; i++) g.add(ring(0.029, 0.03, i % 2 ? grn : red, 0.32 + i * 0.075));
+    [red, grn, yel].forEach((m, i) => { const r = mesh(box(0.03, 0.3, 0.004), m); r.position.set((i - 1) * 0.03, 0.88, 0.03); r.rotation.z = (i - 1) * 0.25; g.add(r); });
+  } },
+  // سوبر فيمنست: a red metal bat with black grip tape
+  bat: { grip: 0.12, make(g) {
+    const red = L({ color: 0xb3161f, emissive: 0x1a0000 }), blk = L({ color: 0x141414 });
+    const sh = mesh(cyl(0.045, 0.022, 0.95, 12), red); sh.position.y = 0.475; g.add(sh);
+    g.add(ring(0.025, 0.28, blk, 0.16)); const kn = mesh(cyl(0.034, 0.034, 0.02, 12), blk); g.add(kn);
+  } },
+};
+function makeStick(kind) {
+  const w = WEAPONS[kind] || WEAPONS.shoma, g = new THREE.Group();
+  w.make(g); g.userData.grip = w.grip;
   return g;
+}
+// the طوبة: a red clay brick thrown by hand (the other fighters' نبلة)
+const brickGeo = new THREE.BoxGeometry(0.2, 0.065, 0.1), brickMat = L({ color: 0xa24a2c, emissive: 0x1c0a04 });
+function makeBrickInHand() { const b = mesh(brickGeo, brickMat); return b; }
+// مدام عفاف hits with the bag she wears (user: her own bag, not another one). The bag (brown leather at
+// her right hip, x -0.45…-0.08, y 0.72…1.2 in model metres) and its strap up to the right shoulder are
+// found by the texture colour under each vertex and cut out of her mesh into their own pieces:
+// `worn` = the same triangles, skinned exactly as before (so standing she looks unchanged);
+// `held` = a copy hanging from her fist by the top of the strap, shown only while she swings it.
+GLB.bag = {};
+function bagSplit(sm, id) {
+  if (GLB.bag[id]) return GLB.bag[id];
+  const geo = sm.geometry, P = geo.attributes.position, U = geo.attributes.uv, N = P.count;
+  const img = sm.material.map && sm.material.map.image; if (!img || !U || !geo.index) return null;
+  const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
+  const cx = c.getContext('2d'); cx.drawImage(img, 0, 0); const D = cx.getImageData(0, 0, c.width, c.height).data;
+  const col = i => { const px = clamp(Math.floor(U.getX(i) * c.width), 0, c.width - 1), py = clamp(Math.floor(U.getY(i) * c.height), 0, c.height - 1), o = (py * c.width + px) * 4; return [D[o], D[o + 1], D[o + 2]]; };
+  const inBox = (x, y) => x > -0.46 && x < -0.07 && y > 0.7 && y < 1.47;
+  const isBag = new Uint8Array(N);
+  for (let i = 0; i < N; i++) {
+    if (!inBox(P.getX(i), P.getY(i))) continue;
+    const [R, G, B] = col(i);
+    // leather: warm brown, also its dark creases (the jacket is navy, the shirt pale beige)
+    if ((R > 70 && R > G * 1.25 && G > B * 1.15 && R - B > 45) || (R > 28 && R > G * 1.2 && G >= B && R - B > 18 && R < 120)) isBag[i] = 1;
+  }
+  const I = geo.index.array, nb = Array.from({ length: N }, () => []);
+  for (let t = 0; t < I.length; t += 3) for (let a = 0; a < 3; a++) { const u = I[t + a], v = I[t + (a + 1) % 3]; nb[u].push(v); nb[v].push(u); }
+  // close small gaps (buckle, stitches): a point inside the box whose neighbours are mostly bag joins it
+  for (let pass = 0; pass < 3; pass++) {
+    const add = [];
+    for (let i = 0; i < N; i++) if (!isBag[i] && inBox(P.getX(i), P.getY(i)) && nb[i].length) {
+      let k = 0; for (const j of nb[i]) k += isBag[j]; if (k / nb[i].length >= 0.6) add.push(i);
+    }
+    add.forEach(i => isBag[i] = 1);
+  }
+  const keep = [], bag = [];
+  for (let t = 0; t < I.length; t += 3) (isBag[I[t]] + isBag[I[t + 1]] + isBag[I[t + 2]] >= 2 ? bag : keep).push(I[t], I[t + 1], I[t + 2]);
+  if (bag.length < 300) return null;
+  const sub = idx => { const g = geo.clone(); g.setIndex(idx); return g; };
+  // grip = the top of the strap (highest bag point), centre = the middle of the bag body
+  let top = -1, cen = new V3(), n = 0;
+  for (let t = 0; t < bag.length; t++) { const i = bag[t]; if (top < 0 || P.getY(i) > P.getY(top)) top = i; if (P.getY(i) < 1.15) { cen.x += P.getX(i); cen.y += P.getY(i); cen.z += P.getZ(i); n++; } }
+  cen.multiplyScalar(1 / Math.max(1, n));
+  return (GLB.bag[id] = { body: sub(keep), bag: sub(bag), grip: new V3(P.getX(top), P.getY(top), P.getZ(top)), cen });
+}
+function takeBag(model, k, id) {
+  let sm = null; model.traverse(o => { if (!sm && o.isSkinnedMesh) sm = o; });
+  const B = sm && bagSplit(sm, id); if (!B) return null;
+  sm.geometry = B.body;
+  const worn = new THREE.SkinnedMesh(B.bag, sm.material);
+  worn.position.copy(sm.position); worn.quaternion.copy(sm.quaternion); worn.scale.copy(sm.scale);
+  worn.bind(sm.skeleton, sm.bindMatrix); worn.frustumCulled = false; worn.castShadow = true;
+  sm.parent.add(worn);
+  // the held copy: strap top at the fist, bag body out along the swing (+Z, like a stick)
+  let g = B.held;
+  if (!g) {
+    g = B.held = B.bag.clone(); g.deleteAttribute('skinIndex'); g.deleteAttribute('skinWeight');
+    const dir = B.cen.clone().sub(B.grip).normalize();
+    g.translate(-B.grip.x, -B.grip.y, -B.grip.z);
+    g.applyMatrix4(new THREE.Matrix4().makeRotationFromQuaternion(new THREE.Quaternion().setFromUnitVectors(dir, new V3(0, 0, 1))));
+    g.scale(k, k, k);
+  }
+  const held = mesh(g, L({ map: sm.material.map })); held.castShadow = true;
+  const grp = new THREE.Group(); grp.add(held);
+  return { worn, held: grp, hang(hg) { grp.position.z = -0.02; hg.add(grp); } };
 }
 // world centre of the mesh points that follow this bone most (the palm, for a hand bone)
 function palmCentre(model, bone) {
@@ -2437,21 +2594,26 @@ function buildGlbFighter(ch, ringColor) {
   // a fist holds a club along +Z (out of the thumb side): it goes through the middle of the palm, found as
   // the centre of the skin points that move with the hand bone, with ~25 cm of butt out of the little-finger side.
   const hand = findBone(model, /^righthand$/i);
-  const stick = makeStick();
+  const bagHit = ch.wpn === 'bag' && takeBag(model, k, ch.id);
+  const stick = bagHit ? bagHit.held : makeStick(ch.wpn);
   stick.visible = false;
   const palm = palmCentre(model, hand) || hand.getWorldPosition(new V3());
   palm.y -= 0.025 * k;                                     // just under the palm, where curled fingers would hold it
   const hg = new THREE.Group(); attachAt(hand, hg, palm, new THREE.Quaternion());
-  stick.rotation.x = Math.PI / 2;                          // the cylinder's length (Y) now runs along +Z
-  stick.position.z = STICK_LEN / 2 - 0.22; hg.add(stick);
-  const sling = makeSling(); sling.rotation.x = Math.PI / 2; sling.position.z = 0.02; sling.visible = false; hg.add(sling);
+  if (!bagHit) {
+    stick.rotation.x = Math.PI / 2;                        // the stick's length (Y) now runs along +Z
+    stick.position.z = -stick.userData.grip; hg.add(stick);
+  } else bagHit.hang(hg);
+  const sling = ch.toss === 'brick' ? makeBrickInHand() : makeSling();
+  if (ch.toss !== 'brick') sling.rotation.x = Math.PI / 2;
+  sling.position.z = 0.02; sling.visible = false; hg.add(sling);
   const mixer = new THREE.AnimationMixer(model), actions = {};
   const clips = clipsFor(ch);
   for (const n in clips) { const a = mixer.clipAction(clips[n]); a.paused = true; actions[n] = a; }
   actions.Combat_Stance.play(); mixer.update(0);
   const dummy = () => new THREE.Group();
   return { root, body, legL: dummy(), legR: dummy(), armL: dummy(), armR: dummy(), head: dummy(), torso: dummy(), cape: null, capeBase: null, stick,
-    sling, glb: { mixer, actions, cur: actions.Combat_Stance, key: '', ph: 0, ot: 0 }, badge, ...fighterExtras(root, body, ringColor) };
+    sling, toss: ch.toss || 'sling', bag: bagHit || null, glb: { mixer, actions, cur: actions.Combat_Stance, key: '', ph: 0, ot: 0 }, badge, ...fighterExtras(root, body, ringColor) };
 }
 const bv = [new V3(), new V3(), new V3()], bx = new V3(), by = new V3(), bz = new V3(), bm = new THREE.Matrix4();
 function placeBadge(r) {
@@ -2617,8 +2779,8 @@ const Music = {
   init() {
     for (const k of ['menu', 'fight']) {
       try {
-        const a = new Audio('assets/' + k + '.mp3');
-        a.loop = true; a.preload = 'auto'; a.volume = 0;
+        const a = new Audio();
+        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'assets/' + k + '.mp3';
         this.tracks[k] = a;
       } catch (e) {}
     }
@@ -2634,7 +2796,16 @@ const Music = {
     const a = this.tracks[this.want];
     if (a && a.paused) { const p = a.play(); if (p && p.catch) p.catch(() => {}); }
   },
-  unlock() { if (this.unlocked) return; this.unlocked = true; this.kick(); },
+  unlock() { this.unlocked = true; this.kick(); },
+  // resolves once the menu track has enough to play through (or after ms), then fetches the fight track
+  ready(ms) {
+    const a = this.tracks.menu, f = this.tracks.fight;
+    return new Promise(ok => {
+      const done = () => { clearTimeout(t); if (f && f.preload === 'none') { f.preload = 'auto'; try { f.load(); } catch (e) {} } ok(); };
+      const t = setTimeout(done, ms);
+      if (!a || a.readyState >= 4) done(); else a.addEventListener('canplaythrough', done, { once: true });
+    });
+  },
   update(dt) {
     for (const k in this.tracks) {
       const a = this.tracks[k];
@@ -2648,8 +2819,7 @@ const Music = {
 };
 Music.init();
 const unlockAudio = () => { SFX.init(); Music.unlock(); };
-addEventListener('pointerdown', unlockAudio, { passive: true });
-addEventListener('keydown', unlockAudio);
+for (const ev of ['pointerdown', 'touchend', 'click', 'keydown']) addEventListener(ev, unlockAudio, { passive: true });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) { for (const k in Music.tracks) Music.tracks[k].pause(); }
   else Music.kick();
@@ -2734,7 +2904,7 @@ const train = { state: 'idle', t: 5, side: 1, dir: 1, head: 0, horn2: false };
 function outfitFrom(s) { return { mask: OPTS.mask[s.mask].id, chest: OPTS.chest[s.chest].id, cape: OPTS.cape[s.cape].id, legs: OPTS.legs[s.legs].id }; }
 function rebuildPlayer() {
   // a fighter still loading: keep the current one on screen and swap when it arrives
-  if (GLB.ready && !charReady(sel.char)) { const want = sel.char; loadChar(want).then(() => { if (sel.char === want) rebuildPlayer(); }); return; }
+  if (GLB.ready && !charReady(sel.char)) { const want = sel.char; loadChar(want).then(() => { if (sel.char === want) { rebuildPlayer(); renderChar(); } }); return; }
   P.setRig(makeRig(outfitFrom(sel), P.color, '#ffb23e', false));
 }
 function rebuildCPU() {
@@ -2989,17 +3159,18 @@ const SHOT_CD = 3, SHOT_SPEED = 19, SHOT_HIT = { dmg: 5, kb: 4.5, kbg: .05, up: 
 const shots = [];
 const stoneGeo = new THREE.IcosahedronGeometry(0.09, 0), stoneMat = L({ color: 0xa69d8f, emissive: 0x2a2620 });
 function fireShot(f) {
-  const d = faceDir(f.face), m = mesh(stoneGeo, stoneMat);
+  const brick = f.rig && f.rig.toss === 'brick', d = faceDir(f.face), m = brick ? mesh(brickGeo, brickMat) : mesh(stoneGeo, stoneMat);
   const p = new V3(f.pos.x + d.x * 0.55, f.pos.y + 1.35, f.pos.z + d.z * 0.55);
   m.position.copy(p); scene.add(m);
-  shots.push({ m, p, v: new V3(d.x * SHOT_SPEED, 1.2, d.z * SHOT_SPEED), owner: f, t: 0 });
+  if (brick) m.rotation.y = f.face;
+  shots.push({ m, p, v: new V3(d.x * SHOT_SPEED, 1.2, d.z * SHOT_SPEED), owner: f, t: 0, b: brick ? 1 : 0 });
   SFX.whoosh();
 }
 function dropShot(i) { scene.remove(shots[i].m); shots.splice(i, 1); }
 function updateShots(dt) {
   for (let i = shots.length - 1; i >= 0; i--) {
     const s = shots[i]; s.t += dt;
-    s.v.y -= 7 * dt; s.p.addScaledVector(s.v, dt); s.m.position.copy(s.p); s.m.rotation.x += dt * 20;
+    s.v.y -= 7 * dt; s.p.addScaledVector(s.v, dt); s.m.position.copy(s.p); if (s.b) s.m.rotation.z += dt * 12; else s.m.rotation.x += dt * 20;
     const t = s.owner.foe;
     const dx = s.p.x - t.pos.x, dz = s.p.z - t.pos.z, dy = s.p.y - t.pos.y;
     if (t.state !== 'ko' && t.state !== 'grabbed' && t.inv <= 0 && Math.hypot(dx, dz) < 0.5 && dy > 0.15 && dy < 2.0) {
@@ -3013,7 +3184,12 @@ function clearShots() { while (shots.length) dropShot(0); guestStones([]); }
 const gStones = [];
 function guestStones(list) {
   while (gStones.length < list.length) { const m = mesh(stoneGeo, stoneMat); scene.add(m); gStones.push(m); }
-  gStones.forEach((m, i) => { m.visible = i < list.length; if (m.visible) m.position.fromArray(list[i]); });
+  gStones.forEach((m, i) => {
+    m.visible = i < list.length; if (!m.visible) return;
+    const q = list[i], b = q[3] === 1; m.position.fromArray(q);
+    if (m.geometry !== (b ? brickGeo : stoneGeo)) { m.geometry = b ? brickGeo : stoneGeo; m.material = b ? brickMat : stoneMat; }
+    if (b) { m.rotation.y = q[4] || 0; m.rotation.z += 0.2; } else m.rotation.x += 0.3;
+  });
 }
 function stepFighter(f, dt) {
   const c = f.ctrl;
@@ -3257,6 +3433,7 @@ function animate(f, dt) {
   r.body.rotation.y = (s === 'attack' && f.atk && f.atk.m.anim === 'airspin') ? spin : lr(r.body.rotation.y, spin);
   if (r.glb) glbAnim(f, r, dt, sp);
   r.stick.visible = stickOn;
+  if (r.bag) r.bag.worn.visible = !stickOn;
   if (r.sling) r.sling.visible = s === 'attack' && !!f.atk && !!f.atk.m.shot;
   r.stars.visible = s === 'dizzy';
   if (s === 'dizzy') r.stars.rotation.y += dt * 6;
@@ -3266,7 +3443,9 @@ function animate(f, dt) {
   r.root.position.copy(f.pos);
   if (s === 'ko') { r.root.rotation.x += dt * 13; r.root.rotation.y = f.face; }
   else { r.root.rotation.x = 0; r.root.rotation.y = f.face; }
-  r.root.visible = !(f.inv > 0 && Math.floor(f.inv * 14) % 2 === 0) && !(f.lives <= 0 && s === 'ko' && f.koT > 1.4);
+  r.root.visible = !(f.inv > 0 && Math.floor(f.inv * 14) % 2 === 0) && !(f.lives <= 0 && s === 'ko' && f.koT > 1.4)
+    // in the menu, never show the last fighter under the name of one that is still downloading
+    && !(mode === 'menu' && f === P && GLB.ready && !charReady(sel.char));
   if (r.badge) placeBadge(r);
 
   if (r.cape) {
@@ -3379,7 +3558,8 @@ function updateHUD() {
   const gcd = Math.ceil(P.grabCd);
   if (hudCache.gcd !== gcd) { hudCache.gcd = gcd; const b = el.tGrab || (el.tGrab = document.querySelector('.tb[data-b="grab"]')); if (b) { b.textContent = gcd ? AR(gcd) : 'مسك'; b.classList.toggle('cd', gcd > 0); } }
   const scd = Math.ceil(P.shotCd);
-  if (hudCache.scd !== scd) { hudCache.scd = scd; const b = el.tShot || (el.tShot = document.querySelector('.tb[data-b="shot"]')); if (b) { b.textContent = scd ? AR(scd) : 'نبلة'; b.classList.toggle('cd', scd > 0); } }
+  const tn = P.rig && P.rig.toss === 'brick' ? 'طوبة' : 'نبلة';
+  if (hudCache.scd !== scd || hudCache.tn !== tn) { hudCache.scd = scd; hudCache.tn = tn; const b = el.tShot || (el.tShot = document.querySelector('.tb[data-b="shot"]')); if (b) { b.textContent = scd ? AR(scd) : tn; b.classList.toggle('cd', scd > 0); } }
   const s = Math.max(0, Math.ceil(matchT));
   setText(el.timer, 't', AR(Math.floor(s / 60)) + ':' + AR(s % 60).padStart(2, '0'));
 }
@@ -3567,6 +3747,7 @@ function setCur(i, kb) {
 }
 function showScreen(s, kb) {
   if (mscreen === 'online' && s !== 'online' && NET.role) netLeave();
+  if (s === 'char' && mscreen !== 'char') { spinYaw = 0.3; spinVel = 0; }
   if (mscreen === 'char' && s !== 'char') { P.dance = false; document.querySelectorAll('.cpdance .mi').forEach(b => b.classList.remove('on')); }
   if (s === 'online') netLobbyReset();
   if (s === 'scores') loadScores();
@@ -3583,15 +3764,15 @@ function renderDiff() {
 }
 // once the 3D characters are in, the tailor gives way to picking a character
 function renderChar() {
-  const on = GLB.ready;
-  $('#charB').hidden = !on; $('#tailorB').hidden = on;
+  const on = GLB.ready, wait = GLB.on && !(on && charReady(sel.char));
+  $('#charB').hidden = !GLB.on; $('#tailorB').hidden = GLB.on;
   const lk = lockOf(sel.char);
   $('#charV').textContent = (lk ? '🔒 ' : '') + CHARS[sel.char].n;
-  $('#charN').textContent = lk || `شخصيتك · ${sel.char + 1} من ${CHARS.length}`;
+  $('#charN').textContent = wait ? 'لحظة... الشخصية بتتحمّل' : lk || `شخصيتك · ${sel.char + 1} من ${CHARS.length}`;
   $('#charB').classList.toggle('locked', !!lk);
   $('#cpV').textContent = (lk ? '🔒 ' : '') + CHARS[sel.char].n;
   $('#cpN').textContent = `${sel.char + 1} من ${CHARS.length}`;
-  $('#cpNote').textContent = CHARS[sel.char].note || '';
+  $('#cpNote').textContent = wait ? 'لحظة... بتتحمّل' : CHARS[sel.char].note || '';
   $('#cpLock').hidden = !lk; $('#cpLock').textContent = lk;
   const art = CHARS[sel.char].art, you = $('#kartYou');
   you.hidden = !on || !art;
@@ -3632,6 +3813,19 @@ $('#charB').addEventListener('click', e => {
   if (GLB.ready) showScreen('char', e.detail === 0);
 });
 $('#cpPrev').addEventListener('click', () => cycleChar(-1));
+let spinYaw = 0.3, spinVel = 0, spinDrag = null;
+addEventListener('pointerdown', e => {
+  if (mode !== 'menu' || mscreen !== 'char' || (e.target.closest && e.target.closest('.mcol, button'))) return;
+  spinDrag = { x: e.clientX, t: performance.now(), id: e.pointerId }; spinVel = 0;
+});
+addEventListener('pointermove', e => {
+  if (!spinDrag || e.pointerId !== spinDrag.id) return;
+  const now = performance.now(), dx = e.clientX - spinDrag.x, d = dx * 0.012;
+  spinYaw += d; spinVel = clamp(d / Math.max(0.016, (now - spinDrag.t) / 1000), -5, 5);
+  spinDrag.x = e.clientX; spinDrag.t = now;
+});
+const spinEnd = e => { if (spinDrag && e.pointerId === spinDrag.id) { if (performance.now() - spinDrag.t > 80) spinVel = 0; spinDrag = null; } };
+addEventListener('pointerup', spinEnd); addEventListener('pointercancel', spinEnd);
 function previewDance(name) {
   P.dance = P.dance === name ? false : name;
   if (P.rig && P.rig.glb) P.rig.glb.ph = 0;               // start the dance from its first step
@@ -3759,7 +3953,7 @@ function tick(now) {
     const tailor = mscreen === 'tailor';
     const want = tailor && tailSlot === 'cape' ? Math.PI - 0.6 + Math.sin(clock * 0.8) * 0.25 : tailor ? Math.sin(clock * 0.7) * 0.4 : Math.sin(clock * 0.55) * 1.15;
     // the picked fighter stands still facing the camera, turned a little toward the ticket (user: no spinning)
-    if (mscreen === 'char') P.face = turnTo(P.face, 0.3, dt * 6);
+    if (mscreen === 'char') { spinYaw += spinVel * dt; if (!spinDrag) spinVel *= Math.exp(-dt * 3); P.face = spinYaw; }
     else P.face = window.__otman && window.__otman.spin != null ? window.__otman.spin : turnTo(P.face, want, dt * 4);
     P.vel.set(0, 0, 0); P.pos.set(0, 0, 1.0); P.onGround = true; P.state = 'idle';
     updateTrain(dt, false);
@@ -3994,7 +4188,7 @@ function hostSend() {
   NET.r.presence({ g: {
     k: NET.k, m: mode, t: r2(matchT), as: NET.inSeq, ag: Math.round(performance.now() - NET.inSeqAt), ct: r2(countT), won: P.won ? 1 : 0, sh: r2(shake), hc: sel.char, cc: cpuChar, n: P.name,
     tr: [TR_STATES.indexOf(train.state), r2(train.head), train.side, train.dir, r2(train.t)],
-    f: [fs(P), fs(C)], ev: NET.ev.slice(-18), pj: shots.map(q => [r2(q.p.x), r2(q.p.y), r2(q.p.z)]) } }).catch(() => {});
+    f: [fs(P), fs(C)], ev: NET.ev.slice(-18), pj: shots.map(q => q.b ? [r2(q.p.x), r2(q.p.y), r2(q.p.z), 1, r2(q.m.rotation.y)] : [r2(q.p.x), r2(q.p.y), r2(q.p.z)]) } }).catch(() => {});
 }
 // everything the friend should hear or see happen goes into the event ring
 function netEv(...e) { if (NET.role !== 'host' || NET.quiet || mode === 'menu') return; NET.ev.push([++NET.seq, ...e]); if (NET.ev.length > 40) NET.ev.splice(0, 20); }
@@ -4423,7 +4617,7 @@ function boot(data) {
     scene.traverse(o => { if (o.isMesh && o.material && o.material.isMeshStandardMaterial && o.material.envMapIntensity === 1) o.material.envMapIntensity = 0.45; });
   }).catch(() => {});
   loadPrefs(data);
-  renderSlots(); renderDiff();
+  renderSlots(); renderDiff(); renderChar();
   rebuildPlayer();
   C.setRig(makeRig(outfitFrom({ mask: 1, chest: 1, cape: 1, legs: 1 }), C.color, '#5fd0ff', true));
   toMenu();
