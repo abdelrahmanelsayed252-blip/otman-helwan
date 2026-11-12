@@ -564,11 +564,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     <div class="mshade" aria-hidden="true"></div>
     <!-- the user's key art: five fighters on the left in front of Helwan station -->
     <div class="kart" aria-hidden="true">
-      <img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/ui/keyart.webp" alt="">
+      <img src="assets/ui/keyart.webp" alt="">
       <div class="kart-you" id="kartYou"><span>إنت</span></div>
     </div>
     <div class="mcol">
-      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/ui/logo.webp" alt=""></h1>
+      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="assets/ui/logo.webp" alt=""></h1>
       <p class="mtag">اللي يفضل واقف على الرصيف ياخد اللقب.</p>
 
       <section class="mscr" id="sMain" aria-label="القايمة">
@@ -580,7 +580,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <div class="mi tkt tkt-y tkt-char" id="charB" tabindex="0" role="group" aria-label="شخصيتك" hidden>
             <button type="button" class="tarr" id="charPrev" aria-label="الشخصية اللي قبل"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
             <span class="tkt-body"><small id="charN">شخصيتك</small><b id="charV">عتمان</b></span>
-            <img class="stampimg" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/ui/badge.webp" alt="">
+            <img class="stampimg" src="assets/ui/badge.webp" alt="">
             <button type="button" class="tarr" id="charNext" aria-label="الشخصية اللي بعد"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
           </div>
           <!-- 3 · the opponent: the ticket tiers, yellow / green / pink -->
@@ -729,7 +729,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <div class="tkt rticket">
         <div class="rprint"><span>لقب · خط 1 · حلوان</span><span>رقم 0001</span></div>
         <div class="rtitle">عتمان الحقيقي هو</div>
-        <img class="rbadge" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/ui/badge.webp" alt="">
+        <img class="rbadge" src="assets/ui/badge.webp" alt="">
         <div id="rName"></div>
         <p id="rSub"></p>
         <p id="rPts" class="rpts"></p>
@@ -1204,11 +1204,11 @@ function signText(g, txt, x, y, size, color) { g.font = `800 ${size}px ${SIGN}`;
 // our round metro mark (the user's badge): drawn into sign textures once it loads, and as a texture for pole signs
 const badgeImg = new Image();
 badgeImg.onload = () => fontRedraws.forEach(f => f());
-badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
+badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
 const badgeOk = () => badgeImg.complete && badgeImg.naturalWidth > 0;
 let badgeTex = null;
 function badgePole(x, z, h, r) {
-  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/ui/badge.webp');
+  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('assets/ui/badge.webp');
   const g = new THREE.Group();
   const pole = mesh(cyl(r * 0.09, r * 0.11, h, 14), steelM(BLUE, 0.4, 0.55)); pole.position.y = h / 2; g.add(pole);
   const collar = mesh(cyl(r * 0.14, r * 0.14, 0.3, 14), steelM(0xc0c6cc, 0.4, 0.7)); collar.position.y = h - 0.1; g.add(collar);
@@ -1774,7 +1774,7 @@ function propModel(g, p) {
   const w = new THREE.Group(); w.add(m); return w;
 }
 async function loadProps() {
-  const get = n => glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
+  const get = n => glbGet('assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
   const [tuk, bus, kiosk] = await Promise.all([get('tuktuk'), get('microbus'), get('kiosk')]);
   if (tuk && ambient.tuk) { ambient.tuk.children.slice().forEach(c => ambient.tuk.remove(c)); ambient.tuk.add(tuk); }
   if (bus) { bus.position.set(30, 0, -11.4); bus.rotation.y = Math.PI; scene.add(bus); ambient.bus = bus; }
@@ -1782,7 +1782,7 @@ async function loadProps() {
 }
 function loadBuildings() {
   const ld = new THREE.TextureLoader();
-  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
+  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
     .then(list => placeBuildings(list.filter(Boolean)));
 }
 function placeBuildings(list) {
@@ -2239,18 +2239,18 @@ const GLB_Q = new URLSearchParams(location.search);
 const CHARS = [
   // cape: 'remove' drops the Meshy cape (cape-fix.js); null leaves the mesh as it is
   // art: where this fighter's head is in the menu key art (assets/ui/keyart.webp), in % of the picture
-  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
-  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
-  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
-  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
-  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
+  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
+  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
+  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
+  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
+  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
   // lock: 'premium' = only by buying it, 'ramadan' = earned in Ramadan (lockOf)
-  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
-  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
-  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
-  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
-  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
-  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
+  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
+  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
+  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
+  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
+  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
+  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
 ];
 const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {}, failed: {} };
 // the CPU's (or the online friend's) character, an index into CHARS
@@ -2348,15 +2348,15 @@ function lockOf(i) {
 }
 async function loadGlb() {
   // kept next to the game (a second CDN was one more slow or blocked host before anything showed)
-  await Promise.all(['https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/js/GLTFLoader.js', 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/js/meshopt_decoder.js'].map(loadScript));
-  await loadScript('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/js/SkeletonUtils.js');
+  await Promise.all(['assets/js/GLTFLoader.js', 'assets/js/meshopt_decoder.js'].map(loadScript));
+  await loadScript('assets/js/SkeletonUtils.js');
   const ld = new THREE.GLTFLoader();
   // the fighters are packed with gltfpack (tools/pack-models.sh): ~1/3 smaller, moves ~5x
   await MeshoptDecoder.ready; ld.setMeshoptDecoder(MeshoptDecoder);
   glbGet = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
   // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
   if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
-  const [moves] = await Promise.all([glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
+  const [moves] = await Promise.all([glbGet('assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
   // the clips were made on Otman's skeleton and also carry his bone lengths (every bone's position);
   // played on a fighter with other proportions they dragged his head points ~20 cm (Robin's warped
   // face, سطوحي's long neck). Keep only the rotations (+ the hips' height), so each keeps its own lengths.
@@ -2364,6 +2364,13 @@ async function loadGlb() {
     c.tracks = c.tracks.filter(t => !/\.(position|scale)$/.test(t.name) || t.name === 'Hips.position');
     GLB.clips[c.name] = pinClip(c);
   });
+  // every clip keeps its own sideways hips spot, so walking/running/attacks stood up to ~half a metre off
+  // the stance (and off the fighter's ring): give them all the stance's spot (standOnFloor centres that)
+  const hs = GLB.clips.Combat_Stance && GLB.clips.Combat_Stance.tracks.find(t => t.name === 'Hips.position');
+  if (hs) for (const n in GLB.clips) for (const t of GLB.clips[n].tracks) {
+    if (t.name !== 'Hips.position') continue;
+    for (let i = 0; i < t.values.length; i += 3) { t.values[i] = hs.values[0]; t.values[i + 2] = hs.values[2]; }
+  }
   // (moves.glb has no mesh, so its joints load as plain nodes, not bones: read them by name)
   GLB.srcRest = {}; moves.scene.traverse(o => { if (o.name && !GLB.srcRest[o.name]) GLB.srcRest[o.name] = o.quaternion.clone(); });
   GLB.ready = true;
@@ -2612,9 +2619,28 @@ function buildGlbFighter(ch, ringColor) {
   const clips = clipsFor(ch);
   for (const n in clips) { const a = mixer.clipAction(clips[n]); a.paused = true; actions[n] = a; }
   actions.Combat_Stance.play(); mixer.update(0);
+  standOnFloor(root, model, meshes.find(m => m.isSkinnedMesh));
   const dummy = () => new THREE.Group();
   return { root, body, legL: dummy(), legR: dummy(), armL: dummy(), armR: dummy(), head: dummy(), torso: dummy(), cape: null, capeBase: null, stick,
     sling, toss: ch.toss || 'sling', bag: bagHit || null, glb: { mixer, actions, cur: actions.Combat_Stance, key: '', ph: 0, ot: 0 }, badge, ...fighterExtras(root, body, ringColor) };
+}
+// In the fight stance the clips (made on Otman) left most fighters' soles 4-10 cm under the floor,
+// أبو البكارير (a kid, shorter legs) 20 cm above it, and the feet ~50 cm off the fighter's own point, so
+// turning him on the pick screen swung him round his left foot (user, 12 Nov 2026). Measured once per
+// build in the stance: the lowest skin point goes to y 0 and the middle of the feet onto the root.
+function standOnFloor(root, model, sm) {
+  if (!sm) return;
+  root.updateMatrixWorld(true);
+  const inv = root.matrixWorld.clone().invert(), v = new V3(), n = sm.geometry.attributes.position.count;
+  const ys = new Float32Array(n), xs = new Float32Array(n), zs = new Float32Array(n);
+  let minY = 1e9;
+  for (let i = 0; i < n; i++) {
+    sm.boneTransform(i, v); v.applyMatrix4(sm.matrixWorld).applyMatrix4(inv);
+    xs[i] = v.x; ys[i] = v.y; zs[i] = v.z; if (v.y < minY) minY = v.y;
+  }
+  let fx = 0, fz = 0, c = 0;
+  for (let i = 0; i < n; i++) if (ys[i] < minY + 0.12) { fx += xs[i]; fz += zs[i]; c++; }
+  model.position.x -= fx / c; model.position.z -= fz / c; model.position.y -= minY;
 }
 const bv = [new V3(), new V3(), new V3()], bx = new V3(), by = new V3(), bz = new V3(), bm = new THREE.Matrix4();
 function placeBadge(r) {
@@ -2781,7 +2807,7 @@ const Music = {
     for (const k of ['menu', 'fight']) {
       try {
         const a = new Audio();
-        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@c12ee22ce087/assets/' + k + '.mp3';
+        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'assets/' + k + '.mp3';
         this.tracks[k] = a;
       } catch (e) {}
     }
