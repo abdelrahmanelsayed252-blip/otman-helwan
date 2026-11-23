@@ -167,6 +167,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .tb[data-b="shot"]{right:84px;bottom:150px;width:52px;height:52px;font-size:14px}
 .tb.cd{opacity:.45;filter:grayscale(.6)}
 .tb[data-b="guard"]{right:166px;bottom:28px;width:58px;height:58px;font-size:16px}
+.tb[data-b="dodge"]{right:162px;bottom:96px;width:56px;height:56px;font-size:15px}
 
 /* ---------- result (poster: "عتمان الحقيقي هو" strip, winner name with the logo's extrude, three metro tickets) ---------- */
 #result{position:absolute;inset:0;display:grid;place-items:center;overflow:auto;padding-block:16px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:radial-gradient(ellipse at center,rgba(12,7,4,.6) 0%,rgba(12,7,4,.9) 100%)}
@@ -242,6 +243,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   .mi,.opt,.tab{transition:none}
   .tb.on{transform:none}
   .card.hit{animation:none}
+  .pct.pop,.pct.danger,.pct.danger.pop,.pp.combo{animation:none}
+  #flash{display:none}
 }
 /* ================= metro-ticket UI (from the Claude Design canvas) =================
    One visual language for every screen: Cairo metro tickets. Colours carry meaning:
@@ -307,6 +310,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .tiers-row{display:flex;gap:10px;align-items:flex-end}
 .tier{flex:1;height:56px;border:0;font:400 clamp(19px,3.6vh,24px)/1.1 var(--rk);transition:transform .12s,box-shadow .12s}
 .tier.on{height:66px;border:3px solid var(--tk-ink);box-shadow:4px 5px 0 var(--tk-ink);transform:rotate(-3deg) translateY(-4px)}
+.tier.lvl{flex:1.9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0 4px;color:var(--tk-ink)}
+.tier.lvl b{font-weight:400;font-size:.8em;line-height:1.05;white-space:nowrap}
+.tier.lvl small{font:700 10.5px/1 var(--body);color:var(--tk-print);white-space:nowrap}
+.tiers-row{gap:7px}
+.tiers-k i{font-style:normal;font-weight:500;opacity:.85;margin-inline-start:8px}
 .trow{display:flex;gap:10px;align-items:stretch}
 .tname{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:6px 14px;transform:rotate(1deg)}
 .tname input{font:400 clamp(19px,3.4vh,24px)/1.15 var(--rk);color:var(--tk-ink);background:transparent;border:0;border-bottom:2px dashed var(--tk-print);border-radius:0;padding:0 0 2px;width:100%;outline:none}
@@ -349,10 +357,26 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 .pp.combo{background:var(--tk-y);color:var(--tk-ink);font-size:20px;transform:translate(-50%,-100%) rotate(4deg)}
 .pp.bad{background:var(--tk-p);color:var(--tk-red)}
 .pp.cpu{background:var(--tk-g);color:var(--tk-ink)}
+/* ---- hit feel (Nov 2026): combo words grow with the count, the % jumps on a hit and trembles
+   past 100, a white flash on a knock-out ---- */
+.pp.combo{scale:var(--cs,1);animation:combopop .2s ease-out}
+.pp.combo.c3{--cs:1.2}.pp.combo.c4{--cs:1.4;background:var(--tk-p)}.pp.combo.c5{--cs:1.65;background:var(--tk-p)}
+.pp.combo.c6{--cs:1.9;background:var(--tk-red);color:#fff}
+@keyframes combopop{0%{scale:calc(var(--cs,1)*1.5)}100%{scale:var(--cs,1)}}
+@media (max-height:500px){.pp.combo.c3{--cs:1.1}.pp.combo.c4{--cs:1.2}.pp.combo.c5{--cs:1.3}.pp.combo.c6{--cs:1.4}}
+.pct{transform-origin:50% 60%}
+.pct.pop{animation:pctpop .24s ease-out}
+.pct.danger{animation:pcttremble .09s linear infinite}
+.pct.danger.pop{animation:pctpop .24s ease-out,pcttremble .09s linear .24s infinite}
+@keyframes pctpop{0%{transform:scale(1.5) rotate(-5deg)}100%{transform:none}}
+@keyframes pcttremble{0%,100%{translate:-1.5px 0}50%{translate:1.5px 1px}}
+#flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+#flash.on{animation:koflash .34s ease-out}
+@keyframes koflash{0%{opacity:.72}100%{opacity:0}}
 #you{background:var(--tk-y);border:2px solid var(--tk-ink);border-radius:4px;font-size:18px;padding:1px 12px 3px;box-shadow:2px 3px 0 var(--tk-ink)}
 #help{background:rgba(22,17,10,.8);color:var(--paper);border-radius:3px}
 .tb{border-radius:6px;border:2px solid var(--tk-ink);box-shadow:3px 4px 0 rgba(12,7,4,.7)}
-.tb[data-b="light"]{background:var(--tk-y)}.tb[data-b="heavy"]{background:var(--tk-p)}.tb[data-b="jump"]{background:var(--tk-g)}.tb[data-b="grab"],.tb[data-b="guard"],.tb[data-b="shot"]{background:var(--tk-s)}
+.tb[data-b="light"]{background:var(--tk-y)}.tb[data-b="heavy"]{background:var(--tk-p)}.tb[data-b="jump"]{background:var(--tk-g)}.tb[data-b="grab"],.tb[data-b="guard"],.tb[data-b="shot"]{background:var(--tk-s)}.tb[data-b="dodge"]{background:#fff}
 
 /* result: no dark wash, so the winner dancing in 3D on the left stays in view; tickets on the right */
 #result{display:block;background:none;padding:0}
@@ -553,6 +577,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   .tb[data-b="grab"]{right:66px;bottom:58px;width:44px;height:44px;font-size:12px}
   .tb[data-b="shot"]{right:62px;bottom:108px;width:40px;height:40px;font-size:11px}
   .tb[data-b="guard"]{right:118px;bottom:16px;width:44px;height:44px;font-size:12px}
+  .tb[data-b="dodge"]{right:118px;bottom:68px;width:42px;height:42px;font-size:11px}
 }
 </style>
 </head>
@@ -564,11 +589,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     <div class="mshade" aria-hidden="true"></div>
     <!-- the user's key art: five fighters on the left in front of Helwan station -->
     <div class="kart" aria-hidden="true">
-      <img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/ui/keyart.webp" alt="">
+      <img src="assets/ui/keyart.webp" alt="">
       <div class="kart-you" id="kartYou"><span>إنت</span></div>
     </div>
     <div class="mcol">
-      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/ui/logo.webp" alt=""></h1>
+      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="assets/ui/logo.webp" alt=""></h1>
       <p class="mtag">اللي يفضل واقف على الرصيف ياخد اللقب.</p>
 
       <section class="mscr" id="sMain" aria-label="القايمة">
@@ -580,14 +605,13 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <div class="mi tkt tkt-y tkt-char" id="charB" tabindex="0" role="group" aria-label="شخصيتك" hidden>
             <button type="button" class="tarr" id="charPrev" aria-label="الشخصية اللي قبل"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
             <span class="tkt-body"><small id="charN">شخصيتك</small><b id="charV">عتمان</b></span>
-            <img class="stampimg" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/ui/badge.webp" alt="">
+            <img class="stampimg" src="assets/ui/badge.webp" alt="">
             <button type="button" class="tarr" id="charNext" aria-label="الشخصية اللي بعد"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
           </div>
-          <!-- 3 · the opponent: the ticket tiers, yellow / green / pink -->
-          <div class="mi tiers" id="diff" tabindex="0" role="radiogroup" aria-label="صعوبة الخصم">
-            <span class="tiers-k">الخصم</span>
-            <span class="tiers-row"><button type="button" role="radio" class="tkt tkt-y tier" data-d="easy">سهل</button><button type="button" role="radio" class="tkt tkt-g tier" data-d="normal">عادي</button><button type="button" role="radio" class="tkt tkt-p tier" data-d="hard">صعب</button></span>
-            <span id="diffV" hidden>عادي</span>
+          <!-- 3 · the opponent: one that learns from you (its level follows the player), or a fixed easy / medium / hard -->
+          <div class="mi tiers" id="diff" tabindex="0" role="radiogroup" aria-label="مستوى الخصم">
+            <span class="tiers-k">الخصم<i id="diffV"></i></span>
+            <span class="tiers-row"><button type="button" role="radio" class="tkt tkt-s tier lvl" data-d="auto"><b>بيتعلم منك</b><small id="lvlV">4 من 10</small></button><button type="button" role="radio" class="tkt tkt-y tier" data-d="easy">سهل</button><button type="button" role="radio" class="tkt tkt-g tier" data-d="normal">متوسط</button><button type="button" role="radio" class="tkt tkt-p tier" data-d="hard">صعب</button></span>
           </div>
           <!-- online 1v1 with a friend (green = the opponent) and the scores -->
           <div class="trow">
@@ -642,9 +666,10 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <li><b>نزلة المرج</b><span>تقيلة وإنت في الهوا</span></li>
           <li><b>رمية بلدي</b><span>مسك، ووجّه قبل ما ترمي</span></li>
           <li><b>الدفاع</b><span>بيصد الضرب والمسك، بس بيخلص لو استحملت كتير</span></li>
+          <li><b>التفادي</b><span>زقة سريعة تعدّي بيها من الضربة، وفي الهوا ترجّعك للرصيف</span></li>
         </ul>
-        <p class="keys">كل ما نسبة الضرر تزيد، الخصم بيطير أبعد. اللي يقع على القضبان يلحق يطلع بنطة أو نطتين قبل القطر.</p>
-        <p class="keys" data-kb><kbd>WASD</kbd> حركة · <kbd>Space</kbd> نط · <kbd>J</kbd> خفيفة · <kbd>K</kbd> تقيلة · <kbd>L</kbd> مسك · <kbd>U</kbd> نبلة/طوبة · <kbd>Shift</kbd> دفاع · <kbd>N</kbd> صوت الضرب · <kbd>M</kbd> المزيكا</p>
+        <p class="keys">كل ما نسبة الضرر تزيد، الخصم بيطير أبعد. اللي يقع على القضبان يلحق يطلع بنطة أو نطتين قبل القطر. دوس دفاع وإنت في الهوا تنزل أسرع.</p>
+        <p class="keys" data-kb><kbd>WASD</kbd> حركة · <kbd>Space</kbd> نط · <kbd>J</kbd> خفيفة · <kbd>K</kbd> تقيلة · <kbd>L</kbd> مسك · <kbd>U</kbd> نبلة/طوبة · <kbd>Shift</kbd> دفاع · <kbd>O</kbd> تفادي · <kbd>N</kbd> صوت الضرب · <kbd>M</kbd> المزيكا</p>
         <div class="mrow"><button class="mi sm go" type="button" data-to="main">رجوع</button></div>
       </section>
 
@@ -704,9 +729,10 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     </div>
     <div id="pops"></div>
     <div id="you" hidden>إنت</div>
-    <div id="help">تحرك <kbd>WASD</kbd> · نط <kbd>Space</kbd> · خفيفة <kbd>J</kbd> · تقيلة <kbd>K</kbd> · مسك <kbd>L</kbd> · نبلة/طوبة <kbd>U</kbd> · دفاع <kbd>Shift</kbd></div>
+    <div id="help">تحرك <kbd>WASD</kbd> · نط <kbd>Space</kbd> · خفيفة <kbd>J</kbd> · تقيلة <kbd>K</kbd> · مسك <kbd>L</kbd> · نبلة/طوبة <kbd>U</kbd> · دفاع <kbd>Shift</kbd> · تفادي <kbd>O</kbd></div>
   </div>
 
+  <div id="flash"></div>
   <div id="big"></div>
 
   <!-- a phone held upright during a match: ask to turn it -->
@@ -720,6 +746,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <button type="button" class="tb" data-b="grab">مسك</button>
       <button type="button" class="tb" data-b="shot">نبلة</button>
       <button type="button" class="tb" data-b="guard">دفاع</button>
+      <button type="button" class="tb" data-b="dodge">تفادي</button>
     </div>
   </div>
 
@@ -729,7 +756,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <div class="tkt rticket">
         <div class="rprint"><span>لقب · خط 1 · حلوان</span><span>رقم 0001</span></div>
         <div class="rtitle">عتمان الحقيقي هو</div>
-        <img class="rbadge" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/ui/badge.webp" alt="">
+        <img class="rbadge" src="assets/ui/badge.webp" alt="">
         <div id="rName"></div>
         <p id="rSub"></p>
         <p id="rPts" class="rpts"></p>
@@ -1204,11 +1231,11 @@ function signText(g, txt, x, y, size, color) { g.font = `800 ${size}px ${SIGN}`;
 // our round metro mark (the user's badge): drawn into sign textures once it loads, and as a texture for pole signs
 const badgeImg = new Image();
 badgeImg.onload = () => fontRedraws.forEach(f => f());
-badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
+badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
 const badgeOk = () => badgeImg.complete && badgeImg.naturalWidth > 0;
 let badgeTex = null;
 function badgePole(x, z, h, r) {
-  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/ui/badge.webp');
+  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('assets/ui/badge.webp');
   const g = new THREE.Group();
   const pole = mesh(cyl(r * 0.09, r * 0.11, h, 14), steelM(BLUE, 0.4, 0.55)); pole.position.y = h / 2; g.add(pole);
   const collar = mesh(cyl(r * 0.14, r * 0.14, 0.3, 14), steelM(0xc0c6cc, 0.4, 0.7)); collar.position.y = h - 0.1; g.add(collar);
@@ -1774,7 +1801,7 @@ function propModel(g, p) {
   const w = new THREE.Group(); w.add(m); return w;
 }
 async function loadProps() {
-  const get = n => glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
+  const get = n => glbGet('assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
   const [tuk, bus, kiosk] = await Promise.all([get('tuktuk'), get('microbus'), get('kiosk')]);
   if (tuk && ambient.tuk) { ambient.tuk.children.slice().forEach(c => ambient.tuk.remove(c)); ambient.tuk.add(tuk); }
   if (bus) { bus.position.set(30, 0, -11.4); bus.rotation.y = Math.PI; scene.add(bus); ambient.bus = bus; }
@@ -1782,7 +1809,7 @@ async function loadProps() {
 }
 function loadBuildings() {
   const ld = new THREE.TextureLoader();
-  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
+  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
     .then(list => placeBuildings(list.filter(Boolean)));
 }
 function placeBuildings(list) {
@@ -2239,19 +2266,21 @@ const GLB_Q = new URLSearchParams(location.search);
 const CHARS = [
   // cape: 'remove' drops the Meshy cape (cape-fix.js); null leaves the mesh as it is
   // art: where this fighter's head is in the menu key art (assets/ui/keyart.webp), in % of the picture
-  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
-  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
-  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
-  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
-  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
+  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
+  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
+  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
+  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
+  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
   // lock: 'premium' = only by buying it, 'ramadan' = earned in Ramadan (lockOf)
-  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
-  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
-  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
-  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
-  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
-  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
+  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
+  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
+  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
+  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
+  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
+  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
 ];
+// test only (not used on the public page unless ?hd is in the address): the new high-detail بطل السيدة زينب
+if (GLB_Q.has('hd')) { CHARS[1].src = 'assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
 const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {}, failed: {} };
 // the CPU's (or the online friend's) character, an index into CHARS
 let cpuChar = 1;
@@ -2297,6 +2326,7 @@ function loadChar(i) {
         const f = new Float32Array(at.array.length); for (let i = 0; i < f.length; i++) f[i] = Math.max(-1, at.array[i] / mx);
         o.geometry.setAttribute(k, new THREE.BufferAttribute(f, at.itemSize));
       }
+      if (o.isMesh && c.smooth) smoothNormals(o.geometry);
       if (o.isSkinnedMesh && window.fixCape && c.cape) fixCape(o, c.cape);
       // game textures are drawn without colour management, so read the model's the same way
       if (o.isMesh && o.material.map) { o.material.map.encoding = THREE.LinearEncoding; o.material.map.needsUpdate = true; }
@@ -2305,6 +2335,23 @@ function loadChar(i) {
   }));
 }
 const charReady = i => !!GLB.models[CHARS[i].id];
+// Meshy 7.1 remeshed models come with flat per-triangle normals (the face showed facets): average the
+// area-weighted face normals of every point that shares a position (UV seams split points, so not merged)
+function smoothNormals(geo) {
+  const P = geo.attributes.position, I = geo.index ? geo.index.array : null, n = P.count, key = new Map(), id = new Int32Array(n);
+  for (let i = 0; i < n; i++) { const k = Math.round(P.getX(i) * 1e4) + ',' + Math.round(P.getY(i) * 1e4) + ',' + Math.round(P.getZ(i) * 1e4); let g = key.get(k); if (g === undefined) { g = key.size; key.set(k, g); } id[i] = g; }
+  const acc = new Float32Array(key.size * 3), a = new V3(), b = new V3(), c = new V3(), e1 = new V3(), e2 = new V3();
+  const tri = I ? I.length : n;
+  for (let t = 0; t < tri; t += 3) {
+    const i0 = I ? I[t] : t, i1 = I ? I[t + 1] : t + 1, i2 = I ? I[t + 2] : t + 2;
+    a.fromBufferAttribute(P, i0); b.fromBufferAttribute(P, i1); c.fromBufferAttribute(P, i2);
+    e1.subVectors(b, a); e2.subVectors(c, a); e1.cross(e2);               // length = 2 x area
+    for (const i of [i0, i1, i2]) { const g = id[i] * 3; acc[g] += e1.x; acc[g + 1] += e1.y; acc[g + 2] += e1.z; }
+  }
+  const N = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { const g = id[i] * 3; a.set(acc[g], acc[g + 1], acc[g + 2]).normalize(); N[i * 3] = a.x; N[i * 3 + 1] = a.y; N[i * 3 + 2] = a.z; }
+  geo.setAttribute('normal', new THREE.BufferAttribute(N, 3));
+}
 // The clips set each bone's rotation as it was on Otman's skeleton. Meshy rigs other fighters with
 // bones resting at other angles (Robin's head bone points forward), so the same numbers bent them
 // wrong (his head hung down). Re-express every rotation relative to this fighter's own rest pose:
@@ -2348,15 +2395,15 @@ function lockOf(i) {
 }
 async function loadGlb() {
   // kept next to the game (a second CDN was one more slow or blocked host before anything showed)
-  await Promise.all(['https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/js/GLTFLoader.js', 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/js/meshopt_decoder.js'].map(loadScript));
-  await loadScript('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/js/SkeletonUtils.js');
+  await Promise.all(['assets/js/GLTFLoader.js', 'assets/js/meshopt_decoder.js'].map(loadScript));
+  await loadScript('assets/js/SkeletonUtils.js');
   const ld = new THREE.GLTFLoader();
   // the fighters are packed with gltfpack (tools/pack-models.sh): ~1/3 smaller, moves ~5x
   await MeshoptDecoder.ready; ld.setMeshoptDecoder(MeshoptDecoder);
   glbGet = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
   // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
   if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
-  const [moves] = await Promise.all([glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
+  const [moves] = await Promise.all([glbGet('assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
   // the clips were made on Otman's skeleton and also carry his bone lengths (every bone's position);
   // played on a fighter with other proportions they dragged his head points ~20 cm (Robin's warped
   // face, سطوحي's long neck). Keep only the rotations (+ the hips' height), so each keeps its own lengths.
@@ -2732,6 +2779,7 @@ function glbAnim(f, r, dt, sp) {
   else if (s === 'dizzy') { clip = 'Face_Punch_Reaction'; t = 0.9; }
   else if (s === 'hitstun') { clip = 'Face_Punch_Reaction'; key = 'hit' + f.lastHitT; t = Math.min(1.5, G.ot * 1.6); }
   else if (s === 'ko') { clip = 'Knock_Down'; t = Math.min(2.4, 0.1 + G.ot * 1.4); }
+  else if (s === 'dodge' && f.onGround) { if (sp > 3) { clip = 'run'; rate = 2; key = 'dash'; } else { clip = 'Block1'; t = 0.5; } }
   else if (!f.onGround) { clip = 'Regular_Jump'; key = 'air'; t = clamp(0.78 - f.vel.y * 0.03, 0.5, 1.05); }
   else if (f.dance && s === 'idle' && G.actions[f.dance]) clip = f.dance;
   else if (sp > 0.6) { clip = sp < 3.4 ? 'walk' : 'run'; rate = sp < 3.4 ? sp / 1.7 : sp / 6.4; }
@@ -2771,10 +2819,21 @@ const MOVES = {
   shot: { dur: .4, act: [.16, .17], range: 0, rad: 0, hy: 1.35, shot: true, anim: 'punchR', name: 'نبلة!' },
 };
 const DIFF = {
-  easy: { react: .5, guard: .12, aggro: .6 },
-  normal: { react: .3, guard: .3, aggro: .85 },
-  hard: { react: .16, guard: .55, aggro: 1 },
+  easy: { react: .5, guard: .12, aggro: .6, dodge: .06 },
+  normal: { react: .3, guard: .3, aggro: .85, dodge: .22 },
+  hard: { react: .16, guard: .55, aggro: 1, dodge: .42 },
 };
+// ---- the CPU's level follows the player (user, 23 Nov 2026: no سهل / صعب, it works out how strong you
+// are and keeps up). skill 0…1 moves while you play: up when you land hits and knock it out, down when
+// it does that to you, and a little more on the result. Kept between matches. ----
+const SKILL_KEY = 'otman-helwan-skill';
+let skill = 0.35;
+try { const v = parseFloat(localStorage.getItem(SKILL_KEY)); if (v >= 0 && v <= 1) skill = v; } catch (e) {}
+const mix = (a, b, t) => a + (b - a) * t;
+function aiParams() { return DIFF[diff] || { react: mix(.55, .14, skill), guard: mix(.08, .58, skill), aggro: mix(.5, 1, skill), dodge: mix(.03, .45, skill) }; }
+function skillNudge(d) { if (NET.role || mode !== 'fight' || diff !== 'auto') return; skill = clamp(skill + d, 0, 1); }
+function skillSave() { try { localStorage.setItem(SKILL_KEY, skill.toFixed(3)); } catch (e) {} }
+const skillLevel = () => Math.round(1 + skill * 9);   // shown to the player as 1…10
 const CPU_NAMES = ['عتمان المعصرة', 'عتمان طره', 'عتمان المرج', 'عتمان عين حلوان', 'عتمان المعادي', 'عتمان دار السلام'];
 const KO_LINES = ['خده القطر!', 'راح المرج!', 'مكانش عتمان ولا حاجة!'];
 
@@ -2782,7 +2841,7 @@ class Fighter {
   constructor(isCPU) {
     this.isCPU = isCPU;
     this.pos = new V3(); this.vel = new V3();
-    this.ctrl = { mx: 0, mz: 0, guard: false, jump: false, light: false, heavy: false, grab: false, shot: false };
+    this.ctrl = { mx: 0, mz: 0, guard: false, jump: false, light: false, heavy: false, grab: false, shot: false, dodge: false };
     this.anim = { t: 0, phase: 0 };
     this.reset();
   }
@@ -2792,6 +2851,7 @@ class Fighter {
     this.chain = 0; this.chainT = 0; this.stunT = 0; this.inv = 0; this.combo = 0; this.comboT = 0;
     this.holding = null; this.heldBy = null; this.holdT = 0; this.koT = 0; this.lastHitBy = null; this.lastHitT = -1e9;
     this.grabCd = 0; this.grabMsgT = -9; this.shotCd = 0;
+    this.dodgeT = 0; this.dodgeInv = 0; this.dodgeCd = 0; this.airDodged = false; this.pitChase = 0;
     this.stats = { hits: 0, maxCombo: 0, kos: 0 };
     this.aiT = 0; this.guardT = 0; this.queue = []; this.dance = false;
     this.vel.set(0, 0, 0);
@@ -2865,7 +2925,7 @@ const Music = {
     for (const k of ['menu', 'fight']) {
       try {
         const a = new Audio();
-        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@4413ee1c6d46/assets/' + k + '.mp3';
+        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'assets/' + k + '.mp3';
         this.tracks[k] = a;
       } catch (e) {}
     }
@@ -2939,9 +2999,138 @@ function updateParts(dt) {
   }
 }
 
+/* ---------------- hit feel: smoke puffs, swing arcs, shock rings ----------------
+   All of it is drawn from what each page already knows about the two fighters (damage going up,
+   speed, state), so the online friend sees the same without anything extra on the wire. */
+const emitLocal = emit;   // sparks for this page only (emit itself is copied to the online friend)
+const puffTex = tex(64, 64, g => {
+  const r = g.createRadialGradient(32, 32, 2, 32, 32, 31);
+  r.addColorStop(0, 'rgba(255,255,255,1)'); r.addColorStop(.62, 'rgba(255,255,255,.9)'); r.addColorStop(.82, 'rgba(255,255,255,.35)'); r.addColorStop(1, 'rgba(255,255,255,0)');
+  g.clearRect(0, 0, 64, 64); g.fillStyle = r; g.fillRect(0, 0, 64, 64);
+});
+// a crescent, bulging to the right: the arc a fist, a foot or a stick cuts through the air
+const slashTex = tex(128, 128, g => {
+  g.clearRect(0, 0, 128, 128); g.save(); g.translate(60, 64);
+  g.shadowColor = '#fff'; g.shadowBlur = 7; g.fillStyle = '#fff';
+  g.beginPath(); g.arc(0, 0, 54, -1.2, 1.2); g.arc(-20, 0, 64.2, 0.9, -0.9, true); g.closePath(); g.fill();
+  g.restore();
+});
+const ringTex = tex(128, 128, g => {
+  g.clearRect(0, 0, 128, 128); g.strokeStyle = '#fff'; g.lineWidth = 9; g.shadowColor = '#fff'; g.shadowBlur = 8;
+  g.beginPath(); g.arc(64, 64, 50, 0, 7); g.stroke();
+});
+function fxPool(n, map, add) {
+  const a = [];
+  for (let i = 0; i < n; i++) {
+    const s = new THREE.Sprite(new THREE.SpriteMaterial({ map, transparent: true, depthWrite: false, blending: add ? THREE.AdditiveBlending : THREE.NormalBlending }));
+    s.visible = false; scene.add(s);
+    a.push({ s, v: new V3(), life: 0, max: 1, size: 1, grow: 0, op: 1 });
+  }
+  a.i = 0;
+  return a;
+}
+const puffs = fxPool(56, puffTex, false), slashes = fxPool(6, slashTex, true), rings = fxPool(5, ringTex, true);
+function fxSpawn(pool, x, y, z, color, size, life, grow, op) {
+  const p = pool[pool.i++ % pool.length];
+  p.s.visible = true; p.s.position.set(x, y, z); p.s.material.color.setHex(color); p.s.material.rotation = 0;
+  p.v.set(0, 0, 0); p.life = p.max = life; p.size = size; p.grow = grow; p.op = op;
+  return p;
+}
+function puff(x, y, z, color, size, life, vx = 0, vy = 0.7, vz = 0) {
+  const p = fxSpawn(puffs, x, y, z, color, size * rand(0.75, 1.25), life * rand(0.8, 1.2), 0.9, 0.78);
+  p.v.set(vx, vy, vz); p.s.material.rotation = rand(0, 6.3);
+}
+function slash(x, y, z, rot, size, color, life = 0.15) { fxSpawn(slashes, x, y, z, color, size, life, 0.55, 0.95).s.material.rotation = rot; }
+function shockRing(x, y, z, color, size, life = 0.32) { fxSpawn(rings, x, y, z, color, size, life, 3.2, 0.9); }
+function updateFx(dt) {
+  for (const pool of [puffs, slashes, rings]) for (const p of pool) {
+    if (p.life <= 0) continue;
+    p.life -= dt;
+    if (p.life <= 0) { p.s.visible = false; continue; }
+    const k = p.life / p.max, age = 1 - k;
+    p.s.position.addScaledVector(p.v, dt); p.v.multiplyScalar(Math.exp(-dt * 3));
+    p.s.scale.setScalar(p.size * (1 + age * p.grow));
+    p.s.material.opacity = p.op * (pool === puffs ? k : k * k);
+  }
+}
+function screenFlash() { const n = el.flash; n.classList.remove('on'); void n.offsetWidth; n.classList.add('on'); }
+const TICKET_COLS = [0xf4e31c, 0x8fcfae, 0xf29db3, 0xe3bb93, 0xffffff];
+let camKick = 0, slowT = 0;
+const koCam = { t: 0, p: new V3() };
+// a knock-out: white flash, a burst in the ticket colours where the fighter went out, and on the
+// last life the match runs slow for a moment while the camera closes in
+function koBurst(f) {
+  const x = f.pos.x, y = Math.max(f.pos.y, PIT_Y) + 1, z = f.pos.z;
+  screenFlash();
+  shockRing(x, y, z, 0xffffff, 1.2, 0.45); shockRing(x, y, z, 0xf4e31c, 0.7, 0.6);
+  TICKET_COLS.forEach(c => emitLocal(tmpV.set(x, y, z), c, 5, 11, 0.75, 0.6, 9));
+  for (let i = 0; i < 9; i++) puff(x + rand(-0.5, 0.5), y + rand(-0.4, 0.6), z + rand(-0.5, 0.5), 0xf4f1e8, 1.1, 0.7, rand(-3, 3), rand(0.5, 3), rand(-2, 2));
+  if (f.lives <= 0) { koCam.t = 1.5; koCam.p.set(clamp(x, -PLAY_X, PLAY_X), 0.6, clamp(z, -PZ, PZ)); if (NET.role !== 'guest') slowT = 0.75; }
+}
+const FLASH_WHITE = new THREE.Color(0xffffff), DODGE_TINT = new THREE.Color(0x9fd8ff);
+function setFlash(r, k, col = FLASH_WHITE) {
+  if (!r.flashMats) {
+    r.flashMats = [];
+    r.root.traverse(o => { const m = o.material; if (m && m.emissive && !r.flashMats.some(e => e.m === m)) r.flashMats.push({ m, base: m.emissive.clone() }); });
+  }
+  for (const e of r.flashMats) e.m.emissive.copy(e.base).lerp(col, k * 0.8);
+}
+const TRAIL_COL = d => d >= 100 ? 0xf0483a : d >= 50 ? 0xf7df3a : 0xf4f1e8;
+function fighterFx(f, dt) {
+  const r = f.rig, s = f.state, live = mode === 'fight' || mode === 'over';
+  const x = f.fx || (f.fx = { dmg: f.dmg, flash: 0, lit: false, ground: true, vy: 0, ko: s === 'ko', trail: 0, slide: 0, atk: null, atkAt: -9 });
+  // a hit landed: the damage went up
+  if (live && f.dmg > x.dmg + 0.5) {
+    const pw = clamp((f.dmg - x.dmg) / 13 * (0.55 + f.dmg / 130), 0.15, 1);
+    x.flash = 0.11 + pw * 0.09; camKick = Math.max(camKick, pw);
+    if (pw > 0.55) shockRing(f.pos.x, f.pos.y + 1.1, f.pos.z, TRAIL_COL(f.dmg), 0.5 + pw * 0.5);
+  }
+  x.dmg = f.dmg;
+  x.flash = Math.max(0, x.flash - dt);
+  const k = clamp(x.flash / 0.1, 0, 1), dk = s === 'dodge' ? 0.55 : 0;
+  if (k > 0 || dk > 0 || x.lit) {
+    setFlash(r, k > 0 ? k : dk, k > 0 ? FLASH_WHITE : DODGE_TINT); x.lit = k > 0 || dk > 0;
+    if (k > 0 && s !== 'ko') { r.root.position.x += Math.sin(clock * 95) * 0.055 * k; r.root.position.z += Math.cos(clock * 83) * 0.03 * k; }
+  }
+  if (live && s === 'dodge') {
+    if (!x.dodge && f.onGround) for (let i = 0; i < 5; i++) puff(f.pos.x + rand(-0.2, 0.2), f.pos.y + 0.1, f.pos.z + rand(-0.2, 0.2), 0xb9b2a2, 0.4, 0.3, -f.vel.x * 0.12 + rand(-0.6, 0.6), 0.4, -f.vel.z * 0.12 + rand(-0.6, 0.6));
+    x.dtrail = (x.dtrail || 0) + dt * 30;
+    while (x.dtrail >= 1) { x.dtrail--; puff(f.pos.x, f.pos.y + rand(0.5, 1.5), f.pos.z, 0xdff2ff, 0.3, 0.2, 0, 0.1, 0); }
+  }
+  x.dodge = s === 'dodge';
+  // sent flying: a smoke trail, longer and thicker the more damage, white -> yellow -> red
+  const sp3 = Math.hypot(f.vel.x, f.vel.y, f.vel.z), d = Math.min(f.dmg, 160);
+  if (live && freeze <= 0 && (s === 'hitstun' || s === 'ko') && sp3 > 7 && f.pos.y > PIT_Y - 2) {
+    x.trail += dt * (24 + d * 0.4);
+    while (x.trail >= 1) { x.trail--; puff(f.pos.x + rand(-0.15, 0.15), f.pos.y + 1 + rand(-0.3, 0.3), f.pos.z + rand(-0.15, 0.15), TRAIL_COL(f.dmg), 0.3 + d / 300, 0.3 + d / 260, -f.vel.x * 0.05, 0.6, -f.vel.z * 0.05); }
+  } else x.trail = 0;
+  // dust: skidding along the floor after a hit, landing from a height, kicking off
+  if (live && s === 'hitstun' && f.onGround && Math.hypot(f.vel.x, f.vel.z) > 4 && freeze <= 0) {
+    x.slide += dt * 22;
+    while (x.slide >= 1) { x.slide--; puff(f.pos.x, f.pos.y + 0.12, f.pos.z, 0xb9b2a2, 0.4, 0.3, rand(-0.5, 0.5), 0.5, rand(-0.5, 0.5)); }
+  }
+  if (live && s !== 'ko' && s !== 'grabbed') {
+    if (f.onGround && !x.ground && x.vy < -9) for (let i = 0; i < 6; i++) { const a = rand(0, 6.3); puff(f.pos.x, f.pos.y + 0.1, f.pos.z, 0xb9b2a2, 0.45, 0.35, Math.cos(a) * 2.6, 0.3, Math.sin(a) * 2.6); }
+    else if (!f.onGround && x.ground && f.vel.y > 8) for (let i = 0; i < 3; i++) puff(f.pos.x + rand(-0.2, 0.2), f.pos.y + 0.1, f.pos.z + rand(-0.2, 0.2), 0xb9b2a2, 0.35, 0.28, rand(-1, 1), 0.2, rand(-1, 1));
+  }
+  x.ground = f.onGround; x.vy = f.vel.y;
+  if (live && s === 'ko' && !x.ko) koBurst(f);
+  x.ko = s === 'ko';
+  // the arc of a swing, once per attack as its strike begins
+  const a = f.atk;
+  if (live && s === 'attack' && a && !a.m.shot && !a.m.grab && a.t >= a.m.act[0] && x.atk !== a && !(x.atkName === a.name && clock - x.atkAt < a.m.dur)) {
+    x.atk = a; x.atkName = a.name; x.atkAt = clock;
+    const m = a.m, fd = faceDir(f.face), col = f === P ? 0xffe9b0 : 0xc4ecff, size = (m.rad + 0.45) * (m.stick ? 1.25 : 1.05);
+    const px = f.pos.x + fd.x * m.range * 0.85, py = f.pos.y + m.hy, pz = f.pos.z + fd.z * m.range * 0.85 + 0.25;
+    const side = fd.x >= 0 ? 0 : Math.PI, tilt = fd.x >= 0 ? 1 : -1;
+    if (m.anim === 'airspin') shockRing(f.pos.x, f.pos.y + 1, f.pos.z, col, 0.75, 0.24);
+    else slash(px, py, pz, m.anim === 'upper' ? Math.PI / 2 : m.anim === 'smash' || m.anim === 'slam' ? -Math.PI / 2 + tilt * 0.35 : m.anim === 'kick' ? side + tilt * 0.45 : side + rand(-0.25, 0.25), size, col, m.stick ? 0.2 : 0.14);
+  }
+}
+
 /* ---------------- DOM refs ---------------- */
 const el = {
-  menu: $('#menu'), hud: $('#hud'), touch: $('#touch'), result: $('#result'), big: $('#big'), pops: $('#pops'), you: $('#you'),
+  menu: $('#menu'), hud: $('#hud'), touch: $('#touch'), result: $('#result'), big: $('#big'), pops: $('#pops'), you: $('#you'), flash: $('#flash'),
   nP: $('#nP'), nC: $('#nC'), dP: $('#dP'), dC: $('#dC'), gP: $('#gP'), gC: $('#gC'), gbP: $('#gbP'), gbC: $('#gbC'), lP: $('#lP'), lC: $('#lC'),
   cardP: $('#cardP'), cardC: $('#cardC'), timer: $('#timer'), warn: $('#warn'), warnSide: $('#warnSide'),
   nm: $('#nm'), go: $('#go'), rotate: $('#rotate'), mute: $('#mute'), rot: $('#rot'), help: $('#help'),
@@ -2953,10 +3142,12 @@ if (coarse) el.help.hidden = true;
 const popups = [];
 const tmpV = new V3();
 function popup(text, f, cls = '', dy = 0) {
+  const combo = cls.indexOf('combo') === 0;
+  if (combo) for (let i = popups.length - 1; i >= 0; i--) if (popups[i].combo && popups[i].f === f) { popups[i].d.remove(); popups.splice(i, 1); }
   const d = document.createElement('div');
   d.className = 'pp ' + cls; d.textContent = text;
   el.pops.appendChild(d);
-  popups.push({ d, f, base: f.pos.clone(), t: 0, dy });
+  popups.push({ d, f, base: f.pos.clone(), t: 0, dy, combo });
 }
 function toScreen(v) {
   tmpV.copy(v).project(camera);
@@ -2982,7 +3173,7 @@ function bigText(t, dur = 1) {
 /* ================= GAME STATE ================= */
 let mode = 'menu';   // menu | count | fight | over
 let freeze = 0, shake = 0, matchT = 180, countT = 0, overT = 0, clock = 0;
-let diff = 'normal';
+let diff = 'auto';   // auto = the CPU's level follows the player; easy | normal | hard = fixed
 const sel = { mask: 0, chest: 0, cape: 0, legs: 0, char: 0 };
 const train = { state: 'idle', t: 5, side: 1, dir: 1, head: 0, horn2: false };
 
@@ -3111,6 +3302,23 @@ function startAttack(f, name) {
   if (m.lunge && f.onGround) { const d = faceDir(f.face); f.vel.x += d.x * m.lunge; f.vel.z += d.z * m.lunge; }
   ownSfx(f, 'whoosh');
 }
+// ---- التفادي (dodge): a quick shove that hits pass through for its first moment. With a direction it is a
+// dash (about 2 m on the ground), without one you slip the hit on the spot. Once per jump in the air, where
+// it also holds you up for a beat (a way back to the platform). Then DODGE_CD before the next one. ----
+const DODGE_CD = 1.1, DODGE = { dur: 0.34, inv: 0.24, dash: 13, air: 11 };
+function startDodge(f) {
+  if (f.dodgeCd > 0 || (!f.onGround && f.airDodged)) return false;
+  const c = f.ctrl, ml = Math.hypot(c.mx, c.mz);
+  f.state = 'dodge'; f.atk = null; f.buffer = null; f.dodgeT = DODGE.dur; f.dodgeInv = DODGE.inv; f.dodgeCd = DODGE_CD;
+  if (ml > 0.25) {
+    const v = f.onGround ? DODGE.dash : DODGE.air;
+    f.vel.x = c.mx / ml * v; f.vel.z = c.mz / ml * v;
+    if (!f.onGround) f.vel.y = Math.max(f.vel.y, 3.5);
+  } else { f.vel.x *= 0.2; f.vel.z *= 0.2; if (!f.onGround) f.vel.y = Math.max(f.vel.y, 2); }
+  if (!f.onGround) f.airDodged = true;
+  ownSfx(f, 'whoosh');
+  return true;
+}
 function release(holder) {
   const t = holder.holding;
   holder.holding = null; if (holder.state === 'holding') holder.state = 'idle';
@@ -3129,11 +3337,14 @@ function doThrow(f) {
   const kb = 7 + t.dmg * 0.11;
   t.vel.set(d.x * kb, 2.5 + kb * 0.4, d.z * kb);
   t.state = 'hitstun'; t.stunT = 0.45 + kb * 0.02; t.lastHitBy = f; t.lastHitT = clock; t.pit = false;
-  f.stats.hits++; freeze = 0.08; shake = Math.min(0.5, shake + 0.25);
+  skillNudge(f === P ? 0.01 : -0.01);
+  f.stats.hits++; freeze = 0.13; shake = Math.min(0.7, shake + 0.3);
   emit(tmpV.copy(t.pos).add(new V3(0, 1, 0)), 0xffb23e, 10, 6, 0.5, 0.35);
   SFX.hit(kb); popup('رمية بلدي!', f, 'move');
   cardJolt(t);
 }
+const COMBO_WORDS = { 2: 'اتنين!', 3: 'تلاتة يا معلم!', 4: 'أربعة.. إيه ده؟!', 5: 'خمسة.. ارحموه!', 6: 'ستة.. حرام عليك!', 7: 'سبعة.. يا ساتر!' };
+function comboWord(n) { return COMBO_WORDS[n] || AR(n) + '.. اتصلوا بالإسعاف!'; }
 function cardJolt(t) {
   const c = t === P ? el.cardP : el.cardC;
   c.classList.remove('hit'); void c.offsetWidth; c.classList.add('hit');
@@ -3181,14 +3392,16 @@ function applyHit(f, t, m, hp) {
   t.state = 'hitstun'; t.stunT = m.stun + kb * 0.02; t.atk = null; t.buffer = null;
   t.face = Math.atan2(-nx, -nz);
   t.lastHitBy = f; t.lastHitT = clock;
+  skillNudge((f === P ? 1 : -1) * (m.dmg || 0) * 0.001);
   f.combo = (wasStun && f.comboT > 0) ? f.combo + 1 : 1;
   f.comboT = 1.0; f.stats.hits++; f.stats.maxCombo = Math.max(f.stats.maxCombo, f.combo);
-  freeze = 0.05 + kb * 0.004; shake = Math.min(0.5, shake + kb * 0.018);
+  // the stop on impact: a blink for a jab, a clear beat for a heavy hit on a damaged fighter
+  freeze = clamp(0.045 + kb * 0.0075, 0.05, 0.2); shake = Math.min(0.7, shake + kb * 0.024);
   emit(hp, 0xffb23e, 6 + (kb | 0), 5 + kb * 0.3, 0.45, 0.3);
   emit(hp, 0xffffff, 2, 1, 1.1, 0.12, 0);
   SFX.hit(kb);
   if (m.name) popup(m.name, f, f === P ? 'move' : 'cpu');
-  if (f.combo >= 2) popup('كومبو ×' + AR(f.combo), f, 'combo', 34);
+  if (f.combo >= 2) popup(comboWord(f.combo), f, 'combo c' + Math.min(f.combo, 6), 34);
   cardJolt(t);
 }
 function checkHit(f, t) {
@@ -3203,6 +3416,7 @@ function checkHit(f, t) {
   const cy = clamp(hy, t.pos.y + 0.25, t.pos.y + 1.85);
   if (Math.hypot(hx - t.pos.x, hy - cy, hz - t.pos.z) > m.rad + 0.32) return;
   a.hit = true;
+  if (t.dodgeInv > 0) { popup('فلت!', t, t === P ? '' : 'cpu'); return; }
   applyHit(f, t, m, new V3(hx, hy, hz));
 }
 function knockOut(f, dir) {
@@ -3211,6 +3425,7 @@ function knockOut(f, dir) {
   f.state = 'ko'; f.koT = 0; f.atk = null;
   f.vel.set(dir * 30, 15, -Math.sign(f.pos.z) * 3);
   f.lives = Math.max(0, f.lives - 1);
+  skillNudge(f === P ? -0.07 : 0.07);
   const by = f.lastHitBy && clock - f.lastHitT < 6 ? f.lastHitBy : null;
   if (by) by.stats.kos++;
   bigText(pick(KO_LINES), 1.4);
@@ -3228,6 +3443,7 @@ function respawn(f) {
 function separate(a, b) {
   const bad = s => s === 'ko' || s === 'grabbed';
   if (bad(a.state) || bad(b.state) || a.holding || b.holding) return;
+  if (a.dodgeInv > 0 || b.dodgeInv > 0) return;   // a dodge slips past the other fighter
   const dx = b.pos.x - a.pos.x, dz = b.pos.z - a.pos.z, d = Math.hypot(dx, dz), min = R * 1.7;
   if (d < min && Math.abs(a.pos.y - b.pos.y) < 1.5) {
     const p = (min - d) / 2, nx = d > 1e-4 ? dx / d : 1, nz = d > 1e-4 ? dz / d : 0;
@@ -3237,7 +3453,7 @@ function separate(a, b) {
 }
 // online, the friend's phone plays its own jump/whoosh the moment it moves, so the host doesn't send those
 function ownSfx(f, n) { if (NET.role === 'host' && f === C) { NET.quiet = true; SFX[n](); NET.quiet = false; } else SFX[n](); }
-function clearPresses(c) { c.jump = c.light = c.heavy = c.grab = c.shot = false; }
+function clearPresses(c) { c.jump = c.light = c.heavy = c.grab = c.shot = c.dodge = false; }
 
 // ---- نبلة (slingshot): a pebble flies from the hand; light damage, a guard facing it blocks it ----
 const SHOT_CD = 3, SHOT_SPEED = 19, SHOT_HIT = { dmg: 5, kb: 4.5, kbg: .05, up: .25, stun: .3 };
@@ -3258,7 +3474,7 @@ function updateShots(dt) {
     s.v.y -= 7 * dt; s.p.addScaledVector(s.v, dt); s.m.position.copy(s.p); if (s.b) s.m.rotation.z += dt * 12; else s.m.rotation.x += dt * 20;
     const t = s.owner.foe;
     const dx = s.p.x - t.pos.x, dz = s.p.z - t.pos.z, dy = s.p.y - t.pos.y;
-    if (t.state !== 'ko' && t.state !== 'grabbed' && t.inv <= 0 && Math.hypot(dx, dz) < 0.5 && dy > 0.15 && dy < 2.0) {
+    if (t.state !== 'ko' && t.state !== 'grabbed' && t.inv <= 0 && t.dodgeInv <= 0 && Math.hypot(dx, dz) < 0.5 && dy > 0.15 && dy < 2.0) {
       applyHit(s.owner, t, SHOT_HIT, s.p.clone()); dropShot(i); continue;
     }
     if (s.t > 1.4 || s.p.y < PIT_Y) dropShot(i);
@@ -3281,6 +3497,9 @@ function stepFighter(f, dt) {
   if (f.state === 'attack' && f.atk && f.atk.m.shot && !f.atk.fired && f.atk.t >= f.atk.m.act[0]) { f.atk.fired = true; if (NET.role !== 'guest') fireShot(f); }
   f.inv = Math.max(0, f.inv - dt);
   f.grabCd = Math.max(0, f.grabCd - dt); f.shotCd = Math.max(0, f.shotCd - dt);
+  f.dodgeCd = Math.max(0, f.dodgeCd - dt); f.dodgeInv = Math.max(0, f.dodgeInv - dt);
+  if (f.onGround) f.airDodged = false;
+  if (f.state !== 'dodge') f.dodgeInv = 0;
   if (f.state !== 'guard' && f.state !== 'dizzy') f.guard = Math.min(100, f.guard + 14 * dt);
   f.comboT -= dt; f.chainT -= dt; f.bufferT -= dt;
   if (f.bufferT <= 0) f.buffer = null;
@@ -3294,6 +3513,9 @@ function stepFighter(f, dt) {
   if (f.state === 'hitstun' || f.state === 'dizzy') {
     f.stunT -= dt;
     if (f.stunT <= 0) { if (f.state === 'dizzy') f.guard = 45; f.state = 'idle'; }
+  } else if (f.state === 'dodge') {
+    f.dodgeT -= dt;
+    if (f.dodgeT <= 0) f.state = 'idle';
   } else if (f.state === 'holding') {
     f.holdT -= dt;
     if (Math.hypot(c.mx, c.mz) > 0.3) f.face = turnTo(f.face, Math.atan2(c.mx, c.mz), dt * 10);
@@ -3324,6 +3546,7 @@ function stepFighter(f, dt) {
   if (f.state === 'guard') { f.guard -= 4 * dt; if (f.guard <= 5) f.state = 'idle'; }
   // grab straight out of guard (guard + grab), so a guarding fighter can still grab and throw
   if (f.state === 'guard' && c.grab && f.onGround) { f.state = 'idle'; startAttack(f, 'grab'); c.grab = false; }
+  if ((f.state === 'idle' || f.state === 'guard') && c.dodge) startDodge(f);
 
   if (f.state === 'idle') {
     if (c.jump) doJump(f);
@@ -3341,7 +3564,11 @@ function stepFighter(f, dt) {
       tx = c.mx / ml * s; tz = c.mz / ml * s;
       f.face = turnTo(f.face, Math.atan2(c.mx, c.mz), dt * 14);
     }
-    approach(f, tx, tz, (f.onGround ? 48 : 22) * dt);
+    approach(f, tx, tz, (f.onGround ? 48 : 34) * dt);   // air: quicker to turn (was 22)
+    // guard held in the air = drop faster
+    if (!f.onGround && c.guard && f.vel.y < 4) f.vel.y -= G * 1.4 * dt;
+  } else if (f.state === 'dodge') {
+    const k = Math.exp(-(f.onGround ? 5.5 : 2.5) * dt); f.vel.x *= k; f.vel.z *= k;
   } else if (f.state === 'attack' || f.state === 'guard' || f.state === 'holding') {
     if (f.onGround) { const k = Math.exp(-10 * dt); f.vel.x *= k; f.vel.z *= k; }
   } else {
@@ -3349,7 +3576,7 @@ function stepFighter(f, dt) {
   }
   clearPresses(c);
 
-  f.vel.y -= G * dt;
+  f.vel.y -= G * dt * (f.state === 'dodge' && !f.onGround ? 0.3 : 1);   // an air dodge hangs for a beat
   f.prevY = f.pos.y;
   f.pos.addScaledVector(f.vel, dt);
   pushFromPosts(f);
@@ -3359,7 +3586,7 @@ function stepFighter(f, dt) {
 
 /* ---------------- AI ---------------- */
 function aiThink(ai, foe, dt) {
-  const c = ai.ctrl, D = DIFF[diff];
+  const c = ai.ctrl, D = aiParams();
   if (ai.state === 'ko' || ai.state === 'grabbed') { c.mx = c.mz = 0; c.guard = false; return; }
   if (ai.guardT > 0) { ai.guardT -= dt; c.guard = true; } else c.guard = false;
   // continue a planned combo
@@ -3379,8 +3606,15 @@ function aiThink(ai, foe, dt) {
     else if (ai.jumps > 0 && ai.vel.y < 2) c.jump = true;
     return;
   }
+  // The foe is down on the tracks: go down after them and fight there (user, 23 Nov 2026), unless a train
+  // is on its way on that track; then stay up, or climb back out if already down. pitChase keeps the
+  // decision steady while the foe hops about down there.
+  const trainDue = sd => (train.state === 'warn' || train.state === 'run') && trainOn(sd);
+  const foeSide = Math.sign(foe.pos.z) || 1;
+  if (Math.abs(foe.pos.z) > PZ && foe.pos.y < 0.3 && foe.state !== 'ko') { ai.pitChase = 1.2; ai.pitSide = foeSide; } else ai.pitChase = Math.max(0, (ai.pitChase || 0) - dt);
+  const chase = ai.pitChase > 0 && !trainDue(ai.pitSide);
   const inPit = Math.abs(ai.pos.z) > PZ && ai.pos.y < 0.2;
-  if (inPit) {
+  if (inPit && !(chase && Math.sign(ai.pos.z) === ai.pitSide)) {
     const sz = Math.sign(ai.pos.z);
     c.mx = clamp(-ai.pos.x * 0.05, -0.3, 0.3); c.mz = -sz;
     if (ai.onGround && Math.abs(ai.pos.z) < PZ + 1.6) c.jump = true;
@@ -3400,18 +3634,27 @@ function aiThink(ai, foe, dt) {
   if (dist > 3.5 && dist < 10 && ai.shotCd <= 0 && ai.onGround && Math.abs(foe.pos.y - ai.pos.y) < 1 && ai.state === 'idle' && Math.random() < D.aggro * 0.35) {
     ai.face = Math.atan2(dx, dz); c.shot = true; return;
   }
-  if (Math.abs(foe.pos.z) > PZ && foe.pos.y < 0.3) {
-    // edge-guard: wait at the edge above the climber
-    const ex = foe.pos.x, ez = Math.sign(foe.pos.z) * (PZ - 0.7);
-    const ddx = ex - ai.pos.x, ddz = ez - ai.pos.z, dd = Math.hypot(ddx, ddz);
-    if (dd > 0.3) { c.mx = ddx / dd; c.mz = ddz / dd; } else { c.mx = c.mz = 0; }
+  if (Math.abs(foe.pos.z) > PZ && foe.pos.y < 0.3 && !chase) {
+    // a train is coming down there: wait above the climber, a step back from the edge until it has passed
+    const ex = foe.pos.x, ez = Math.sign(foe.pos.z) * (PZ - (trainDue(foeSide) ? 1.6 : 0.7));
+    const ddx = ex - ai.pos.x, ddz = ez - ai.pos.z, dd = Math.hypot(ddx, ddz), ease = Math.min(1, dd);
+    if (dd > 0.3) { c.mx = ddx / dd * ease; c.mz = ddz / dd * ease; } else { c.mx = c.mz = 0; }
     if (dist < 1.9 && foe.pos.y > -1.1 && Math.random() < D.aggro) { if (Math.random() < 0.5) c.heavy = true; else c.light = true; }
     return;
+  }
+  // slip out of a swing that is on its way: back, or along the platform when a track is behind
+  if (foe.state === 'attack' && foe.atk && !foe.atk.m.shot && foe.atk.t < foe.atk.m.act[0] && dist < 2.2 && dist > 0.01 && ai.state === 'idle' && ai.onGround && ai.dodgeCd <= 0 && Math.random() < D.dodge) {
+    let ax = -dx / dist, az = -dz / dist;
+    if (Math.abs(ai.pos.z + az * 2.2) > PZ - 0.5) { az = 0; ax = Math.sign(ax) || (Math.random() < 0.5 ? 1 : -1); }
+    if (Math.abs(ai.pos.x + ax * 2.2) > PLAY_X - 0.5) ax = -ax;
+    c.mx = ax; c.mz = az; c.dodge = true; return;
   }
   if (foe.state === 'attack' && foe.atk && foe.atk.t < foe.atk.m.act[0] && dist < 2.2 && Math.random() < D.guard) {
     ai.guardT = 0.45; c.mx = c.mz = 0; return;
   }
-  if (dist < 1.45) {
+  // still up on the platform with the foe below: no swinging at the air, walk off the edge to them
+  const above = chase && !inPit && foe.pos.y < ai.pos.y - 0.8;
+  if (dist < 1.45 && !above) {
     c.mx = c.mz = 0;
     const r = Math.random();
     // a guarding foe can't be grabbed: lean on the guard with heavies (drains it toward a break) or step back
@@ -3424,10 +3667,10 @@ function aiThink(ai, foe, dt) {
   }
   // approach from the platform side so hits push the foe toward the tracks
   const pitDir = Math.sign(foe.pos.z) || (Math.random() < 0.5 ? 1 : -1);
-  const tx = foe.pos.x, tz = clamp(foe.pos.z - pitDir * 1.0, -PZ + 0.4, PZ - 0.4);
+  const tx = foe.pos.x, tz = chase ? foe.pos.z + (above ? foeSide * 0.6 : 0) : clamp(foe.pos.z - pitDir * 1.0, -PZ + 0.4, PZ - 0.4);
   const ddx = tx - ai.pos.x, ddz = tz - ai.pos.z, dd = Math.hypot(ddx, ddz);
   if (dd > 0.2) { c.mx = ddx / dd; c.mz = ddz / dd; } else { c.mx = c.mz = 0; }
-  if (Math.random() < 0.05) c.jump = true;
+  if (Math.random() < 0.05 && !chase) c.jump = true;
 }
 
 /* ---------------- train ---------------- */
@@ -3514,6 +3757,7 @@ function animate(f, dt) {
   else if (s === 'holding') { aLx = aRx = -1.35; aLz = 0.25; aRz = -0.25; }
   else if (s === 'grabbed') { bX = -0.3; aLx = -1 + Math.sin(a.t * 22) * 0.7; aRx = -1 - Math.sin(a.t * 22) * 0.7; lL = Math.sin(a.t * 18) * 0.5; lR = -lL; }
   else if (s === 'ko') { aLz = -1.6; aRz = 1.6; lL = -0.6; lR = 0.6; }
+  else if (s === 'dodge') { aLz = -0.9; aRz = 0.9; lL = -0.5; lR = 0.3; bX = sp > 3 ? 0.35 : -0.3; }
   else if (!f.onGround) { lL = -0.7; lR = 0.25; aLz = -0.9; aRz = 0.9; if (f.vel.y < 0) { lL = -0.3; lR = 0.1; } }
   else if (sp > 0.6) {
     a.phase += sp * dt * 2.1;
@@ -3522,6 +3766,10 @@ function animate(f, dt) {
   } else { bH = Math.sin(a.t * 2.6) * 0.015; }
 
   if (r.glb) { bX = 0; bH = 0; if (s !== 'dizzy') bZ = 0; if (!(s === 'attack' && f.atk && f.atk.m.anim === 'airspin')) spin = 0; }
+  // a dodge leans into the dash (or away from the hit on the spot); in the air it is one quick turn
+  a.dg = s === 'dodge' ? (a.dg || 0) + dt : 0;
+  const airTurn = s === 'dodge' && !f.onGround;
+  if (s === 'dodge') { fast = true; if (airTurn) spin = Math.min(1, a.dg / DODGE.dur) * Math.PI * 2; else bX = sp > 3 ? (f.vel.x * Math.sin(f.face) + f.vel.z * Math.cos(f.face) >= 0 ? 0.42 : -0.42) : -0.3; }
   const kf = 1 - Math.exp(-dt * (fast ? 34 : 18));
   const lr = (o, v) => o + (v - o) * kf;
   r.legL.rotation.x = lr(r.legL.rotation.x, lL);
@@ -3533,7 +3781,7 @@ function animate(f, dt) {
   r.body.rotation.x = lr(r.body.rotation.x, bX);
   r.body.rotation.z = lr(r.body.rotation.z, bZ);
   r.body.position.y = lr(r.body.position.y, bH);
-  r.body.rotation.y = (s === 'attack' && f.atk && f.atk.m.anim === 'airspin') ? spin : lr(r.body.rotation.y, spin);
+  r.body.rotation.y = (airTurn || (s === 'attack' && f.atk && f.atk.m.anim === 'airspin')) ? spin : lr(r.body.rotation.y, spin);
   if (r.glb) { glbAnim(f, r, dt, sp); plantFeet(f, r, dt, sp); }
   r.stick.visible = stickOn;
   if (r.bag) r.bag.worn.visible = !stickOn;
@@ -3544,6 +3792,7 @@ function animate(f, dt) {
   if (s === 'guard') r.bubble.scale.setScalar(0.55 + f.guard / 100 * 0.45);
 
   r.root.position.copy(f.pos);
+  fighterFx(f, dt);
   if (s === 'ko') { r.root.rotation.x += dt * 13; r.root.rotation.y = f.face; }
   else { r.root.rotation.x = 0; r.root.rotation.y = f.face; }
   r.root.visible = !(f.inv > 0 && Math.floor(f.inv * 14) % 2 === 0) && !(f.lives <= 0 && s === 'ko' && f.koT > 1.4)
@@ -3585,7 +3834,7 @@ function animate(f, dt) {
 const keys = new Set();
 const joy = { x: 0, y: 0 };
 let touchGuard = false;
-const KEYMAP = { Space: 'jump', KeyJ: 'light', KeyK: 'heavy', KeyL: 'grab', KeyZ: 'light', KeyX: 'heavy', KeyC: 'grab', KeyU: 'shot', KeyV: 'shot' };
+const KEYMAP = { Space: 'jump', KeyJ: 'light', KeyK: 'heavy', KeyL: 'grab', KeyZ: 'light', KeyX: 'heavy', KeyC: 'grab', KeyU: 'shot', KeyV: 'shot', KeyO: 'dodge', KeyB: 'dodge' };
 addEventListener('keydown', e => {
   if (e.target && e.target.tagName === 'INPUT') return;
   if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
@@ -3643,7 +3892,7 @@ function setText(node, key, v) { if (hudCache[key] !== v) { hudCache[key] = v; n
 function pctColor(d) {
   const t = clamp(d / 150, 0, 1);
   // printed ink on the ticket, going red as the damage climbs
-  const stops = [[22, 17, 10], [92, 32, 22], [160, 24, 20], [205, 14, 14]];
+  const stops = [[22, 17, 10], [150, 66, 8], [212, 28, 18], [140, 0, 12]];
   const s = t * 3, i = Math.min(2, Math.floor(s)), k = s - i;
   const c = stops[i].map((v, j) => Math.round(v + (stops[i + 1][j] - v) * k));
   return `rgb(${c[0]},${c[1]},${c[2]})`;
@@ -3652,7 +3901,12 @@ function renderLives(node, n) { node.innerHTML = [0, 1, 2].map(i => `<span class
 function updateHUD() {
   for (const [f, d, g, gb, l, k] of [[P, el.dP, el.gP, el.gbP, el.lP, 'p'], [C, el.dC, el.gC, el.gbC, el.lC, 'c']]) {
     const dm = Math.round(f.dmg);
-    if (hudCache[k + 'd'] !== dm) { hudCache[k + 'd'] = dm; d.textContent = AR(dm) + '%'; d.style.color = pctColor(dm); }
+    if (hudCache[k + 'd'] !== dm) {
+      const up = dm > (hudCache[k + 'd'] || 0);
+      hudCache[k + 'd'] = dm; d.textContent = AR(dm) + '%'; d.style.color = pctColor(dm);
+      d.classList.toggle('danger', dm >= 100);
+      if (up) { d.classList.remove('pop'); void d.offsetWidth; d.classList.add('pop'); }
+    }
     g.style.transform = `scaleX(${clamp(f.guard / 100, 0, 1)})`;
     gb.classList.toggle('broken', f.state === 'dizzy');
     if (hudCache[k + 'l'] !== f.lives) { hudCache[k + 'l'] = f.lives; renderLives(l, f.lives); }
@@ -3663,6 +3917,8 @@ function updateHUD() {
   const scd = Math.ceil(P.shotCd);
   const tn = P.rig && P.rig.toss === 'brick' ? 'طوبة' : 'نبلة';
   if (hudCache.scd !== scd || hudCache.tn !== tn) { hudCache.scd = scd; hudCache.tn = tn; const b = el.tShot || (el.tShot = document.querySelector('.tb[data-b="shot"]')); if (b) { b.textContent = scd ? AR(scd) : tn; b.classList.toggle('cd', scd > 0); } }
+  const dcd = P.dodgeCd > 0.05;
+  if (hudCache.dcd !== dcd) { hudCache.dcd = dcd; const b = el.tDodge || (el.tDodge = document.querySelector('.tb[data-b="dodge"]')); if (b) b.classList.toggle('cd', dcd); }
   const s = Math.max(0, Math.ceil(matchT));
   setText(el.timer, 't', AR(Math.floor(s / 60)) + ':' + AR(s % 60).padStart(2, '0'));
 }
@@ -3699,6 +3955,9 @@ function updateCamera(dt) {
     if (asp < 1.25) d *= Math.pow(1.25 / asp, 0.8);
     // aim a little toward the camera side so the near track stays in frame too
     tl.set(clamp(mid.x, -PLAY_X + 3.6, PLAY_X - 3.6), 0.2, clamp(mid.z, -2.6, 2.6) * 0.75 + 0.6);
+    d *= 1 - 0.09 * camKick;
+    if (koCam.t > 0 && mode === 'fight') { koCam.t -= dt; tl.lerp(koCam.p, 0.75); d = Math.min(d, 10) * 0.8; k = 1 - Math.exp(-dt * 7); }
+    else if (camKick > 0.02) k = Math.max(k, 1 - Math.exp(-dt * 14));
     tp.copy(tl).addScaledVector(CAM_DIR, d);
     if (mode === 'count') k = 1 - Math.exp(-dt * 3);
     if (mode === 'over' && overT > 1.0) {
@@ -3714,7 +3973,7 @@ function updateCamera(dt) {
   camera.position.copy(camPos);
   if (shake > 0.001) camera.position.add(new V3(rand(-1, 1), rand(-1, 1), rand(-1, 1)).multiplyScalar(shake * 0.35));
   camera.lookAt(camLook);
-  shake *= Math.exp(-dt * 7);
+  shake *= Math.exp(-dt * 7); camKick *= Math.exp(-dt * 9);
 }
 
 /* ---------------- flow ---------------- */
@@ -3734,13 +3993,13 @@ function startMatch() {
   savePrefs();
   P.name = myName();
   C.name = NET.role === 'host' ? NET.peerName : pick(CPU_NAMES);
-  if (NET.role === 'host') { NET.k++; NET.ev = []; NET.seen = (NET.inp || [0, 0, 0, 0, 0, 0, 0]).slice(3, 7); NET.seenShot = NET.inp ? +NET.inp[8] || 0 : 0; }
+  if (NET.role === 'host') { NET.k++; NET.ev = []; NET.seen = (NET.inp || [0, 0, 0, 0, 0, 0, 0]).slice(3, 7); NET.seenShot = NET.inp ? +NET.inp[8] || 0 : 0; NET.seenDodge = NET.inp ? +NET.inp[9] || 0 : 0; }
   rebuildCPU();
   placeForFight(); clearShots();
   C.rig.root.visible = true;
   el.nP.textContent = P.name; el.nC.textContent = C.name;
   for (const k in hudCache) delete hudCache[k];
-  matchT = 180; freeze = 0; shake = 0;
+  matchT = 180; freeze = 0; shake = 0; slowT = 0; camKick = 0; koCam.t = 0;
   train.state = 'idle'; train.t = 6; placeTrains(false); el.warn.hidden = true; SFX.rumble(false);
   popups.forEach(p => p.d.remove()); popups.length = 0;
   el.menu.hidden = true; el.result.hidden = true; el.hud.hidden = false; el.hud.classList.remove('over');
@@ -3767,6 +4026,7 @@ function endMatch() {
   if (P.lives !== C.lives) win = P.lives > C.lives ? P : C;
   else win = P.dmg <= C.dmg ? P : C;
   P.won = win === P;
+  if (!NET.role && diff === 'auto') { skill = clamp(skill + (P.won ? 0.04 : -0.04), 0, 1); skillSave(); }
   // the result shot: winner back up on the platform, loser a few steps to the side, out of the camera's way
   const lose = win === P ? C : P, wx = clamp(win.pos.x, -PLAY_X + 4, PLAY_X - 4);
   win.pos.set(wx, 0, 0); win.prevY = 0; win.vel.set(0, 0, 0);
@@ -3784,7 +4044,7 @@ function fillResult(win) {
   $('#sHits').textContent = AR(P.stats.hits);
   $('#sCombo').textContent = AR(P.stats.maxCombo);
   $('#sKO').textContent = AR(P.stats.kos);
-  $('#rPts').textContent = '+' + fmtN(matchPoints(win === P, P.stats.kos, P.stats.maxCombo, !NET.role)) + ' نقطة';
+  $('#rPts').textContent = '+' + fmtN(matchPoints(win === P, P.stats.kos, P.stats.maxCombo, !NET.role)) + ' نقطة' + (NET.role ? '' : diff === 'auto' ? ' · الخصم مستوى ' + skillLevel() : ' · الخصم ' + DIFF_LABEL[diff]);
 }
 function toMenu() {
   if (NET.role) netLeave();
@@ -3793,7 +4053,7 @@ function toMenu() {
   el.you.hidden = true;
   SFX.rumble(false);
   Music.set('menu', false);
-  showScreen('main');
+  showScreen('main'); renderDiff();
   P.reset(); P.pos.set(0, 0, 1.0); P.onGround = true; P.rig.root.visible = true; P.rig.root.rotation.set(0, 0, 0);
   C.rig.root.visible = false; if (C.rig.ring) { C.rig.ring.visible = false; C.rig.shadow.visible = false; }
   popups.forEach(p => p.d.remove()); popups.length = 0;
@@ -3812,7 +4072,7 @@ const OPT_NOTE = {
   track: 'ترينج الجيم اللي مبتروحهوش', jeans: 'جينز واسع من العتبة', galabeya: 'جلابية الجمعة', shorts: 'للحر وللجري',
 };
 const SLOTS = ['mask', 'chest', 'cape', 'legs'];
-const DIFF_ORDER = ['easy', 'normal', 'hard'], DIFF_LABEL = { easy: 'سهل', normal: 'عادي', hard: 'صعب' };
+const DIFF_ORDER = ['auto', 'easy', 'normal', 'hard'], DIFF_LABEL = { auto: 'بيتعلم منك', easy: 'سهل', normal: 'متوسط', hard: 'صعب' };
 const scr = { main: $('#sMain'), char: $('#sChar'), tailor: $('#sTailor'), moves: $('#sMoves'), online: $('#sOnline'), scores: $('#sScores') };
 const tabsEl = $('#tabs'), optsEl = $('#opts');
 let mscreen = 'main', tailSlot = 'mask', cur = 0;
@@ -3860,9 +4120,11 @@ function showScreen(s, kb) {
   setCur(s === 'tailor' ? sel[tailSlot] : s === 'char' ? Math.max(0, items().indexOf($('#cpOk'))) : 0, kb);
   SFX.ui(true);
 }
-function cycleDiff(d) { diff = DIFF_ORDER[(DIFF_ORDER.indexOf(diff) + d + 3) % 3]; renderDiff(); savePrefs(); SFX.ui(true); }
+function cycleDiff(d) { diff = DIFF_ORDER[(DIFF_ORDER.indexOf(diff) + d + 4) % 4]; renderDiff(); savePrefs(); SFX.ui(true); }
+// the opponent tickets; the learning one shows its level right now, and the line above says what it does
 function renderDiff() {
-  $('#diffV').textContent = DIFF_LABEL[diff];
+  $('#lvlV').textContent = skillLevel() + ' من 10';
+  $('#diffV').textContent = diff === 'auto' ? 'بيقوى لما تكسب ويهدى لما تخسر' : '';
   document.querySelectorAll('.tier').forEach(b => { const on = b.dataset.d === diff; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
 }
 // once the 3D characters are in, the tailor gives way to picking a character
@@ -3973,14 +4235,14 @@ function menuKey(e) {
 
 const PREF_KEY = 'otman-helwan-v1';
 function savePrefs() {
-  try { localStorage.setItem(PREF_KEY, JSON.stringify({ sel, diff, name: el.nm.value, muted: SFX.muted, musicOff: Music.off })); } catch (e) {}
+  try { localStorage.setItem(PREF_KEY, JSON.stringify({ sel, diff, dv: 2, name: el.nm.value, muted: SFX.muted, musicOff: Music.off })); } catch (e) {}
 }
 function loadPrefs(extra) {
   let p = extra && extra.sel ? extra : null;
   if (!p) { try { p = JSON.parse(localStorage.getItem(PREF_KEY) || 'null'); } catch (e) { p = null; } }
   if (!p) return renderName();
   if (p.sel) for (const k in sel) if (Number.isInteger(p.sel[k]) && p.sel[k] >= 0 && p.sel[k] < (k === 'char' ? CHARS.length : OPTS[k].length)) sel[k] = p.sel[k];
-  if (DIFF[p.diff]) diff = p.diff;
+  if (p.dv === 2 && (p.diff === 'auto' || DIFF[p.diff])) diff = p.diff;
   if (typeof p.name === 'string' && p.name.trim()) el.nm.value = p.name.slice(0, 18);
   if (p.muted) SFX.muted = true;
   if (p.musicOff) Music.off = true;
@@ -4069,18 +4331,20 @@ function tick(now) {
     readPlayer();
     if (NET.role === 'host') hostInput(C);
     else if (!(window.__otman && window.__otman.noAI)) aiThink(C, P, dt);
+    const sdt = slowT > 0 ? dt * 0.3 : dt;
+    if (slowT > 0) slowT -= dt;
     if (freeze > 0) freeze -= dt;
     else {
-      stepFighter(P, dt); stepFighter(C, dt);
+      stepFighter(P, sdt); stepFighter(C, sdt);
       separate(P, C);
       checkHit(P, C); checkHit(C, P);
-      updateShots(dt);
+      updateShots(sdt);
       for (const f of [P, C]) {
         if (f.state === 'ko' && f.koT > 1.5) { if (f.lives > 0) respawn(f); }
         else if (f.state !== 'ko' && f.pos.y < -12) knockOut(f, 1);
       }
     }
-    updateTrain(dt, true);
+    updateTrain(sdt, true);
     const dead = [P, C].find(f => f.lives <= 0 && f.state === 'ko' && f.koT > 1.2);
     if (dead || matchT <= 0) endMatch();
     updateHUD();
@@ -4107,7 +4371,7 @@ function tick(now) {
   if (NET.role === 'host' && mode !== 'menu') { hostSend(); if (mode === 'fight') netStall(performance.now() - NET.inpAt, 2500); }
   animate(P, dt);
   if (mode !== 'menu') animate(C, dt);
-  updateParts(dt);
+  updateParts(dt); updateFx(dt);
   Music.update(dt);
   updateAmbient(dt);
   updateFade(dt);
@@ -4277,6 +4541,7 @@ function hostInput(f) {
   c.mx = clamp(+i[0] || 0, -1, 1); c.mz = clamp(+i[1] || 0, -1, 1); c.guard = !!i[2];
   for (let k = 0; k < 4; k++) { const n = +i[3 + k] || 0; if (n > NET.seen[k]) { c[NET_KEYS[k]] = true; NET.seen[k] = n; } }
   { const n = +i[8] || 0; if (n > (NET.seenShot | 0)) { c.shot = true; NET.seenShot = n; } }
+  { const n = +i[9] || 0; if (n > (NET.seenDodge | 0)) { c.dodge = true; NET.seenDodge = n; } }
 }
 function fs(f) {
   const a = f.atk;
@@ -4287,7 +4552,7 @@ function fs(f) {
 const TR_STATES = ['idle', 'warn', 'run'];
 function hostSend() {
   if (!NET.r) return;
-  if (mode !== 'fight' && NET.inp) { NET.seen = NET.inp.slice(3, 7); NET.seenShot = +NET.inp[8] || 0; }   // presses outside the fight don't count later
+  if (mode !== 'fight' && NET.inp) { NET.seen = NET.inp.slice(3, 7); NET.seenShot = +NET.inp[8] || 0; NET.seenDodge = +NET.inp[9] || 0; }   // presses outside the fight don't count later
   NET.r.presence({ g: {
     k: NET.k, m: mode, t: r2(matchT), as: NET.inSeq, ag: Math.round(performance.now() - NET.inSeqAt), ct: r2(countT), won: P.won ? 1 : 0, sh: r2(shake), hc: sel.char, cc: cpuChar, n: P.name,
     tr: [TR_STATES.indexOf(train.state), r2(train.head), train.side, train.dir, r2(train.t)],
@@ -4361,7 +4626,7 @@ function applyFighter(f, s, age, dt) {
 // of after a round trip. The host still decides hits, damage and lives. Each snapshot says which of
 // our inputs the host had (as) and for how long (ag); we compare the host's position with where we
 // were at that moment and slide the difference in, so the two copies don't drift apart.
-const FREE = new Set(['idle', 'guard', 'attack']);
+const FREE = new Set(['idle', 'guard', 'attack', 'dodge']);
 function histAt(t) {
   const h = NET.hist;
   if (!h.length || t < h[0].t || t > h[h.length - 1].t + 40) return null;
@@ -4392,7 +4657,7 @@ function predictMe(g, age, dt) {
   // don't walk through the other fighter (only we move)
   if (C.state !== 'ko' && C.state !== 'grabbed') {
     const dx = P.pos.x - C.pos.x, dz = P.pos.z - C.pos.z, d = Math.hypot(dx, dz), min = R * 1.7;
-    if (d < min && d > 1e-4 && Math.abs(P.pos.y - C.pos.y) < 1.5) { P.pos.x += dx / d * (min - d); P.pos.z += dz / d * (min - d); collide(P); }
+    if (P.dodgeInv <= 0 && d < min && d > 1e-4 && Math.abs(P.pos.y - C.pos.y) < 1.5) { P.pos.x += dx / d * (min - d); P.pos.z += dz / d * (min - d); collide(P); }
   }
   // a new snapshot: how far is the host's copy from ours at the same moment?
   if (NET.recAt !== NET.snapAt) {
@@ -4432,13 +4697,14 @@ function guestStep(dt) {
   NET_KEYS.forEach((key, i) => { if (P.ctrl[key]) { NET.cnt[i]++; pressed = true; } });
   const r1 = v => Math.round(v * 10) / 10, now = performance.now();
   if (P.ctrl.shot) { NET.shotCnt = (NET.shotCnt | 0) + 1; pressed = true; }
-  const inp = [r1(P.ctrl.mx), r1(P.ctrl.mz), P.ctrl.guard ? 1 : 0, ...NET.cnt], key = inp.join() + '|' + (NET.shotCnt | 0);
+  if (P.ctrl.dodge) { NET.dodgeCnt = (NET.dodgeCnt | 0) + 1; pressed = true; }
+  const inp = [r1(P.ctrl.mx), r1(P.ctrl.mz), P.ctrl.guard ? 1 : 0, ...NET.cnt], key = inp.join() + '|' + (NET.shotCnt | 0) + '|' + (NET.dodgeCnt | 0);
   // a changed joystick goes out at most 15 times a second, a button press at once
   if (key !== NET.lastInp && (pressed || now - NET.lastSendT >= 66)) {
     NET.lastInp = key; NET.lastSendT = now; NET.iseq++;
     NET.sentAt.set(NET.iseq, now);
     if (NET.sentAt.size > 120) NET.sentAt.delete(NET.sentAt.keys().next().value);
-    NET.r.presence({ inp: [...inp, NET.iseq, NET.shotCnt | 0] }).catch(() => {});
+    NET.r.presence({ inp: [...inp, NET.iseq, NET.shotCnt | 0, NET.dodgeCnt | 0] }).catch(() => {});
   }
   const quiet = performance.now() - NET.snapAt;
   const age = Math.min(0.15, quiet / 1000);
@@ -4447,7 +4713,7 @@ function guestStep(dt) {
   mode = g.m; matchT = g.t; countT = g.ct; shake = Math.max(shake, g.sh);
   applyFighter(C, g.f[0], age, dt);
   if (mode === 'fight' && FREE.has(g.f[1][7])) predictMe(g, age, dt);
-  else { applyFighter(P, g.f[1], age, dt); clearPresses(P.ctrl); NET.predicting = false; }
+  else { applyFighter(P, g.f[1], age, dt); clearPresses(P.ctrl); NET.predicting = false; P.dodgeCd = Math.max(0, P.dodgeCd - dt); }
   guestStones(g.pj || []);
   // the train, as the host sees it
   const ts = TR_STATES[g.tr[0]] || 'idle';
@@ -4487,18 +4753,19 @@ async function netRecord(win) {
 const CPU_REC = 'otman-helwan-cpu';
 // points (user, 10 Nov 2026: "the scores should count numbers"): a win 100, a loss 20 for playing,
 // +30 per knock-out you caused, +5 per hit of your longest combo; vs the CPU scaled by difficulty
+// (the learning opponent: 0.4 of the points at its lowest level, all of them at its highest)
 const PTS_DIFF = { easy: 0.4, normal: 0.7, hard: 1 };
 function matchPoints(won, kos, combo, vsCpu) {
   const p = (won ? 100 : 20) + (+kos || 0) * 30 + (+combo || 0) * 5;
-  return Math.round(vsCpu ? p * (PTS_DIFF[diff] || 0.7) : p);
+  return Math.round(vsCpu ? p * (diff === 'auto' ? 0.4 + 0.6 * skill : PTS_DIFF[diff] || 0.7) : p);
 }
 const fmtN = n => Number(n || 0).toLocaleString('en-US');
 function cpuRecord(won) {
   try {
     const r = JSON.parse(localStorage.getItem(CPU_REC) || '{"w":0,"l":0}'); r[won ? 'w' : 'l']++;
     r.p = (r.p | 0) + matchPoints(won, P.stats.kos, P.stats.maxCombo, true);
-    // Ramadan fighters: wins on عادي/صعب during Ramadan count; at RAMADAN_WINS they unlock for good
-    if (won && diff !== 'easy' && inRamadan()) {
+    // Ramadan fighters: wins on متوسط / صعب, or against the learning CPU at level 5+, during Ramadan count; at RAMADAN_WINS they unlock for good
+    if (won && (diff === 'auto' ? skill >= 0.4 : diff !== 'easy') && inRamadan()) {
       r.rw = (r.rw | 0) + 1;
       if (r.rw >= RAMADAN_WINS) {
         const u = unlocks(); let got = '';
@@ -4536,6 +4803,18 @@ async function loadScores() {
 
 
 
+// Supabase's free plan puts a project to sleep after a week with no requests (that is what broke the name
+// screen on 23 Nov 2026: the server's address stopped resolving). So any visit to the game, at most once a
+// day per browser, asks it for one row: enough to count as use while people still open the game.
+function supaWake() {
+  if (IN_CLAUDE || LOCALNET || location.protocol === 'file:') return;
+  try {
+    const K = 'otman-helwan-wake', now = Date.now();
+    if (now - (+localStorage.getItem(K) || 0) < 864e5) return;
+    localStorage.setItem(K, String(now));
+    fetch(SUPA_URL + '/rest/v1/matches?select=a&limit=1', { headers: { apikey: SUPA_KEY, Authorization: 'Bearer ' + SUPA_KEY } }).catch(() => {});
+  } catch (e) {}
+}
 // ---- online names: claimed once on Supabase (claim_name), fixed for 30 days ----
 // The browser keeps a random secret token; the server stores only its hash next to the name,
 // so nobody else can take or use that name. Clearing the browser's data loses the token (and
@@ -4586,7 +4865,11 @@ async function doClaim() {
   }
   claimArm = 0; $('#claimBand').textContent = 'ثبّت الاسم'; onStatus('بنثبّت الاسم...');
   let r;
-  try { r = await claimName(name); } catch (e) { onStatus('معرفناش نثبّت الاسم دلوقتي. جرب تاني كمان شوية.', true); return; }
+  try { r = await claimName(name); } catch (e) {
+    // no answer at all (TypeError: failed to fetch) = the online server is down or asleep, not a bad name
+    const down = !e || e instanceof TypeError || /fetch|network|load failed/i.test(String(e.message || e));
+    onStatus(down ? 'سيرفر الأونلاين مش شغال دلوقتي. اللعب ضد الكمبيوتر شغال عادي.' : 'معرفناش نثبّت الاسم دلوقتي. جرب تاني كمان شوية.', true); return;
+  }
   const v = idGet() || {};
   if (r && (r.ok || r.err === 'locked')) {
     v.name = r.name; v.until = r.until; idSet(v); el.nm.value = r.name; renderName(); savePrefs();
@@ -4741,6 +5024,7 @@ function boot(data) {
     renderChar();
   }).catch(e => console.warn('[glb] could not load, keeping the procedural fighter', e));
   requestAnimationFrame(frame);
+  setTimeout(supaWake, 4000);
 }
 const hot = window.claude && window.claude.hot;
 if (hot && hot.ready) hot.ready(boot); else boot((hot && hot.data) || {});
