@@ -594,6 +594,34 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   .tb{font-size:11px;border-width:2.5px;box-shadow:0 4px 0 var(--tk-ink),0 7px 8px rgba(0,0,0,.3)}
   .tb::after{inset:3px}
 }
+/* ===== more than two fighters (كله بيضرب في كله): the others' tickets sit in a row on the left ===== */
+.card[hidden]{display:none}
+#foes{position:absolute;left:max(16px,env(safe-area-inset-left,0px));top:calc(12px + env(safe-area-inset-top,0px));display:flex;gap:8px;align-items:flex-start}
+#foes .card{position:relative;left:auto;top:auto}
+.card.out{opacity:.45;filter:grayscale(.7)}
+#hud.multi #foes .card{width:min(150px,16vw);padding:4px 8px 0;gap:0 6px}
+#hud.multi #foes .card:nth-child(2){transform:rotate(-1deg)}
+#hud.multi #foes .card .who{font-size:11px}#hud.multi #foes .card .who::before{display:none}
+#hud.multi #foes .pct{font-size:clamp(18px,min(4vh,2.5vw),28px)}
+#hud.multi #foes .card .lives{gap:3px}#hud.multi #foes .lives span{width:10px;height:10px}
+#hud.multi #foes .lives span.on{border-width:1.5px}
+#hud.multi #foes .card .gbar{height:6px;margin:2px -8px 0}
+.tier.mt{font-size:clamp(14px,2.5vh,17px);padding:0 2px}.tier.mt.on{font-size:clamp(15px,2.7vh,18px)}
+@media (max-height:500px){
+  #foes{left:max(8px,env(safe-area-inset-left,0px));top:calc(4px + env(safe-area-inset-top,0px));gap:5px}
+  #hud.multi #foes .card{width:min(104px,12.4vw);padding:3px 6px 0}
+  #hud.multi #foes .pct{font-size:17px}
+  #hud.multi #foes .lives span{width:8px;height:8px}
+  .tier.mt{font-size:13px}.tier.mt.on{font-size:14px}
+}
+@media (max-width:700px) and (min-height:501px){
+  #foes{left:max(8px,env(safe-area-inset-left,0px));top:calc(8px + env(safe-area-inset-top,0px));gap:4px}
+  #hud.multi #foes .card{width:20vw;padding:3px 5px 0}
+  #hud.multi #foes .pct{font-size:clamp(14px,4.4vw,20px)}
+  #hud.multi #foes .lives span{width:7px;height:7px}
+  #hud.multi #topbar{top:calc(64px + env(safe-area-inset-top,0px))}
+}
+#fps{position:fixed;left:8px;bottom:8px;z-index:60;padding:3px 8px;background:rgba(0,0,0,.72);color:#eef33b;font:700 12px/1.4 'IBM Plex Sans Arabic',sans-serif;border-radius:3px;pointer-events:none;direction:rtl}
 /* upright layout: the start ticket without the empty bands (no "Enter" line on a phone, and no
    "turn the phone" line in a desktop window, where there is no phone to turn) */
 @media (orientation:portrait) and (max-width:700px){
@@ -630,11 +658,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     <div class="mshade" aria-hidden="true"></div>
     <!-- the user's key art: five fighters on the left in front of Helwan station -->
     <div class="kart" aria-hidden="true">
-      <img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/keyart.webp" alt="">
+      <img src="assets/ui/keyart.webp" alt="">
       <div class="kart-you" id="kartYou"><span>إنت</span></div>
     </div>
     <div class="mcol">
-      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/logo.webp" alt=""></h1>
+      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="assets/ui/logo.webp" alt=""></h1>
       <p class="mtag">اللي يفضل واقف على الرصيف ياخد اللقب.</p>
 
       <section class="mscr" id="sMain" aria-label="القايمة">
@@ -646,8 +674,13 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <div class="mi tkt tkt-y tkt-char" id="charB" tabindex="0" role="group" aria-label="شخصيتك" hidden>
             <button type="button" class="tarr" id="charPrev" aria-label="الشخصية اللي قبل"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
             <span class="tkt-body"><small id="charN">شخصيتك</small><b id="charV">عتمان</b></span>
-            <img class="stampimg" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/badge.webp" alt="">
+            <img class="stampimg" src="assets/ui/badge.webp" alt="">
             <button type="button" class="tarr" id="charNext" aria-label="الشخصية اللي بعد"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+          </div>
+          <!-- the mode: one against one, or everyone for himself with 3 or 4 on the platform -->
+          <div class="mi tiers" id="modeB" tabindex="0" role="radiogroup" aria-label="الطور">
+            <span class="tiers-k">الطور</span>
+            <span class="tiers-row"><button type="button" role="radio" class="tkt tkt-y tier mt" data-m="0">1 ضد 1</button><button type="button" role="radio" class="tkt tkt-g tier mt" data-m="3">كله في كله · 3</button><button type="button" role="radio" class="tkt tkt-p tier mt" data-m="4">كله في كله · 4</button></span>
           </div>
           <!-- 3 · the opponent: one that learns from you (its level follows the player), or a fixed easy / medium / hard -->
           <div class="mi tiers" id="diff" tabindex="0" role="radiogroup" aria-label="مستوى الخصم">
@@ -785,11 +818,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   <div id="touch" dir="ltr" hidden>
     <div id="stick"><div id="knob"></div></div>
     <div id="btns">
-      <button type="button" class="tb" data-b="light"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/icons/light.png" alt=""><span>خفيفة</span></button>
-      <button type="button" class="tb" data-b="heavy"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/icons/heavy.png" alt=""><span>تقيلة</span></button>
-      <button type="button" class="tb" data-b="jump"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/icons/jump.png" alt=""><span>نط</span></button>
-      <button type="button" class="tb" data-b="guard" aria-label="دفاع: دوسة سريعة تفادي، ودوسة طويلة دفاع"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/icons/guard.png" alt=""><span>دفاع</span></button>
-      <button type="button" class="tb" data-b="grab"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/icons/grab.png" alt=""><span>مسك</span></button>
+      <button type="button" class="tb" data-b="light"><img src="assets/ui/icons/light.png" alt=""><span>خفيفة</span></button>
+      <button type="button" class="tb" data-b="heavy"><img src="assets/ui/icons/heavy.png" alt=""><span>تقيلة</span></button>
+      <button type="button" class="tb" data-b="jump"><img src="assets/ui/icons/jump.png" alt=""><span>نط</span></button>
+      <button type="button" class="tb" data-b="guard" aria-label="دفاع: دوسة سريعة تفادي، ودوسة طويلة دفاع"><img src="assets/ui/icons/guard.png" alt=""><span>دفاع</span></button>
+      <button type="button" class="tb" data-b="grab"><img src="assets/ui/icons/grab.png" alt=""><span>مسك</span></button>
     </div>
   </div>
 
@@ -799,7 +832,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <div class="tkt rticket">
         <div class="rprint"><span>لقب · خط 1 · حلوان</span><span>رقم 0001</span></div>
         <div class="rtitle">عتمان الحقيقي هو</div>
-        <img class="rbadge" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/badge.webp" alt="">
+        <img class="rbadge" src="assets/ui/badge.webp" alt="">
         <div id="rName"></div>
         <p id="rSub"></p>
         <p id="rPts" class="rpts"></p>
@@ -852,7 +885,7 @@ const TRAIN_SPEED = 30, TRAIN_CARS = 7, TRAIN_LEN = TRAIN_CARS * 12.05;
 /* ---------------- renderer ---------------- */
 const canvas = $('#c');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));   // set again by applyQuality() at boot
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0a1120);
 scene.fog = new THREE.Fog(0x0a1120, 30, 80);
@@ -1274,11 +1307,11 @@ function signText(g, txt, x, y, size, color) { g.font = `800 ${size}px ${SIGN}`;
 // our round metro mark (the user's badge): drawn into sign textures once it loads, and as a texture for pole signs
 const badgeImg = new Image();
 badgeImg.onload = () => fontRedraws.forEach(f => f());
-badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
+badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
 const badgeOk = () => badgeImg.complete && badgeImg.naturalWidth > 0;
 let badgeTex = null;
 function badgePole(x, z, h, r) {
-  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/badge.webp');
+  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('assets/ui/badge.webp');
   const g = new THREE.Group();
   const pole = mesh(cyl(r * 0.09, r * 0.11, h, 14), steelM(BLUE, 0.4, 0.55)); pole.position.y = h / 2; g.add(pole);
   const collar = mesh(cyl(r * 0.14, r * 0.14, 0.3, 14), steelM(0xc0c6cc, 0.4, 0.7)); collar.position.y = h - 0.1; g.add(collar);
@@ -1601,7 +1634,7 @@ function buildWaitingArea(x0, x1, roofY = 3.0) {
 // fade the roof while anyone is under it
 function updateFade(dt) {
   for (const f of FADE) {
-    const under = [P, C].some(p => p.rig && p.rig.root.visible && p.pos.x > f.x0 - 0.3 && p.pos.x < f.x1 + 0.3 && p.pos.z > f.z0 - 0.3 && p.pos.z < f.z1 + 0.3 && p.pos.y < f.y - 0.4);
+    const under = fighters.some(p => p.rig && p.rig.root.visible && p.pos.x > f.x0 - 0.3 && p.pos.x < f.x1 + 0.3 && p.pos.z > f.z0 - 0.3 && p.pos.z < f.z1 + 0.3 && p.pos.y < f.y - 0.4);
     f.o += ((under && mode !== 'menu' ? 0.22 : 1) - f.o) * (1 - Math.exp(-dt * 10));
     for (const m of f.mats) { m.opacity = f.o; m.depthWrite = f.o > 0.95; }
   }
@@ -1844,7 +1877,7 @@ function propModel(g, p) {
   const w = new THREE.Group(); w.add(m); return w;
 }
 async function loadProps() {
-  const get = n => glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
+  const get = n => glbGet('assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
   const [tuk, bus, kiosk] = await Promise.all([get('tuktuk'), get('microbus'), get('kiosk')]);
   if (tuk && ambient.tuk) { ambient.tuk.children.slice().forEach(c => ambient.tuk.remove(c)); ambient.tuk.add(tuk); }
   if (bus) { bus.position.set(30, 0, -11.4); bus.rotation.y = Math.PI; scene.add(bus); ambient.bus = bus; }
@@ -1852,7 +1885,7 @@ async function loadProps() {
 }
 function loadBuildings() {
   const ld = new THREE.TextureLoader();
-  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
+  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
     .then(list => placeBuildings(list.filter(Boolean)));
 }
 function placeBuildings(list) {
@@ -2309,21 +2342,22 @@ const GLB_Q = new URLSearchParams(location.search);
 const CHARS = [
   // cape: 'remove' drops the Meshy cape (cape-fix.js); null leaves the mesh as it is
   // art: where this fighter's head is in the menu key art (assets/ui/keyart.webp), in % of the picture
-  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
-  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
-  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
-  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
-  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
+  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
+  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
+  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
+  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
+  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
   // lock: 'premium' = only by buying it, 'ramadan' = earned in Ramadan (lockOf)
-  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
-  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
-  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
-  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
-  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
-  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
+  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
+  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
+  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
+  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
+  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
+  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
 ];
 // test only (not used on the public page unless ?hd is in the address): the new high-detail بطل السيدة زينب
-if (GLB_Q.has('hd')) { CHARS[1].src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
+const LITE = !GLB_Q.has('full') && (GLB_Q.has('lite') || (window.matchMedia && matchMedia('(pointer: coarse)').matches));
+if (GLB_Q.has('hd')) { CHARS[1].src = 'assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
 const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {}, failed: {} };
 // the CPU's (or the online friend's) character, an index into CHARS
 let cpuChar = 1;
@@ -2366,7 +2400,9 @@ let glbGet = null;
 function loadChar(i) {
   const c = CHARS[i];
   if (GLB.models[c.id]) return Promise.resolve();
-  return GLB.loading[c.id] || (GLB.loading[c.id] = glbGet(c.src).then(g => {
+  // phones get the half-detail copies (assets/models/lite/, same look from fight distance); computers the full ones
+  const src = LITE && !c.smooth ? c.src.replace('/models/web/', '/models/lite/') : c.src;
+  return GLB.loading[c.id] || (GLB.loading[c.id] = glbGet(src).then(g => {
     g.scene.traverse(o => {
       // the user asked to drop the capes altogether (the re-tied ones still looked torn)
       // packed files keep skin weights as 0-255 bytes; the GPU reads them right, but r128's
@@ -2447,15 +2483,15 @@ function lockOf(i) {
 }
 async function loadGlb() {
   // kept next to the game (a second CDN was one more slow or blocked host before anything showed)
-  await Promise.all(['https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/js/GLTFLoader.js', 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/js/meshopt_decoder.js'].map(loadScript));
-  await loadScript('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/js/SkeletonUtils.js');
+  await Promise.all(['assets/js/GLTFLoader.js', 'assets/js/meshopt_decoder.js'].map(loadScript));
+  await loadScript('assets/js/SkeletonUtils.js');
   const ld = new THREE.GLTFLoader();
   // the fighters are packed with gltfpack (tools/pack-models.sh): ~1/3 smaller, moves ~5x
   await MeshoptDecoder.ready; ld.setMeshoptDecoder(MeshoptDecoder);
   glbGet = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
   // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
   if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
-  const [moves] = await Promise.all([glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
+  const [moves] = await Promise.all([glbGet('assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
   // the clips were made on Otman's skeleton and also carry his bone lengths (every bone's position);
   // played on a fighter with other proportions they dragged his head points ~20 cm (Robin's warped
   // face, سطوحي's long neck). Keep only the rotations (+ the hips' height), so each keeps its own lengths.
@@ -2857,6 +2893,21 @@ function makeRig(o, ringColor, emblemColor, isCPU) {
   return GLB.ready && GLB.models[charOf(isCPU).id] ? buildGlbFighter(charOf(isCPU), ringColor) : buildFighter(o, ringColor, emblemColor);
 }
 // a random opponent for the CPU: never your own fighter, and one that has already loaded
+// the third and fourth fighters of a free-for-all: fighters nobody else in the match has, when there are enough
+function rebuildExtras() {
+  const used = [sel.char, cpuChar];
+  for (const f of fighters.slice(2)) {
+    const ok = CHARS.map((c, i) => i).filter(i => !used.includes(i) && charReady(i) && !lockOf(i));
+    f.char = ok.length ? pick(ok) : cpuChar; used.push(f.char);
+    const cs = { mask: rand(0, 4) | 0, chest: rand(0, 4) | 0, cape: rand(0, 4) | 0, legs: rand(0, 4) | 0 };
+    f.setRig(GLB.ready && charReady(f.char) && GLB.models[CHARS[f.char].id] ? buildGlbFighter(CHARS[f.char], f.color) : buildFighter(outfitFrom(cs), f.color, '#f29db3'));
+  }
+}
+function hideRig(f) {
+  const r = f.rig; if (!r) return;
+  r.root.visible = false; if (r.ring) { r.ring.visible = false; r.shadow.visible = false; }
+  if (r.badge && r.badge.m) r.badge.m.visible = false;
+}
 function pickCpuChar() {
   const ok = CHARS.map((c, i) => i).filter(i => i !== sel.char && charReady(i) && !lockOf(i));
   return ok.length ? pick(ok) : (sel.char === 0 ? 1 : 0);
@@ -2920,14 +2971,28 @@ class Fighter {
     this.grabCd = 0; this.grabMsgT = -9; this.shotCd = 0;
     this.dodgeT = 0; this.dodgeInv = 0; this.dodgeCd = 0; this.airDodged = false; this.pitChase = 0;
     this.stats = { hits: 0, maxCombo: 0, kos: 0 };
-    this.aiT = 0; this.guardT = 0; this.queue = []; this.dance = false;
+    this.aiT = 0; this.guardT = 0; this.queue = []; this.dance = false; this.foe = null; this.tgtT = 0;
     this.vel.set(0, 0, 0);
   }
   setRig(r) { if (this.rig) disposeRig(this.rig); this.rig = r; scene.add(r.root); }
 }
-const P = new Fighter(false), C = new Fighter(true);
-P.foe = C; C.foe = P;
-P.color = 0xffb23e; C.color = 0x5fd0ff;
+const P = new Fighter(false), C = new Fighter(true), C2 = new Fighter(true), C3 = new Fighter(true);
+[P, C, C2, C3].forEach((f, i) => { f.idx = i; });
+P.color = 0xffb23e; C.color = 0x5fd0ff; C2.color = 0xf29db3; C3.color = 0xe3bb93;
+// كله بيضرب في كله (free-for-all, 23 Nov 2026): ffa = 0 is one against one, 3 or 4 is that many fighters,
+// everyone for himself (you + CPU's; offline only). `fighters` = the ones in this match, in HUD order.
+let ffa = 0, fighters = [P, C], matchWinner = null;
+const winnerNow = () => (NET.role === 'guest' || !matchWinner) ? (P.won ? P : C) : matchWinner;
+// the closest fighter still in the match (an attack turns to face him)
+function nearestFoe(f) {
+  let b = null, bd = 1e9;
+  for (const o of fighters) {
+    if (o === f || o.lives <= 0 || o.state === 'ko') continue;
+    const d = Math.hypot(o.pos.x - f.pos.x, o.pos.z - f.pos.z);
+    if (d < bd) { bd = d; b = o; }
+  }
+  return b;
+}
 
 /* ---------------- audio ---------------- */
 const SFX = {
@@ -2992,7 +3057,7 @@ const Music = {
     for (const k of ['menu', 'fight']) {
       try {
         const a = new Audio();
-        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@68d61e3c28c8/assets/' + k + '.mp3';
+        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'assets/' + k + '.mp3';
         this.tracks[k] = a;
       } catch (e) {}
     }
@@ -3193,8 +3258,60 @@ const el = {
   cardP: $('#cardP'), cardC: $('#cardC'), timer: $('#timer'), warn: $('#warn'), warnSide: $('#warnSide'),
   nm: $('#nm'), go: $('#go'), rotate: $('#rotate'), mute: $('#mute'), rot: $('#rot'), help: $('#help'),
 };
+// one ticket per fighter: yours on the right, the others in a row on the left (#foes)
+{
+  const box = document.createElement('div'); box.id = 'foes'; el.hud.insertBefore(box, el.cardC); box.appendChild(el.cardC);
+  const hudOf = card => ({ card, n: card.querySelector('.who b'), d: card.querySelector('.pct'), gb: card.querySelector('.gbar'), g: card.querySelector('.gbar i'), l: card.querySelector('.lives') });
+  P.hud = hudOf(el.cardP); C.hud = hudOf(el.cardC); el.cardC.classList.add('foe');
+  for (const f of [C2, C3]) {
+    const c = el.cardC.cloneNode(true); c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
+    c.hidden = true; box.appendChild(c); f.hud = hudOf(c);
+  }
+}
+const CARD_BG = ['', '#8fcfae', '#f29db3', '#e3bb93'];
 const coarse = (window.matchMedia && matchMedia('(pointer: coarse)').matches) || ('ontouchstart' in window);
 if (coarse) el.help.hidden = true;
+
+/* ---------------- speed: automatic quality, and a counter with ?fps ----------------
+   The computer keeps everything (and a sharper picture than before: up to 2 device pixels). Quality only
+   steps DOWN, one level at a time, and only when the game really is slow: under 40 frames a second for 4 s
+   of a fight. A fast machine never leaves level 0. The level is remembered on that device (?q=0 resets).
+     0 = full: soft shadows (2048 px, 1024 on phones)
+     1 = sharper-edged, smaller shadows, picture at most 1.5 device pixels
+     2 = no cast shadows (the round shadow under each fighter stays), 1.25 device pixels
+     3 = 1 device pixel, the far street's cars stop */
+const Q_KEY = 'otman-helwan-q';
+const QUAL = { level: 0, t: 0, n: 0, slow: 0, hold: 2, fps: 0, lastNow: 0, show: /[?&]fps\b/.test(location.search), box: null };
+const BASE_DPR = Math.min(window.devicePixelRatio || 1, coarse ? 1.75 : 2);
+function applyQuality(l, save) {
+  l = clamp(l | 0, 0, 3); QUAL.level = l; QUAL.hold = 3; QUAL.slow = 0; QUAL.t = QUAL.n = 0;
+  renderer.setPixelRatio(Math.min(BASE_DPR, [9, 1.5, 1.25, 1][l])); sizeW = -1;   // resize() runs on the next frame
+  sun.castShadow = l < 2;
+  const type = l === 0 ? THREE.PCFSoftShadowMap : THREE.PCFShadowMap;
+  if (renderer.shadowMap.type !== type) {   // the shadow filter is compiled into the materials: rebuild them (one hitch)
+    renderer.shadowMap.type = type;
+    scene.traverse(o => { if (o.material && o.receiveShadow) o.material.needsUpdate = true; });
+  }
+  const ms = (coarse ? 1024 : 2048) >> (l >= 1 ? 1 : 0);
+  if (sun.shadow.mapSize.x !== ms) { sun.shadow.mapSize.set(ms, ms); if (sun.shadow.map) { sun.shadow.map.dispose(); sun.shadow.map = null; } }
+  if (save) { try { localStorage.setItem(Q_KEY, String(l)); } catch (e) {} }
+}
+function watchSpeed(now) {
+  const raw = (now - QUAL.lastNow) / 1000; QUAL.lastNow = now;
+  if (!(raw > 0 && raw < 0.5) || document.hidden) return;
+  QUAL.t += raw; QUAL.n++;
+  if (QUAL.t < 2) return;
+  QUAL.fps = QUAL.n / QUAL.t; QUAL.t = QUAL.n = 0;
+  if (QUAL.show) {
+    if (!QUAL.box) { QUAL.box = document.createElement('div'); QUAL.box.id = 'fps'; document.body.appendChild(QUAL.box); }
+    const i = renderer.info.render;
+    QUAL.box.textContent = Math.round(QUAL.fps) + ' fps · جودة ' + QUAL.level + ' · ' + i.calls + ' رسمة · ' + Math.round(i.triangles / 1000) + 'k' + (LITE ? ' · خفيف' : '');
+  }
+  if (mode !== 'fight') { QUAL.slow = 0; return; }
+  if (QUAL.hold > 0) { QUAL.hold -= 2; return; }
+  QUAL.slow = QUAL.fps < 40 ? QUAL.slow + 1 : 0;
+  if (QUAL.slow >= 2 && QUAL.level < 3) applyQuality(QUAL.level + 1, true);
+}
 
 /* ---------------- popups ---------------- */
 const popups = [];
@@ -3358,8 +3475,8 @@ function startAttack(f, name) {
   const m = MOVES[name];
   f.state = 'attack'; f.atk = { name, m, t: 0, hit: false }; f.buffer = null;
   f.chain = m.chain || 0;
-  const foe = f.foe;
-  if (foe.state !== 'ko') {
+  const foe = nearestFoe(f);
+  if (foe) {
     const dx = foe.pos.x - f.pos.x, dz = foe.pos.z - f.pos.z;
     if (Math.hypot(dx, dz) < 3.2) f.face = Math.atan2(dx, dz);
   }
@@ -3401,7 +3518,7 @@ function doThrow(f) {
   const kb = 7 + t.dmg * 0.11;
   t.vel.set(d.x * kb, 2.5 + kb * 0.4, d.z * kb);
   t.state = 'hitstun'; t.stunT = 0.45 + kb * 0.02; t.lastHitBy = f; t.lastHitT = clock; t.pit = false;
-  skillNudge(f === P ? 0.01 : -0.01);
+  skillNudge(f === P ? 0.01 : t === P ? -0.01 : 0);
   f.stats.hits++; freeze = 0.13; shake = Math.min(0.7, shake + 0.3);
   emit(tmpV.copy(t.pos).add(new V3(0, 1, 0)), 0xffb23e, 10, 6, 0.5, 0.35);
   SFX.hit(kb); popup('رمية بلدي!', f, 'move');
@@ -3410,7 +3527,7 @@ function doThrow(f) {
 const COMBO_WORDS = { 2: 'اتنين!', 3: 'تلاتة يا معلم!', 4: 'أربعة.. إيه ده؟!', 5: 'خمسة.. ارحموه!', 6: 'ستة.. حرام عليك!', 7: 'سبعة.. يا ساتر!' };
 function comboWord(n) { return COMBO_WORDS[n] || AR(n) + '.. اتصلوا بالإسعاف!'; }
 function cardJolt(t) {
-  const c = t === P ? el.cardP : el.cardC;
+  const c = t.hud && t.hud.card; if (!c) return;
   c.classList.remove('hit'); void c.offsetWidth; c.classList.add('hit');
 }
 function applyHit(f, t, m, hp) {
@@ -3456,7 +3573,7 @@ function applyHit(f, t, m, hp) {
   t.state = 'hitstun'; t.stunT = m.stun + kb * 0.02; t.atk = null; t.buffer = null;
   t.face = Math.atan2(-nx, -nz);
   t.lastHitBy = f; t.lastHitT = clock;
-  skillNudge((f === P ? 1 : -1) * (m.dmg || 0) * 0.001);
+  skillNudge((f === P ? 1 : t === P ? -1 : 0) * (m.dmg || 0) * 0.001);
   f.combo = (wasStun && f.comboT > 0) ? f.combo + 1 : 1;
   f.comboT = 1.0; f.stats.hits++; f.stats.maxCombo = Math.max(f.stats.maxCombo, f.combo);
   // the stop on impact: a blink for a jab, a clear beat for a heavy hit on a damaged fighter
@@ -3489,19 +3606,21 @@ function knockOut(f, dir) {
   f.state = 'ko'; f.koT = 0; f.atk = null;
   f.vel.set(dir * 30, 15, -Math.sign(f.pos.z) * 3);
   f.lives = Math.max(0, f.lives - 1);
-  skillNudge(f === P ? -0.07 : 0.07);
   const by = f.lastHitBy && clock - f.lastHitT < 6 ? f.lastHitBy : null;
+  skillNudge(f === P ? -0.07 : by === P ? 0.07 : 0);
   if (by) by.stats.kos++;
-  bigText(pick(KO_LINES), 1.4);
+  // with more than two on the platform, say who just went out for good
+  bigText(fighters.length > 2 && f.lives <= 0 ? (f === P ? 'إنت برّة!' : f.name + ' برّة!') : pick(KO_LINES), 1.4);
   shake = 0.6; freeze = 0.12;
   emit(tmpV.copy(f.pos).add(new V3(0, 1, 0)), 0xff4a3d, 16, 9, 0.7, 0.5);
   SFX.ko();
 }
 function respawn(f) {
   f.state = 'idle'; f.atk = null; f.pit = false; f.onGround = false; f.jumps = 1;
-  f.pos.set(f === P ? -3.5 : 3.5, 6, 0); f.vel.set(0, 0, 0);
+  const sx = [-3.5, 3.5, -7.5, 7.5][f.idx] || 0;
+  f.pos.set(sx, 6, 0); f.vel.set(0, 0, 0);
   f.dmg = 0; f.guard = 100; f.inv = 2;
-  f.face = f === P ? Math.PI / 2 : -Math.PI / 2;
+  f.face = sx < 0 ? Math.PI / 2 : -Math.PI / 2;
   f.rig.root.rotation.set(0, f.face, 0);
 }
 function separate(a, b) {
@@ -3555,11 +3674,13 @@ function updateShots(dt) {
   for (let i = shots.length - 1; i >= 0; i--) {
     const s = shots[i]; s.t += dt;
     s.v.y -= 7 * dt; s.p.addScaledVector(s.v, dt); s.m.position.copy(s.p); if (s.b) s.m.rotation.z += dt * 12; else s.m.rotation.x += dt * 20;
-    const t = s.owner.foe;
-    const dx = s.p.x - t.pos.x, dz = s.p.z - t.pos.z, dy = s.p.y - t.pos.y;
-    if (t.state !== 'ko' && t.state !== 'grabbed' && t.inv <= 0 && t.dodgeInv <= 0 && Math.hypot(dx, dz) < 0.5 && dy > 0.15 && dy < 2.0) {
-      applyHit(s.owner, t, SHOT_HIT, s.p.clone()); dropShot(i); continue;
+    let got = null;
+    for (const t of fighters) {
+      if (t === s.owner) continue;
+      const dx = s.p.x - t.pos.x, dz = s.p.z - t.pos.z, dy = s.p.y - t.pos.y;
+      if (t.state !== 'ko' && t.state !== 'grabbed' && t.inv <= 0 && t.dodgeInv <= 0 && Math.hypot(dx, dz) < 0.5 && dy > 0.15 && dy < 2.0) { got = t; break; }
     }
+    if (got) { applyHit(s.owner, got, SHOT_HIT, s.p.clone()); dropShot(i); continue; }
     if (s.t > 1.4 || s.p.y < PIT_Y) dropShot(i);
   }
 }
@@ -3669,6 +3790,18 @@ function stepFighter(f, dt) {
 }
 
 /* ---------------- AI ---------------- */
+// who a CPU goes after: the closest fighter still in, leaning toward whoever is nearest to going out
+// (high damage), and it sticks with a choice for a couple of seconds so it doesn't dither between two
+function aiTarget(ai, dt) {
+  ai.tgtT -= dt;
+  const ok = t => t && t !== ai && t.lives > 0 && fighters.includes(t);
+  if (!ok(ai.foe) || ai.tgtT <= 0) {
+    const score = t => Math.hypot(t.pos.x - ai.pos.x, t.pos.z - ai.pos.z) - Math.min(t.dmg, 150) * 0.02 - (t === ai.foe ? 1.5 : 0) + (t.state === 'ko' ? 6 : 0);
+    const list = fighters.filter(t => t !== ai && t.lives > 0).sort((a, b) => score(a) - score(b));
+    ai.foe = list[0] || ai.foe || P; ai.tgtT = rand(1.5, 3);
+  }
+  return ai.foe;
+}
 function aiThink(ai, foe, dt) {
   const c = ai.ctrl, D = aiParams();
   if (ai.state === 'ko' || ai.state === 'grabbed') { c.mx = c.mz = 0; c.guard = false; return; }
@@ -3809,7 +3942,7 @@ function updateTrain(dt, live) {
       train.state = 'idle'; train.t = rand(7, 11); placeTrains(false);
       el.warn.hidden = true; SFX.rumble(false);
     }
-    if (live) for (const f of [P, C]) {
+    if (live) for (const f of fighters) {
       if (f.state === 'ko' || f.lives <= 0) continue;
       const s = Math.sign(f.pos.z);
       if (!trainOn(s) || Math.abs(f.pos.z) <= PZ + 0.05 || f.pos.y > PIT_Y + 3.4) continue;
@@ -4009,7 +4142,8 @@ function pctColor(d) {
 }
 function renderLives(node, n) { node.innerHTML = [0, 1, 2].map(i => `<span class="${i < n ? 'on' : ''}"></span>`).join(''); }
 function updateHUD() {
-  for (const [f, d, g, gb, l, k] of [[P, el.dP, el.gP, el.gbP, el.lP, 'p'], [C, el.dC, el.gC, el.gbC, el.lC, 'c']]) {
+  for (const f of fighters) {
+    const { d, g, gb, l } = f.hud, k = 'f' + f.idx;
     const dm = Math.round(f.dmg);
     if (hudCache[k + 'd'] !== dm) {
       const up = dm > (hudCache[k + 'd'] || 0);
@@ -4019,7 +4153,7 @@ function updateHUD() {
     }
     g.style.transform = `scaleX(${clamp(f.guard / 100, 0, 1)})`;
     gb.classList.toggle('broken', f.state === 'dizzy');
-    if (hudCache[k + 'l'] !== f.lives) { hudCache[k + 'l'] = f.lives; renderLives(l, f.lives); }
+    if (hudCache[k + 'l'] !== f.lives) { hudCache[k + 'l'] = f.lives; renderLives(l, f.lives); f.hud.card.classList.toggle('out', f.lives <= 0); }
   }
   // the grab button shows its countdown
   const gcd = Math.ceil(P.grabCd);
@@ -4056,12 +4190,14 @@ function updateCamera(dt) {
     }
     k = 1 - Math.exp(-dt * 3);
   } else {
-    const live = [P, C].filter(f => f.state !== 'ko');
-    const mid = new V3();
-    (live.length ? live : [P, C]).forEach(f => mid.add(f.pos));
-    mid.multiplyScalar(1 / (live.length || 2));
-    const sepr = live.length === 2 ? live[0].pos.distanceTo(live[1].pos) : 2;
-    let d = clamp(11 + sepr * 0.55, 11, 19);
+    const live = fighters.filter(f => f.state !== 'ko'), seen = live.length ? live : fighters;
+    // the middle of everyone still up (of the box round them, so three in a corner don't pull it off the fourth)
+    const lo = new V3(1e9, 1e9, 1e9), hi = new V3(-1e9, -1e9, -1e9);
+    seen.forEach(f => { lo.min(f.pos); hi.max(f.pos); });
+    const mid = lo.clone().add(hi).multiplyScalar(0.5);
+    let sepr = 2;
+    if (live.length > 1) { sepr = 0; for (const a of live) for (const b of live) sepr = Math.max(sepr, a.pos.distanceTo(b.pos)); }
+    let d = clamp(11 + sepr * 0.55, 11, fighters.length > 2 ? 25 : 19);
     if (asp < 1.25) d *= Math.pow(1.25 / asp, 0.8);
     // aim a little toward the camera side so the near track stays in frame too
     tl.set(clamp(mid.x, -PLAY_X + 3.6, PLAY_X - 3.6), 0.2, clamp(mid.z, -2.6, 2.6) * 0.75 + 0.6);
@@ -4071,7 +4207,7 @@ function updateCamera(dt) {
     tp.copy(tl).addScaledVector(CAM_DIR, d);
     if (mode === 'count') k = 1 - Math.exp(-dt * 3);
     if (mode === 'over' && overT > 1.0) {
-      const w = P.won ? P : C, wide = asp >= 1.25;
+      const w = winnerNow(), wide = asp >= 1.25;
       tl.set(w.pos.x + (wide ? 2.0 : 0.6), w.pos.y + 1.05, w.pos.z);
       tp.set(w.pos.x + (wide ? 1.5 : 0.5), w.pos.y + 1.75, w.pos.z + (wide ? 5.6 : 6.8));
       k = 1 - Math.exp(-dt * 2.5);
@@ -4087,27 +4223,35 @@ function updateCamera(dt) {
 }
 
 /* ---------------- flow ---------------- */
+const START_X = { 2: [-3, 3], 3: [-6, 6, 0], 4: [-8, 8, -2.7, 2.7] };
 function placeForFight() {
-  for (const f of [P, C]) {
-    const st = f.stats; f.reset(); f.stats = { hits: 0, maxCombo: 0, kos: 0 }; void st;
-    f.pos.set(f === P ? -3 : 3, 0, 0);
-    f.face = f === P ? Math.PI / 2 : -Math.PI / 2;
+  const xs = START_X[fighters.length] || START_X[2];
+  fighters.forEach((f, i) => {
+    f.reset(); f.stats = { hits: 0, maxCombo: 0, kos: 0 };
+    f.pos.set(xs[i], 0, i === 2 ? -1.2 : i === 3 ? 1.2 : 0);
+    f.face = xs[i] < 0 ? Math.PI / 2 : xs[i] > 0 ? -Math.PI / 2 : 0;
     f.onGround = true;
     f.rig.root.rotation.set(0, f.face, 0);
-  }
+  });
 }
 function startMatch() {
   if (NET.role === 'guest') return guestAgain();   // only the room's host starts a match
   if (GLB.ready && lockOf(sel.char)) { renderChar(); $('#charB').classList.remove('nope'); void $('#charB').offsetWidth; $('#charB').classList.add('nope'); SFX.init(); SFX.ui(false); return; }
   SFX.init();
   savePrefs();
+  fighters = [P, C, C2, C3].slice(0, NET.role ? 2 : (ffa || 2)); matchWinner = null;
   P.name = myName();
-  C.name = NET.role === 'host' ? NET.peerName : pick(CPU_NAMES);
+  if (NET.role === 'host') C.name = NET.peerName;
+  else { const names = CPU_NAMES.slice().sort(() => Math.random() - 0.5); fighters.slice(1).forEach((f, i) => { f.name = names[i % names.length]; }); }
   if (NET.role === 'host') { NET.k++; NET.ev = []; NET.seen = (NET.inp || [0, 0, 0, 0, 0, 0, 0]).slice(3, 7); NET.seenShot = NET.inp ? +NET.inp[8] || 0 : 0; NET.seenDodge = NET.inp ? +NET.inp[9] || 0 : 0; }
-  rebuildCPU();
+  rebuildCPU(); rebuildExtras();
   placeForFight(); clearShots();
-  C.rig.root.visible = true;
-  el.nP.textContent = P.name; el.nC.textContent = C.name;
+  for (const f of fighters) {
+    f.rig.root.visible = true; f.hud.card.hidden = false; f.hud.card.classList.remove('out'); f.hud.n.textContent = f.name;
+    if (f !== P) f.hud.card.style.background = fighters.length > 2 ? CARD_BG[f.idx] : '';
+  }
+  for (const f of [C2, C3]) if (!fighters.includes(f)) { f.hud.card.hidden = true; hideRig(f); }
+  el.hud.classList.toggle('multi', fighters.length > 2);
   for (const k in hudCache) delete hudCache[k];
   matchT = 180; freeze = 0; shake = 0; slowT = 0; camKick = 0; koCam.t = 0;
   train.state = 'idle'; train.t = 6; placeTrains(false); el.warn.hidden = true; SFX.rumble(false);
@@ -4132,15 +4276,15 @@ function endMatch() {
   mode = 'over'; overT = 0;
   { const d = ['dance', 'dance2'].filter(n => GLB.clips[n]); danceNow = d.length ? d[danceTurn++ % d.length] : 'dance'; }
   SFX.rumble(false);
-  let win;
-  if (P.lives !== C.lives) win = P.lives > C.lives ? P : C;
-  else win = P.dmg <= C.dmg ? P : C;
-  P.won = win === P;
+  // most lives left, then least damage; a tie goes to whoever is first in the list (you)
+  const win = fighters.slice().sort((a, b) => (b.lives - a.lives) || (a.dmg - b.dmg))[0];
+  matchWinner = win; P.won = win === P;
   if (!NET.role && diff === 'auto') { skill = clamp(skill + (P.won ? 0.04 : -0.04), 0, 1); skillSave(); }
   // the result shot: winner back up on the platform, loser a few steps to the side, out of the camera's way
-  const lose = win === P ? C : P, wx = clamp(win.pos.x, -PLAY_X + 4, PLAY_X - 4);
+  const wx = clamp(win.pos.x, -PLAY_X + 4, PLAY_X - 4);
   win.pos.set(wx, 0, 0); win.prevY = 0; win.vel.set(0, 0, 0);
-  lose.pos.set(wx - 3.4, 0, -0.6); lose.prevY = 0; lose.vel.set(0, 0, 0);
+  let k = 0;
+  for (const lose of fighters) if (lose !== win) { lose.pos.set(wx - 3.4 - 1.5 * k++, 0, -0.6); lose.prevY = 0; lose.vel.set(0, 0, 0); }
   fillResult(win);
   if (NET.role === 'host') netRecord(win);
   else if (!NET.role) cpuRecord(win === P);
@@ -4166,6 +4310,7 @@ function toMenu() {
   showScreen('main'); renderDiff();
   P.reset(); P.pos.set(0, 0, 1.0); P.onGround = true; P.rig.root.visible = true; P.rig.root.rotation.set(0, 0, 0);
   C.rig.root.visible = false; if (C.rig.ring) { C.rig.ring.visible = false; C.rig.shadow.visible = false; }
+  hideRig(C2); hideRig(C3);
   popups.forEach(p => p.d.remove()); popups.length = 0;
 }
 $('#again').addEventListener('click', startMatch);
@@ -4230,12 +4375,15 @@ function showScreen(s, kb) {
   setCur(s === 'tailor' ? sel[tailSlot] : s === 'char' ? Math.max(0, items().indexOf($('#cpOk'))) : 0, kb);
   SFX.ui(true);
 }
+const MODES = [0, 3, 4];
+function renderMode() { document.querySelectorAll('#modeB .tier').forEach(b => { const on = +b.dataset.m === ffa; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); }); }
+function cycleMode(d) { ffa = MODES[(MODES.indexOf(ffa) + d + 3) % 3]; renderMode(); savePrefs(); SFX.ui(true); }
 function cycleDiff(d) { diff = DIFF_ORDER[(DIFF_ORDER.indexOf(diff) + d + 4) % 4]; renderDiff(); savePrefs(); SFX.ui(true); }
 // the opponent tickets; the learning one shows its level right now, and the line above says what it does
 function renderDiff() {
   $('#lvlV').textContent = skillLevel() + ' من 10';
   $('#diffV').textContent = diff === 'auto' ? 'بيقوى لما تكسب ويهدى لما تخسر' : '';
-  document.querySelectorAll('.tier').forEach(b => { const on = b.dataset.d === diff; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+  document.querySelectorAll('#diff .tier').forEach(b => { const on = b.dataset.d === diff; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
 }
 // once the 3D characters are in, the tailor gives way to picking a character
 function renderChar() {
@@ -4277,6 +4425,10 @@ el.menu.addEventListener('pointerover', e => {
 });
 el.menu.addEventListener('focusin', e => {
   const i = items().indexOf(e.target); if (i >= 0 && i !== cur) setCur(i, false);
+});
+$('#modeB').addEventListener('click', e => {
+  const t = e.target.closest('.tier');
+  if (t) { ffa = +t.dataset.m; renderMode(); savePrefs(); SFX.ui(true); } else cycleMode(1);
 });
 $('#diff').addEventListener('click', e => {
   const t = e.target.closest('.tier');
@@ -4333,6 +4485,7 @@ function menuKey(e) {
     const d = c === 'ArrowLeft' || c === 'KeyA' ? 1 : -1; // RTL: left is "next"
     if (mscreen === 'tailor') { setSlot(SLOTS[(SLOTS.indexOf(tailSlot) + d + 4) % 4]); setCur(sel[tailSlot], true); }
     else if (it[cur] && it[cur].id === 'diff') cycleDiff(d);
+    else if (it[cur] && it[cur].id === 'modeB') cycleMode(d);
     else if (mscreen === 'char') cycleChar(d);
     else if (it[cur] && it[cur].id === 'charB') cycleChar(d);
   } else if (c === 'Enter' || c === 'Space' || c === 'NumpadEnter') {
@@ -4345,7 +4498,7 @@ function menuKey(e) {
 
 const PREF_KEY = 'otman-helwan-v1';
 function savePrefs() {
-  try { localStorage.setItem(PREF_KEY, JSON.stringify({ sel, diff, dv: 2, name: el.nm.value, muted: SFX.muted, musicOff: Music.off })); } catch (e) {}
+  try { localStorage.setItem(PREF_KEY, JSON.stringify({ sel, diff, dv: 2, ffa, name: el.nm.value, muted: SFX.muted, musicOff: Music.off })); } catch (e) {}
 }
 function loadPrefs(extra) {
   let p = extra && extra.sel ? extra : null;
@@ -4353,6 +4506,7 @@ function loadPrefs(extra) {
   if (!p) return renderName();
   if (p.sel) for (const k in sel) if (Number.isInteger(p.sel[k]) && p.sel[k] >= 0 && p.sel[k] < (k === 'char' ? CHARS.length : OPTS[k].length)) sel[k] = p.sel[k];
   if (p.dv === 2 && (p.diff === 'auto' || DIFF[p.diff])) diff = p.diff;
+  if (p.ffa === 3 || p.ffa === 4) ffa = p.ffa;
   if (typeof p.name === 'string' && p.name.trim()) el.nm.value = p.name.slice(0, 18);
   if (p.muted) SFX.muted = true;
   if (p.musicOff) Music.off = true;
@@ -4395,6 +4549,7 @@ document.addEventListener('touchend', e => {
 }, { passive: false });
 
 function updateAmbient(dt) {
+  if (QUAL.level >= 3) return;
   const tk = ambient.tuk;
   if (tk) {
     tk.position.x += ambient.tukDir * 7 * dt;
@@ -4422,6 +4577,7 @@ function tick(now) {
   { const up = coarse && sizeH > sizeW && mode !== 'menu'; if (el.rotate.hidden === up) el.rotate.hidden = !up; }
   const dt = Math.min(0.033, Math.max(0, (now - last) / 1000));
   last = now; clock += dt;
+  watchSpeed(now);
 
   if (NET.role === 'guest' && (mode !== 'menu' || (NET.snap && NET.snap.k !== NET.k))) guestStep(dt);
   else if (mode === 'menu') {
@@ -4434,37 +4590,39 @@ function tick(now) {
     updateTrain(dt, false);
   } else if (mode === 'count') {
     updateCount(dt);
-    for (const f of [P, C]) { f.vel.set(0, 0, 0); clearPresses(f.ctrl); }
+    for (const f of fighters) { f.vel.set(0, 0, 0); clearPresses(f.ctrl); }
     updateTrain(dt, false);
   } else if (mode === 'fight') {
     matchT -= dt;
     readPlayer();
     if (NET.role === 'host') hostInput(C);
-    else if (!(window.__otman && window.__otman.noAI)) aiThink(C, P, dt);
+    else if (!(window.__otman && window.__otman.noAI)) { for (const f of fighters) if (f.isCPU && f.lives > 0) aiThink(f, aiTarget(f, dt), dt); }
     const sdt = slowT > 0 ? dt * 0.3 : dt;
     if (slowT > 0) slowT -= dt;
     if (freeze > 0) freeze -= dt;
     else {
-      stepFighter(P, sdt); stepFighter(C, sdt);
-      separate(P, C);
-      checkHit(P, C); checkHit(C, P);
+      for (const f of fighters) stepFighter(f, sdt);
+      for (let i = 0; i < fighters.length; i++) for (let j = i + 1; j < fighters.length; j++) separate(fighters[i], fighters[j]);
+      for (const a of fighters) for (const b of fighters) if (a !== b) checkHit(a, b);
       updateShots(sdt);
-      for (const f of [P, C]) {
+      for (const f of fighters) {
         if (f.state === 'ko' && f.koT > 1.5) { if (f.lives > 0) respawn(f); }
         else if (f.state !== 'ko' && f.pos.y < -12) knockOut(f, 1);
       }
     }
     updateTrain(sdt, true);
-    const dead = [P, C].find(f => f.lives <= 0 && f.state === 'ko' && f.koT > 1.2);
-    if (dead || matchT <= 0) endMatch();
+    // over when one is left; in a free-for-all also when you are out (no watching the CPU's finish it)
+    const out = fighters.filter(f => f.lives <= 0);
+    const decided = fighters.length - out.length <= 1 || (fighters.length > 2 && P.lives <= 0);
+    if ((decided && out.every(f => f.state === 'ko' && f.koT > 1.2)) || matchT <= 0) endMatch();
     updateHUD();
   } else if (mode === 'over') {
     overT += dt;
-    for (const f of [P, C]) {
+    for (const f of fighters) {
       if (f.state !== 'ko') {
         clearPresses(f.ctrl); f.ctrl.mx = f.ctrl.mz = 0; f.ctrl.guard = false;
         if (f.state === 'attack' || f.state === 'holding' || f.state === 'grabbed') { if (f.holding) release(f); f.state = 'idle'; f.atk = null; }
-        const winner = (f === P) === P.won;
+        const winner = f === winnerNow();
         // the winner turns to the camera and dances (the code-built fighter, which has no clip, hops instead)
         // the winner's dance: one of the two, picked when the match ends (danceNow)
         f.dance = winner && overT > 0.5 && !!(f.rig && f.rig.glb) ? danceNow : false;
@@ -4480,7 +4638,7 @@ function tick(now) {
 
   if (NET.role === 'host' && mode !== 'menu') { hostSend(); if (mode === 'fight') netStall(performance.now() - NET.inpAt, 2500); }
   animate(P, dt);
-  if (mode !== 'menu') animate(C, dt);
+  if (mode !== 'menu') for (const f of fighters) if (f !== P) animate(f, dt);
   updateParts(dt); updateFx(dt); updateAim();
   Music.update(dt);
   updateAmbient(dt);
@@ -4491,7 +4649,7 @@ function tick(now) {
 
   if (mode === 'fight' || mode === 'count' || (mode === 'over' && overT > 1.4)) {
     // "إنت" over you in the fight; "اللقب ليه!" over the winner on the result screen
-    const f = mode === 'over' ? (P.won ? P : C) : P, label = mode === 'over' ? 'اللقب ليه!' : 'إنت';
+    const f = mode === 'over' ? winnerNow() : P, label = mode === 'over' ? 'اللقب ليه!' : 'إنت';
     if (el.you.textContent !== label) el.you.textContent = label;
     const [x, y, ok] = toScreen(tmpV.set(f.pos.x, f.pos.y + 2.45, f.pos.z));
     el.you.hidden = !ok || f.state === 'ko';
@@ -4692,6 +4850,10 @@ function netStall(quiet, lim = 1500) {
 // ---- guest: draw the host's match, send our keys ----
 function guestBegin(g) {
   NET.k = g.k; NET.overShown = false; overT = 0;
+  // online is always one against one, whatever the last offline match was
+  fighters = [P, C]; matchWinner = null; el.hud.classList.remove('multi');
+  for (const f of [C2, C3]) { f.hud.card.hidden = true; hideRig(f); }
+  C.hud.card.style.background = ''; C.hud.card.hidden = false; C.hud.card.classList.remove('out'); P.hud.card.classList.remove('out');
   SFX.init();
   // we play the host's C (our own pick, sent as gc); our C is the host's fighter
   const want = Number.isInteger(g.cc) && g.cc < CHARS.length ? g.cc : (g.hc === 0 ? 1 : 0);
@@ -5113,7 +5275,7 @@ function boot(data) {
     scene.traverse(o => { if (o.isMesh && o.material && o.material.isMeshStandardMaterial && o.material.envMapIntensity === 1) o.material.envMapIntensity = 0.45; });
   }).catch(() => {});
   loadPrefs(data);
-  renderSlots(); renderDiff(); renderChar();
+  renderSlots(); renderDiff(); renderMode(); renderChar();
   rebuildPlayer();
   C.setRig(makeRig(outfitFrom({ mask: 1, chest: 1, cape: 1, legs: 1 }), C.color, '#5fd0ff', true));
   toMenu();
@@ -5122,7 +5284,7 @@ function boot(data) {
   try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => ({ sel: { ...sel }, diff, name: el.nm.value, muted: SFX.muted })); } catch (e) {}
   // dev aid: open with ?debug to poke the game from the console (window.__otman)
   if (/[?&]debug\b/.test(location.search)) {
-    window.__otman = { P, C, scene, camera, sel, OPTS, train, trainObj, GLB, CHARS, streetBlocks, BUILDINGS, ambient, PROPS, buildGlbFighter, loadChar, lockOf, rebuildPlayer, startMatch, endMatch, toMenu, cam: null, spin: null, pause: false,
+    window.__otman = { P, C, C2, C3, renderer, QUAL, applyQuality, scene, camera, sel, OPTS, train, trainObj, GLB, CHARS, streetBlocks, BUILDINGS, ambient, PROPS, buildGlbFighter, loadChar, lockOf, rebuildPlayer, startMatch, endMatch, toMenu, cam: null, spin: null, pause: false,
       get mode() { return mode; },
       // run n frames by hand (a hidden tab gets no rAF)
       step(n = 20) { for (let i = 0; i < n; i++) { last = performance.now() - 33; tick(performance.now()); } } };
@@ -5133,6 +5295,10 @@ function boot(data) {
     else { C.rig.root.rotation.set(0, C.face, 0); }
     renderChar();
   }).catch(e => console.warn('[glb] could not load, keeping the procedural fighter', e));
+  { const m = /[?&]q=(\d)/.exec(location.search); let l = 0;
+    if (m) { l = +m[1]; try { localStorage.setItem(Q_KEY, String(clamp(l, 0, 3))); } catch (e) {} }
+    else { try { l = +localStorage.getItem(Q_KEY) || 0; } catch (e) {} }
+    applyQuality(l, false); QUAL.hold = 2; }
   requestAnimationFrame(frame);
   setTimeout(supaWake, 4000);
 }
