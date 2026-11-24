@@ -695,11 +695,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     <div class="mshade" aria-hidden="true"></div>
     <!-- the user's key art: five fighters on the left in front of Helwan station -->
     <div class="kart" aria-hidden="true">
-      <img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/keyart.webp" alt="">
+      <img src="assets/ui/keyart.webp" alt="">
       <div class="kart-you" id="kartYou"><span>إنت</span></div>
     </div>
     <div class="mcol">
-      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/logo.webp" alt=""></h1>
+      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="assets/ui/logo.webp" alt=""></h1>
       <p class="mtag">اللي يفضل واقف على الرصيف ياخد اللقب.</p>
 
       <section class="mscr" id="sMain" aria-label="القايمة">
@@ -711,7 +711,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <div class="mi tkt tkt-y tkt-char" id="charB" tabindex="0" role="group" aria-label="شخصيتك" hidden>
             <button type="button" class="tarr" id="charPrev" aria-label="الشخصية اللي قبل"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
             <span class="tkt-body"><small id="charN">شخصيتك</small><b id="charV">عتمان</b></span>
-            <img class="stampimg" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/badge.webp" alt="">
+            <img class="stampimg" src="assets/ui/badge.webp" alt="">
             <button type="button" class="tarr" id="charNext" aria-label="الشخصية اللي بعد"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
           </div>
           <!-- the mode: one against one, or everyone for himself with 3 or 4 on the platform -->
@@ -731,7 +731,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           </div>
           <!-- online 1v1 with a friend (green = the opponent) and the scores -->
           <div class="trow">
-            <button class="mi tkt tkt-g tonline" type="button" data-to="online"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><path d="M2 20c0-3 2.2-5 5-5s5 2 5 5M12 20c0-3 2.2-5 5-5s5 2 5 5"></path></svg><span class="tkt-body"><small>خط 1 · إنت وصاحبك</small><b>العب أونلاين</b></span></button>
+            <button class="mi tkt tkt-g tonline" type="button" data-to="online"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><path d="M2 20c0-3 2.2-5 5-5s5 2 5 5M12 20c0-3 2.2-5 5-5s5 2 5 5"></path></svg><span class="tkt-body"><small>خط 1 · إنت وصحابك · لحد 8</small><b>العب أونلاين</b></span></button>
             <button class="mi tkt tkt-y tstub" type="button" data-to="scores"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8"></path></svg><small>الأسكورات</small></button>
           </div>
           <!-- 4 · your name on a pink ticket, the combos and the sound as small stubs -->
@@ -794,8 +794,8 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       </section>
 
       <section class="mscr" id="sOnline" aria-label="العب أونلاين" hidden>
-        <h2 class="mh">العب مع صاحبك</h2>
-        <p class="onote">واحد فيكم يعمل أوضة ويبعت الكود للتاني، والتاني يكتبه ويدخل.</p>
+        <h2 class="mh">العب مع صحابك</h2>
+        <p class="onote">اختار الطور والعدد، واعمل أوضة وابعت الكود لصحابك. اللي يدخل بالكود يلعب، والأماكن الفاضية بياخدها الكمبيوتر.</p>
         <div class="mlist">
           <!-- first time online: pick a name; it is yours alone and fixed for 30 days -->
           <div class="tkt tkt-p claimbox" id="onClaim" hidden>
@@ -804,11 +804,21 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
             <p class="claimwarn">خد بالك: الاسم ده هيتثبت عليك شهر كامل ومحدش غيرك يقدر ياخده، ومش هتقدر تغيره قبل <b id="claimUntil"></b>.</p>
           </div>
           <button class="mi go" id="claimGo" type="button" hidden><span class="band" id="claimBand">ثبّت الاسم</span></button>
+          <!-- the room's mode and size: chosen before making the room, and by the host while friends come in -->
+          <div id="onSet" hidden>
+          <div class="mi tiers" id="onModeB" tabindex="0" role="radiogroup" aria-label="الطور">
+            <span class="tiers-k">الطور<i class="onModeV"></i></span>
+            <span class="tiers-row"><button type="button" role="radio" class="tkt tkt-y tier mt" data-m="duel">1 ضد 1</button><button type="button" role="radio" class="tkt tkt-s tier mt" data-m="ffa">كله في كله</button><button type="button" role="radio" class="tkt tkt-g tier mt" data-m="tdm">الفتونة</button><button type="button" role="radio" class="tkt tkt-p tier mt" data-m="elim">جولة عدالة</button></span>
+          </div>
+          <div class="mi tiers" id="onSizeB" tabindex="0" role="radiogroup" aria-label="العدد" hidden>
+            <span class="tiers-k">العدد</span>
+            <span class="tiers-row"><button type="button" role="radio" class="tkt tkt-y tier mt" data-i="0"></button><button type="button" role="radio" class="tkt tkt-g tier mt" data-i="1"></button><button type="button" role="radio" class="tkt tkt-p tier mt" data-i="2"></button></span>
+          </div>
+          </div>
           <button class="mi go" id="onHost" type="button"><span class="band">اعمل أوضة</span></button>
-          <div class="tkt tkt-y ocode" id="onCodeBox" hidden><small>كود الأوضة، ابعته لصاحبك</small><b id="onCode" dir="ltr">----</b></div>
+          <div class="tkt tkt-y ocode" id="onCodeBox" hidden><small>كود الأوضة، ابعته لصحابك</small><b id="onCode" dir="ltr">----</b></div>
           <!-- the room: its mode and who is in (the host decides; friends see the same ticket) -->
           <div class="tkt tkt-s olist" id="onList" hidden><small id="onListK">اللاعيبة</small><b id="onModeT"></b><p id="onNames"></p></div>
-          <div class="trow" id="onSet" hidden><button class="mi tkt tkt-g tjoin" id="onMode" type="button">غيّر الطور</button><button class="mi tkt tkt-y tjoin" id="onSize" type="button">غيّر العدد</button></div>
           <button class="mi go" id="onStart" type="button" hidden><span class="band">ابدأ الماتش</span></button>
           <div class="trow" id="onJoinRow">
             <label class="tkt tkt-p tname"><small>كود صاحبك</small><input id="onIn" maxlength="4" autocomplete="off" spellcheck="false" dir="ltr" placeholder="K7P2"></label>
@@ -865,11 +875,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   <div id="touch" dir="ltr" hidden>
     <div id="stick"><div id="knob"></div></div>
     <div id="btns">
-      <button type="button" class="tb" data-b="light"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/icons/light.png" alt=""><span>خفيفة</span></button>
-      <button type="button" class="tb" data-b="heavy"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/icons/heavy.png" alt=""><span>تقيلة</span></button>
-      <button type="button" class="tb" data-b="jump"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/icons/jump.png" alt=""><span>نط</span></button>
-      <button type="button" class="tb" data-b="guard" aria-label="دفاع: دوسة سريعة تفادي، ودوسة طويلة دفاع"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/icons/guard.png" alt=""><span>دفاع</span></button>
-      <button type="button" class="tb" data-b="grab"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/icons/grab.png" alt=""><span>مسك</span></button>
+      <button type="button" class="tb" data-b="light"><img src="assets/ui/icons/light.png" alt=""><span>خفيفة</span></button>
+      <button type="button" class="tb" data-b="heavy"><img src="assets/ui/icons/heavy.png" alt=""><span>تقيلة</span></button>
+      <button type="button" class="tb" data-b="jump"><img src="assets/ui/icons/jump.png" alt=""><span>نط</span></button>
+      <button type="button" class="tb" data-b="guard" aria-label="دفاع: دوسة سريعة تفادي، ودوسة طويلة دفاع"><img src="assets/ui/icons/guard.png" alt=""><span>دفاع</span></button>
+      <button type="button" class="tb" data-b="grab"><img src="assets/ui/icons/grab.png" alt=""><span>مسك</span></button>
     </div>
   </div>
 
@@ -879,7 +889,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <div class="tkt rticket">
         <div class="rprint"><span>لقب · خط 1 · حلوان</span><span>رقم 0001</span></div>
         <div class="rtitle">عتمان الحقيقي هو</div>
-        <img class="rbadge" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/badge.webp" alt="">
+        <img class="rbadge" src="assets/ui/badge.webp" alt="">
         <div id="rName"></div>
         <p id="rSub"></p>
         <p id="rPts" class="rpts"></p>
@@ -945,11 +955,63 @@ scene.add(sun);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 sun.castShadow = true;
-{ const big = !(window.matchMedia && matchMedia('(pointer: coarse)').matches); sun.shadow.mapSize.set(big ? 2048 : 1024, big ? 2048 : 1024); }
+const BIG = !(window.matchMedia && matchMedia('(pointer: coarse)').matches);   // a computer, not a phone
+sun.shadow.mapSize.set(BIG ? 2048 : 1024, BIG ? 2048 : 1024);
 Object.assign(sun.shadow.camera, { left: -22, right: 22, top: 14, bottom: -14, near: 2, far: 60 });
 sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.03;
 sun.intensity = 0.75;
-const maxAniso = Math.min(4, renderer.capabilities.getMaxAnisotropy());
+// (how sharp a texture stays when seen at a flat angle, like the platform floor: 16 on computers, 4 on phones)
+const maxAniso = Math.min(BIG ? 16 : 4, renderer.capabilities.getMaxAnisotropy());
+
+/* ---------------- the second platform (4 ضد 4) ----------------
+   Platform B lies across the NEAR track, toward the camera (z OUT_Z … OUT_Z + 6.4): a train on that track
+   then passes behind whoever stands on B instead of hiding them. It is the island moved 10.6 m in z, with a
+   railing instead of a second track on its camera side. Team 0 starts on B, team 1 on the island; you
+   cross by jumping the 4.2 m track (a jump covers ~4.8 m, the second jump makes it easy) or through it.
+   TWIN is set by setMap() from the mode and size on every page, so nothing new goes over the network. */
+const DB0 = 7.4, DB1 = 7.4 + 6.4, DBC = 7.4 + 3.2;   // = OUT_Z, OUT_Z + 2 PZ, its centre (those consts come later)
+let TWIN = false;
+const twinG = new THREE.Group(), twinHide = [], twinTops = [], twinPosts = [];
+const deckOf = z => Math.abs(z) <= 3.2 ? 0 : TWIN && z >= DB0 ? 1 : -1;   // 0 the island, 1 platform B, -1 over a track
+const deckLo = d => d === 1 ? DB0 : -3.2, deckHi = d => d === 1 ? DB1 : 3.2;
+function setMap(on) {
+  on = !!on; if (on === TWIN) return; TWIN = on;
+  twinG.visible = on; twinHide.forEach(o => { o.visible = !on; });
+  for (const [list, extra] of [[TOPS, twinTops], [POSTS, twinPosts]]) for (const e of extra) {
+    const i = list.indexOf(e); if (on && i < 0) list.push(e); else if (!on && i >= 0) list.splice(i, 1);
+  }
+  // the floodlight's shadows reach the second platform too (+z is "down" in the light's view)
+  sun.shadow.camera.bottom = on ? -23 : -14; sun.shadow.camera.updateProjectionMatrix();
+}
+function buildTwin(side, floorTex) {
+  const n0 = scene.children.length, LEN = 46 + 40, WOOD = 0x8a5a2b, BLUE_ = 0x1f4f9c;
+  const ft = floorTex.clone(); ft.needsUpdate = true; ft.wrapS = THREE.RepeatWrapping; ft.repeat.x = LEN / 46; ft.offset.x = -(LEN / 46 - 1) / 2;
+  const deck = mesh(box(LEN, 1.6, 6.4), [side, side, L({ map: ft }), side, side, side]);
+  deck.position.set(0, -0.8, DBC); scene.add(deck);
+  // past the railing the floor carries on toward the camera, so the bottom of the screen is never a void
+  const apron = mesh(box(LEN, 1.6, 12), [side, side, L({ map: ft, color: 0x8f8f8f }), side, side, side]);   // same tiles, dimmer: it isn't part of the fight
+  apron.position.set(0, -0.8, DB1 + 6); scene.add(apron);
+  const strip = mesh(box(46, 0.04, 0.16), warnStrips[1].material); strip.position.set(0, 0.03, DB0 + 0.06); scene.add(strip);
+  // railing along the camera side: thin, so it never hides the fight
+  const railM = L({ color: BLUE_ });
+  for (const y of [0.55, 1.05]) { const r = mesh(box(LEN, 0.06, 0.06), railM); r.position.set(0, y, DB1 + 0.14); scene.add(r); }
+  for (let x = -40; x <= 40; x += 2.5) { const q = mesh(box(0.07, 1.05, 0.07), railM); q.position.set(x, 0.525, DB1 + 0.14); scene.add(q); }
+  // (no lamp posts on this side: they would stand between the camera and the fight)
+  // three wooden benches with their backs to the railing: solid, like the island's (jump over or onto them)
+  const woodM = L({ color: WOOD }), legM = L({ color: 0x2a2a2a });
+  for (const bx of [-12, 0, 12]) {
+    const bz = DB1 - 0.55;
+    const seat = mesh(box(1.6, 0.08, 0.44), woodM); seat.position.set(bx, 0.44, bz); scene.add(seat);
+    const back = mesh(box(1.6, 0.4, 0.06), woodM); back.position.set(bx, 0.75, bz + 0.22); scene.add(back);
+    for (const sx of [-0.7, 0.7]) { const leg = mesh(box(0.08, 0.44, 0.4), legM); leg.position.set(bx + sx, 0.22, bz); scene.add(leg); }
+    twinTops.push({ x0: bx - 0.8, x1: bx + 0.8, z0: bz - 0.22, z1: bz + 0.25, y: 0.48, solid: true });
+  }
+  // the catenary masts of the near track now stand on this platform: you walk round them
+  for (const px of [-9, 9]) twinPosts.push({ x: px, z: DB0 + 0.6, r: 0.2, h: 7 });
+  while (scene.children.length > n0) twinG.add(scene.children[n0]);
+  twinG.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = o !== deck && o !== apron && o !== strip; } });
+  twinG.visible = false; scene.add(twinG);
+}
 
 /* ---------------- helpers ---------------- */
 const fontRedraws = [];
@@ -1354,11 +1416,11 @@ function signText(g, txt, x, y, size, color) { g.font = `800 ${size}px ${SIGN}`;
 // our round metro mark (the user's badge): drawn into sign textures once it loads, and as a texture for pole signs
 const badgeImg = new Image();
 badgeImg.onload = () => fontRedraws.forEach(f => f());
-badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
+badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
 const badgeOk = () => badgeImg.complete && badgeImg.naturalWidth > 0;
 let badgeTex = null;
 function badgePole(x, z, h, r) {
-  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/badge.webp');
+  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('assets/ui/badge.webp');
   const g = new THREE.Group();
   const pole = mesh(cyl(r * 0.09, r * 0.11, h, 14), steelM(BLUE, 0.4, 0.55)); pole.position.y = h / 2; g.add(pole);
   const collar = mesh(cyl(r * 0.14, r * 0.14, 0.3, 14), steelM(0xc0c6cc, 0.4, 0.7)); collar.position.y = h - 0.1; g.add(collar);
@@ -1496,6 +1558,7 @@ function buildStation() {
   scene.add(near);
   const nearRail = mesh(box(160, 0.08, 0.08), L({ color: BLUE }));
   nearRail.position.set(0, PIT_Y + 2.45, OUT_Z + 0.2); scene.add(nearRail);
+  twinHide.push(near, nearRail); buildTwin(side, floorTex);
 
   // far wall: painted yellow-brick wall with a blue iron fence on top (star-cut panels)
   const wallTex = tex(512, 128, (g, w, h) => {
@@ -1924,7 +1987,7 @@ function propModel(g, p) {
   const w = new THREE.Group(); w.add(m); return w;
 }
 async function loadProps() {
-  const get = n => glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
+  const get = n => glbGet('assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
   const [tuk, bus, kiosk] = await Promise.all([get('tuktuk'), get('microbus'), get('kiosk')]);
   if (tuk && ambient.tuk) { ambient.tuk.children.slice().forEach(c => ambient.tuk.remove(c)); ambient.tuk.add(tuk); }
   if (bus) { bus.position.set(30, 0, -11.4); bus.rotation.y = Math.PI; scene.add(bus); ambient.bus = bus; }
@@ -1932,7 +1995,7 @@ async function loadProps() {
 }
 function loadBuildings() {
   const ld = new THREE.TextureLoader();
-  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
+  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
     .then(list => placeBuildings(list.filter(Boolean)));
 }
 function placeBuildings(list) {
@@ -2389,23 +2452,48 @@ const GLB_Q = new URLSearchParams(location.search);
 const CHARS = [
   // cape: 'remove' drops the Meshy cape (cape-fix.js); null leaves the mesh as it is
   // art: where this fighter's head is in the menu key art (assets/ui/keyart.webp), in % of the picture
-  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
-  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
-  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
-  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
-  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
+  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
+  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وصندل', src: 'assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
+  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
+  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
+  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
   // lock: 'premium' = only by buying it, 'ramadan' = earned in Ramadan (lockOf)
-  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
-  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
-  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
-  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
-  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
-  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
+  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
+  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
+  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
+  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
+  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
+  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
 ];
 // test only (not used on the public page unless ?hd is in the address): the new high-detail بطل السيدة زينب
 const LITE = !GLB_Q.has('full') && (GLB_Q.has('lite') || (window.matchMedia && matchMedia('(pointer: coarse)').matches));
-if (GLB_Q.has('hd')) { CHARS[1].src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
-const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {}, failed: {} };
+// computers at full quality swap in each fighter's 2048 px skin (assets/models/hd/, made by tools/hd-textures.py)
+// once he is on screen; ?hd=0 keeps the 1024 px one (to compare)
+const HD = !LITE && BIG && GLB_Q.get('hd') !== '0';
+const hdQ = []; let hdBusy = false;
+function hdSkin(ch) {
+  if (!HD || GLB.hd[ch.id] || ch.smooth || ch.id === 'kofeyya') return;   // (his model already carries a 2048 px skin)
+  GLB.hd[ch.id] = 1; hdQ.push(ch); hdPump();
+}
+function hdPump() {
+  if (hdBusy || !GLB.allIn || !hdQ.length) return;   // after every model is in, one picture at a time
+  if (QUAL.level > 0) { hdQ.length = 0; return; }    // a machine that had to step down keeps the light skins
+  const ch = hdQ.shift(), img = new Image(); hdBusy = true;
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    const seen = new Set();   // every copy of this fighter shares the one texture: swap its picture in place
+    GLB.models[ch.id].scene.traverse(o => { const t = o.isMesh && o.material.map; if (t && !seen.has(t)) { seen.add(t); t.image = img; t.needsUpdate = true; } });
+    GLB.hd[ch.id] = 2; hdBusy = false; hdPump();
+  };
+  img.onerror = () => { hdBusy = false; hdPump(); };
+  img.src = 'assets/models/hd/' + ch.id + '.webp';
+}
+if (GLB_Q.has('hd')) { CHARS[1].src = 'assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
+// ?hy: بطل السيدة زينب made with Hunyuan 3D (80k triangles, test only, 24 Nov 2026), rigged by Meshy
+if (GLB_Q.has('hy')) CHARS[1].src = 'assets/models/web/kofeyya-hy.glb';
+// ?m71: بطل السيدة زينب made again on Meshy at its top settings (7.1, Ultra geometry 4k, 4K texture, 80k triangles; test only, 24 Nov 2026)
+if (GLB_Q.has('m71')) { CHARS[1].src = 'assets/models/web/kofeyya-m71u.glb'; CHARS[1].smooth = true; }   // (Meshy's remesh comes faceted: smooth its normals)
+const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {}, failed: {}, hd: {}, allIn: false };
 // the CPU's (or the online friend's) character, an index into CHARS
 let cpuChar = 1;
 // game move -> clip, and where in the clip (seconds) the strike lands (hit) and where to stop (end).
@@ -2464,7 +2552,7 @@ function loadChar(i) {
       if (o.isMesh && c.smooth) smoothNormals(o.geometry);
       if (o.isSkinnedMesh && window.fixCape && c.cape) fixCape(o, c.cape);
       // game textures are drawn without colour management, so read the model's the same way
-      if (o.isMesh && o.material.map) { o.material.map.encoding = THREE.LinearEncoding; o.material.map.needsUpdate = true; }
+      if (o.isMesh && o.material.map) { o.material.map.encoding = THREE.LinearEncoding; o.material.map.anisotropy = Math.min(BIG ? 8 : 2, maxAniso); o.material.map.needsUpdate = true; }
     });
     GLB.models[c.id] = g;
   }));
@@ -2530,15 +2618,15 @@ function lockOf(i) {
 }
 async function loadGlb() {
   // kept next to the game (a second CDN was one more slow or blocked host before anything showed)
-  await Promise.all(['https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/js/GLTFLoader.js', 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/js/meshopt_decoder.js'].map(loadScript));
-  await loadScript('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/js/SkeletonUtils.js');
+  await Promise.all(['assets/js/GLTFLoader.js', 'assets/js/meshopt_decoder.js'].map(loadScript));
+  await loadScript('assets/js/SkeletonUtils.js');
   const ld = new THREE.GLTFLoader();
   // the fighters are packed with gltfpack (tools/pack-models.sh): ~1/3 smaller, moves ~5x
   await MeshoptDecoder.ready; ld.setMeshoptDecoder(MeshoptDecoder);
   glbGet = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
   // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
   if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
-  const [moves] = await Promise.all([glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
+  const [moves] = await Promise.all([glbGet('assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
   // the clips were made on Otman's skeleton and also carry his bone lengths (every bone's position);
   // played on a fighter with other proportions they dragged his head points ~20 cm (Robin's warped
   // face, سطوحي's long neck). Keep only the rotations (+ the hips' height), so each keeps its own lengths.
@@ -2566,6 +2654,7 @@ async function loadGlb() {
       await loadChar(i).catch(e => { GLB.failed[CHARS[i].id] = 1; console.warn('[glb] no', CHARS[i].id, e); });
     }
     loadProps(); loadBuildings();
+    GLB.allIn = true; hdPump();
   })();
 }
 function findBone(model, re) { let b = null; model.traverse(o => { if (!b && o.isBone && re.test(o.name)) b = o; }); return b; }
@@ -2749,6 +2838,7 @@ function buildGlbFighter(ch, ringColor) {
   root.add(body);
   const k = GLB.h / GLB.srcH;
   const model = THREE.SkeletonUtils.clone(GLB.models[ch.id].scene);
+  hdSkin(ch);
   model.scale.setScalar(k);
   body.add(model);
   const meshes = [];
@@ -3011,6 +3101,7 @@ class Fighter {
     this.reset();
   }
   reset() {
+    this.hitStop = 0;
     this.face = 0; this.state = 'idle'; this.onGround = false; this.pit = false; this.jumps = 2;
     this.dmg = 0; this.lives = 3; this.guard = 100; this.atk = null; this.buffer = null; this.bufferT = 0;
     this.chain = 0; this.chainT = 0; this.stunT = 0; this.inv = 0; this.combo = 0; this.comboT = 0;
@@ -3119,7 +3210,7 @@ const Music = {
     for (const k of ['menu', 'fight']) {
       try {
         const a = new Audio();
-        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@b1c292ecf7f1/assets/' + k + '.mp3';
+        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'assets/' + k + '.mp3';
         this.tracks[k] = a;
       } catch (e) {}
     }
@@ -3250,18 +3341,37 @@ function updateFx(dt) {
 function screenFlash() { const n = el.flash; n.classList.remove('on'); void n.offsetWidth; n.classList.add('on'); }
 const TICKET_COLS = [0xf4e31c, 0x8fcfae, 0xf29db3, 0xe3bb93, 0xffffff];
 let camKick = 0, slowT = 0;
+// With more than two fighters a hit must not stop or shake the whole match (the user, 24 Nov 2026: in 3 ضد 3
+// every hit by anybody froze the game and punched the camera, so he couldn't play). So:
+//  - the stop on impact is per fighter (the two in the hit hold still, everyone else keeps moving);
+//  - camera punch, shake and the white flash are only for a hit this page's player is part of.
+// A duel keeps the old whole-match stop and shake.
+const crowd = () => fighters.length > 2;
+function impact(a, b, fz, sh) {
+  if (!crowd()) { freeze = fz; if (sh) shake = Math.min(0.7, shake + sh); return; }
+  a.hitStop = Math.max(a.hitStop || 0, fz); if (b) b.hitStop = Math.max(b.hitStop || 0, fz);
+}
+// is this page's player in the hit that just landed on v? (a friend's page isn't told who hit: swinging right beside him counts)
+function mine(v, within = 0.25) {
+  if (!crowd() || v === P) return true;
+  if (v.lastHitBy === P && clock - v.lastHitT < within) return true;
+  return NET.role === 'guest' && P.state === 'attack' && Math.hypot(v.pos.x - P.pos.x, v.pos.z - P.pos.z) < 3.6;
+}
 const koCam = { t: 0, p: new V3() };
 // a knock-out: white flash, a burst in the ticket colours where the fighter went out, and on the
 // last life the match runs slow for a moment while the camera closes in
 function koBurst(f) {
   const x = f.pos.x, y = Math.max(f.pos.y, PIT_Y) + 1, z = f.pos.z;
-  screenFlash();
+  const last = teamPlay() ? (gmode === 'elim' && upCount(f.team) === 0) : f.lives <= 0;
+  const own = mine(f, 6);   // (a knock-out comes a while after the hit that caused it)
+  if (own) screenFlash();
+  if (crowd() && own) shake = Math.max(shake, f === P ? 0.6 : 0.4);
   shockRing(x, y, z, 0xffffff, 1.2, 0.45); shockRing(x, y, z, 0xf4e31c, 0.7, 0.6);
   TICKET_COLS.forEach(c => emitLocal(tmpV.set(x, y, z), c, 5, 11, 0.75, 0.6, 9));
   for (let i = 0; i < 9; i++) puff(x + rand(-0.5, 0.5), y + rand(-0.4, 0.6), z + rand(-0.5, 0.5), 0xf4f1e8, 1.1, 0.7, rand(-3, 3), rand(0.5, 3), rand(-2, 2));
   // the slow close-up: the last life in a duel or free-for-all, the knock-out that ends a round in جولة عدالة
-  const last = teamPlay() ? (gmode === 'elim' && upCount(f.team) === 0) : f.lives <= 0;
-  if (last) { koCam.t = 1.5; koCam.p.set(clamp(x, -PLAY_X, PLAY_X), 0.6, clamp(z, -PZ, PZ)); if (NET.role !== 'guest') slowT = 0.75; }
+  // (in a crowd the slow close-up is for your own knock-outs and for the one that ends a round, not for two others far away)
+  if (last && (own || teamPlay())) { koCam.t = 1.5; koCam.p.set(clamp(x, -PLAY_X, PLAY_X), 0.6, clamp(z, -PZ, TWIN ? DB1 : PZ)); if (NET.role !== 'guest') slowT = 0.75; }
 }
 const FLASH_WHITE = new THREE.Color(0xffffff), DODGE_TINT = new THREE.Color(0x9fd8ff);
 function setFlash(r, k, col = FLASH_WHITE) {
@@ -3278,7 +3388,8 @@ function fighterFx(f, dt) {
   // a hit landed: the damage went up
   if (live && f.dmg > x.dmg + 0.5) {
     const pw = clamp((f.dmg - x.dmg) / 13 * (0.55 + f.dmg / 130), 0.15, 1);
-    x.flash = 0.11 + pw * 0.09; camKick = Math.max(camKick, pw);
+    x.flash = 0.11 + pw * 0.09;
+    if (mine(f)) { camKick = Math.max(camKick, pw); if (crowd()) shake = Math.min(0.7, shake + pw * 0.35); }
     if (pw > 0.55) shockRing(f.pos.x, f.pos.y + 1.1, f.pos.z, TRAIL_COL(f.dmg), 0.5 + pw * 0.5);
   }
   x.dmg = f.dmg;
@@ -3470,7 +3581,7 @@ function rebuildCPU() {
 // the floor under a fighter: platform or track bed, or a roof/seat they came down onto
 // (prevY = height before this frame's move, so surfaces are one-way from above)
 function groundAt(f) {
-  let gy = (!f.pit && Math.abs(f.pos.z) <= PZ) ? 0 : PIT_Y;
+  let gy = (!f.pit && deckOf(f.pos.z) >= 0) ? 0 : PIT_Y;
   const py = f.prevY == null ? f.pos.y : f.prevY;
   for (const t of TOPS) {
     if (t.y <= gy || f.pos.x < t.x0 || f.pos.x > t.x1 || f.pos.z < t.z0 || f.pos.z > t.z1) continue;
@@ -3515,7 +3626,8 @@ function bumpRoofs(f) {
 function collide(f) {
   bumpRoofs(f);
   f.pos.x = clamp(f.pos.x, -PLAY_X, PLAY_X);
-  const lim = OUT_Z - R; f.pos.z = clamp(f.pos.z, -lim, lim);
+  // (two platforms: at floor height you may walk on over platform B, up to its railing; down in the track its wall stops you)
+  const lim = OUT_Z - R; f.pos.z = clamp(f.pos.z, -lim, TWIN && !f.pit ? DB1 - R : lim);   // (f.pit, not the height: gravity dips y a few cm before the floor catches it)
   const sz = Math.sign(f.pos.z) || 1;
   if (f.pit) {
     if (f.pos.y < -0.02) {
@@ -3533,7 +3645,7 @@ function collide(f) {
     }
   }
   if (!f.onGround && f.jumps === 2 && f.vel.y < -1) f.jumps = 1;
-  if (!f.pit && Math.abs(f.pos.z) > PZ && f.pos.y < -0.02) f.pit = true;
+  if (!f.pit && deckOf(f.pos.z) < 0 && f.pos.y < -0.02) f.pit = true;
 }
 function approach(f, tx, tz, acc) {
   const dx = tx - f.vel.x, dz = tz - f.vel.z, l = Math.hypot(dx, dz);
@@ -3616,7 +3728,7 @@ function doThrow(f) {
   t.vel.set(d.x * kb, 2.5 + kb * 0.4, d.z * kb);
   t.state = 'hitstun'; t.stunT = 0.45 + kb * 0.02; t.lastHitBy = f; t.lastHitT = clock; t.pit = false;
   skillNudge(f === P ? 0.01 : t === P ? -0.01 : 0);
-  f.stats.hits++; freeze = 0.13; shake = Math.min(0.7, shake + 0.3);
+  f.stats.hits++; impact(f, t, 0.13, 0.3);
   emit(tmpV.copy(t.pos).add(new V3(0, 1, 0)), 0xffb23e, 10, 6, 0.5, 0.35);
   SFX.hit(kb); popup('رمية بلدي!', f, 'move');
   cardJolt(t);
@@ -3638,7 +3750,7 @@ function applyHit(f, t, m, hp) {
     if (t.state === 'guard') {
       // holding guard means nobody can grab you, from any side (user's rule)
       f.vel.x -= nx * 3; f.vel.z -= nz * 3; t.vel.x += nx * 1.2; t.vel.z += nz * 1.2;
-      emit(hp, 0x7fd8ff, 6, 4, 0.4, 0.25); SFX.block(); freeze = 0.04;
+      emit(hp, 0x7fd8ff, 6, 4, 0.4, 0.25); SFX.block(); impact(f, t, 0.04, 0);
       popup('الدرع مقفول!', t, t === P ? '' : 'cpu');
       return;
     }
@@ -3654,7 +3766,7 @@ function applyHit(f, t, m, hp) {
       t.guard -= m.dmg * 3.2;
       t.vel.x += nx * 2.5; t.vel.z += nz * 2.5;
       emit(hp, 0x7fd8ff, 6, 4, 0.4, 0.25);
-      SFX.block(); freeze = 0.04;
+      SFX.block(); impact(f, t, 0.04, 0);
       if (t.guard <= 0) { t.guard = 0; t.state = 'dizzy'; t.stunT = 1.6; popup('الدفاع اتكسر!', t, 'bad'); SFX.brk(); }
       return;
     }
@@ -3674,7 +3786,7 @@ function applyHit(f, t, m, hp) {
   f.combo = (wasStun && f.comboT > 0) ? f.combo + 1 : 1;
   f.comboT = 1.0; f.stats.hits++; f.stats.maxCombo = Math.max(f.stats.maxCombo, f.combo);
   // the stop on impact: a blink for a jab, a clear beat for a heavy hit on a damaged fighter
-  freeze = clamp(0.045 + kb * 0.0075, 0.05, 0.2); shake = Math.min(0.7, shake + kb * 0.024);
+  impact(f, t, clamp(0.045 + kb * 0.0075, 0.05, 0.2), kb * 0.024);
   emit(hp, 0xffb23e, 6 + (kb | 0), 5 + kb * 0.3, 0.45, 0.3);
   emit(hp, 0xffffff, 2, 1, 1.1, 0.12, 0);
   SFX.hit(kb);
@@ -3715,7 +3827,7 @@ function knockOut(f, dir) {
     const up = upCount(t), them = upCount(1 - t);
     if (up === 1 && them >= 2 && !clutchSaid[t]) { clutchSaid[t] = true; clutch = { t: 1.5, text: 'لوحده قصاد ' + them + '!' }; }
   }
-  shake = 0.6; freeze = 0.12;
+  if (!crowd()) { shake = 0.6; freeze = 0.12; }   // (with more fighters the burst decides: see koBurst)
   emit(tmpV.copy(f.pos).add(new V3(0, 1, 0)), 0xff4a3d, 16, 9, 0.7, 0.5);
   SFX.ko();
 }
@@ -3725,8 +3837,9 @@ function respawn(f) {
   const slot = fighters.filter(o => o.team === f.team).indexOf(f);
   const sx = teamPlay() ? (f.team === 0 ? -1 : 1) * (3.5 + 2.2 * Math.max(0, slot)) : ([-3.5, 3.5, -7.5, 7.5][f.idx] || 0);
   f.pos.set(sx, 6, teamPlay() ? [0, -1.4, 1.4, 0][slot] || 0 : 0); f.vel.set(0, 0, 0);
+  if (TWIN) f.pos.set([-2.2, 2.2, -6.6, 6.6][slot] || 0, 6, f.team === 0 ? DBC : 0);   // back on your own platform
   f.dmg = 0; f.guard = 100; f.inv = 2;
-  f.face = sx < 0 ? Math.PI / 2 : -Math.PI / 2;
+  f.face = TWIN ? (f.team === 0 ? Math.PI : 0) : sx < 0 ? Math.PI / 2 : -Math.PI / 2;
   f.rig.root.rotation.set(0, f.face, 0);
 }
 function separate(a, b) {
@@ -3840,7 +3953,7 @@ function stepFighter(f, dt) {
     if (c.jump) { f.buffer = 'jump'; f.bufferT = 0.25; }
     const landed = (a.name === 'spike' || a.name === 'air') && f.onGround && a.t > 0.05;
     if (a.t >= a.m.dur || landed) {
-      if (landed && a.name === 'spike') { shake = Math.min(0.5, shake + 0.15); emit(tmpV.set(f.pos.x, f.pos.y + 0.1, f.pos.z), 0x8a8576, 8, 4, 0.6, 0.4, 2); }
+      if (landed && a.name === 'spike') { if (!crowd() || f === P) shake = Math.min(0.5, shake + 0.15); emit(tmpV.set(f.pos.x, f.pos.y + 0.1, f.pos.z), 0x8a8576, 8, 4, 0.6, 0.4, 2); }
       f.state = 'idle'; f.atk = null;
       if (f.chain) f.chainT = 0.38;
       const b = f.buffer; f.buffer = null;
@@ -3903,7 +4016,9 @@ function aiTarget(ai, dt) {
   ai.tgtT -= dt;
   const ok = t => t && !allies(t, ai) && t.lives > 0 && fighters.includes(t);
   if (!ok(ai.foe) || ai.tgtT <= 0) {
-    const score = t => Math.hypot(t.pos.x - ai.pos.x, t.pos.z - ai.pos.z) - Math.min(t.dmg, 150) * 0.02 - (t === ai.foe ? 1.5 : 0) + (t.state === 'ko' ? 6 : 0);
+    // (two platforms: a foe on the other one counts as 7 m further, so a CPU deals with its own platform first)
+    const far = t => TWIN && deckOf(t.pos.z) >= 0 && deckOf(ai.pos.z) >= 0 && deckOf(t.pos.z) !== deckOf(ai.pos.z) ? 7 : 0;
+    const score = t => Math.hypot(t.pos.x - ai.pos.x, t.pos.z - ai.pos.z) + far(t) - Math.min(t.dmg, 150) * 0.02 - (t === ai.foe ? 1.5 : 0) + (t.state === 'ko' ? 6 : 0);
     const list = fighters.filter(t => !allies(t, ai) && t.lives > 0).sort((a, b) => score(a) - score(b));
     ai.foe = list[0] || null; ai.tgtT = rand(1.5, 3);
   }
@@ -3935,22 +4050,46 @@ function aiThink(ai, foe, dt) {
   // decision steady while the foe hops about down there.
   const trainDue = sd => (train.state === 'warn' || train.state === 'run') && trainOn(sd);
   const foeSide = Math.sign(foe.pos.z) || 1;
-  if (Math.abs(foe.pos.z) > PZ && foe.pos.y < 0.3 && foe.state !== 'ko') { ai.pitChase = 1.2; ai.pitSide = foeSide; } else ai.pitChase = Math.max(0, (ai.pitChase || 0) - dt);
+  if (deckOf(foe.pos.z) < 0 && foe.pos.y < 0.3 && foe.state !== 'ko') { ai.pitChase = 1.2; ai.pitSide = foeSide; } else ai.pitChase = Math.max(0, (ai.pitChase || 0) - dt);
   const chase = ai.pitChase > 0 && !trainDue(ai.pitSide);
-  const inPit = Math.abs(ai.pos.z) > PZ && ai.pos.y < 0.2;
+  const inPit = deckOf(ai.pos.z) < 0 && ai.pos.y < 0.2;
   if (inPit && !(chase && Math.sign(ai.pos.z) === ai.pitSide)) {
     const sz = Math.sign(ai.pos.z);
-    c.mx = clamp(-ai.pos.x * 0.05, -0.3, 0.3); c.mz = -sz;
-    if (ai.onGround && Math.abs(ai.pos.z) < PZ + 1.6) c.jump = true;
+    // (two platforms: out of the near track on the side its foe is on, or the nearer wall)
+    const toB = TWIN && sz > 0 && (deckOf(foe.pos.z) === 1 || (deckOf(foe.pos.z) < 0 && ai.pos.z > TRACK_Z));
+    ai.crossing = 0;
+    c.mx = clamp(-ai.pos.x * 0.05, -0.3, 0.3); c.mz = toB ? 1 : -sz;
+    if (ai.onGround && (toB ? ai.pos.z > DB0 - 1.6 : Math.abs(ai.pos.z) < PZ + 1.6)) c.jump = true;
     else if (!ai.onGround && ai.vel.y < 1 && ai.jumps > 0 && ai.pos.y < 0.3) c.jump = true;
     return;
   }
+  // 4 ضد 4 on two platforms, and the foe is on the other one: stand back a moment (not everybody at once, and
+  // never with a train due on the track between), then run at the lip and jump across, second jump at the top
+  const dA = deckOf(ai.pos.z), dF = deckOf(foe.pos.z);
+  if (ai.state !== 'idle' && ai.state !== 'guard') ai.crossing = 0;
+  if (TWIN && foe.state !== 'ko' && (ai.state === 'idle' || ai.state === 'guard') && (ai.crossing || (dA >= 0 && (dF >= 0 ? dF !== dA : dA === 1 && foe.pos.z < 0)))) {
+    const dir = ai.crossing || (dA === 1 ? -1 : 1), lip = dir > 0 ? PZ : DB0;
+    c.guard = false;
+    if (!ai.onGround) {
+      if (ai.crossing) { c.mx = 0; c.mz = dir; if (ai.jumps > 0 && ai.vel.y < 1) c.jump = true; return; }
+    } else if (ai.crossing && dA >= 0 && (dA === 1) === (dir > 0)) { ai.crossing = 0; ai.crossT = null; }   // landed across
+    else {
+      ai.crossing = 0;
+      if (ai.crossT == null) ai.crossT = rand(0.3, 2.4);
+      ai.crossT -= dt;
+      const gap = (lip - ai.pos.z) * dir;
+      if (ai.crossT > 0 || trainDue(1)) { const d = lip - dir * 1.9 - ai.pos.z; c.mx = clamp((foe.pos.x - ai.pos.x) * 0.1, -0.5, 0.5); c.mz = Math.abs(d) > 0.25 ? Math.sign(d) : 0; return; }
+      c.mx = clamp((foe.pos.x - ai.pos.x) * 0.15, -0.6, 0.6); c.mz = dir;
+      if (gap < 0.45) { c.jump = true; ai.crossing = dir; }
+      return;
+    }
+  } else if (ai.onGround) ai.crossT = null;
   ai.aiT -= dt;
   if (ai.aiT > 0) return;
   ai.aiT = D.react * rand(0.6, 1.4);
   const dx = foe.pos.x - ai.pos.x, dz = foe.pos.z - ai.pos.z, dist = Math.hypot(dx, dz);
-  if ((train.state === 'warn' || train.state === 'run') && trainOn(Math.sign(ai.pos.z)) && Math.abs(ai.pos.z) > PZ - 1.3) {
-    c.mx = 0; c.mz = -Math.sign(ai.pos.z); return;
+  if ((train.state === 'warn' || train.state === 'run') && trainOn(Math.sign(ai.pos.z)) && (dA === 1 ? ai.pos.z < DB0 + 1.3 : Math.abs(ai.pos.z) > PZ - 1.3)) {
+    c.mx = 0; c.mz = dA === 1 ? 1 : -Math.sign(ai.pos.z); return;
   }
   if (foe.state === 'ko') { c.mx = -ai.pos.x * 0.1; c.mz = -ai.pos.z * 0.2; return; }
   if (ai.onGround && clock - (ai.blockedT || -9) < 0.25) c.jump = true;   // a seat in the way: hop over it
@@ -3958,9 +4097,9 @@ function aiThink(ai, foe, dt) {
   if (dist > 3.5 && dist < 10 && ai.shotCd <= 0 && ai.onGround && Math.abs(foe.pos.y - ai.pos.y) < 1 && ai.state === 'idle' && Math.random() < D.aggro * 0.35) {
     ai.face = Math.atan2(dx, dz); c.shot = true; return;
   }
-  if (Math.abs(foe.pos.z) > PZ && foe.pos.y < 0.3 && !chase) {
+  if (dF < 0 && foe.pos.y < 0.3 && !chase) {
     // a train is coming down there: wait above the climber, a step back from the edge until it has passed
-    const ex = foe.pos.x, ez = Math.sign(foe.pos.z) * (PZ - (trainDue(foeSide) ? 1.6 : 0.7));
+    const back = trainDue(foeSide) ? 1.6 : 0.7, ex = foe.pos.x, ez = dA === 1 ? DB0 + back : Math.sign(foe.pos.z) * (PZ - back);
     const ddx = ex - ai.pos.x, ddz = ez - ai.pos.z, dd = Math.hypot(ddx, ddz), ease = Math.min(1, dd);
     if (dd > 0.3) { c.mx = ddx / dd * ease; c.mz = ddz / dd * ease; } else { c.mx = c.mz = 0; }
     if (dist < 1.9 && foe.pos.y > -1.1 && Math.random() < D.aggro) { if (Math.random() < 0.5) c.heavy = true; else c.light = true; }
@@ -3969,7 +4108,8 @@ function aiThink(ai, foe, dt) {
   // slip out of a swing that is on its way: back, or along the platform when a track is behind
   if (foe.state === 'attack' && foe.atk && !foe.atk.m.shot && foe.atk.t < foe.atk.m.act[0] && dist < 2.2 && dist > 0.01 && ai.state === 'idle' && ai.onGround && ai.dodgeCd <= 0 && Math.random() < D.dodge) {
     let ax = -dx / dist, az = -dz / dist;
-    if (Math.abs(ai.pos.z + az * 2.2) > PZ - 0.5) { az = 0; ax = Math.sign(ax) || (Math.random() < 0.5 ? 1 : -1); }
+    const dk = Math.max(0, dA), zz = ai.pos.z + az * 2.2;
+    if (zz > deckHi(dk) - 0.5 || zz < deckLo(dk) + 0.5) { az = 0; ax = Math.sign(ax) || (Math.random() < 0.5 ? 1 : -1); }
     if (Math.abs(ai.pos.x + ax * 2.2) > PLAY_X - 0.5) ax = -ax;
     c.mx = ax; c.mz = az; c.dodge = true; return;
   }
@@ -3994,8 +4134,8 @@ function aiThink(ai, foe, dt) {
     return;
   }
   // approach from the platform side so hits push the foe toward the tracks
-  const pitDir = Math.sign(foe.pos.z) || (Math.random() < 0.5 ? 1 : -1);
-  const tx = foe.pos.x, tz = chase ? foe.pos.z + (above ? foeSide * 0.6 : 0) : clamp(foe.pos.z - pitDir * 1.0, -PZ + 0.4, PZ - 0.4);
+  const fk = Math.max(0, dF), pitDir = fk === 1 ? -1 : Math.sign(foe.pos.z) || (Math.random() < 0.5 ? 1 : -1);
+  const tx = foe.pos.x, tz = chase ? foe.pos.z + (above ? (dA === 1 ? -0.6 : foeSide * 0.6) : 0) : clamp(foe.pos.z - pitDir * 1.0, deckLo(fk) + 0.4, deckHi(fk) - 0.4);
   const ddx = tx - ai.pos.x, ddz = tz - ai.pos.z, dd = Math.hypot(ddx, ddz);
   if (dd > 0.2) { c.mx = ddx / dd; c.mz = ddz / dd; } else { c.mx = c.mz = 0; }
   // coming in at a run: now and then a running kick or swing instead of stopping first
@@ -4020,7 +4160,7 @@ function placeTrains(show) {
   trainObj.rotation.y = train.dir > 0 ? 0 : Math.PI; trainObj.position.set(train.head, 0, s1 * TRACK_Z);
   if (both) { trainObj2.rotation.y = train.dir > 0 ? Math.PI : 0; trainObj2.position.set(-train.head, 0, -TRACK_Z); }
 }
-const trainWarnText = () => train.side === 0 ? 'على الرصيفين مع بعض!' : train.side > 0 ? 'على الرصيف اللي قدام' : 'على الرصيف اللي ورا';
+const trainWarnText = () => train.side === 0 ? (TWIN ? 'على السكتين مع بعض!' : 'على الرصيفين مع بعض!') : train.side > 0 ? (TWIN ? 'على السكة اللي بين الرصيفين' : 'على الرصيف اللي قدام') : (TWIN ? 'على السكة اللي ورا' : 'على الرصيف اللي ورا');
 function trainStrips(flash) { warnStrips[1].material.opacity = trainOn(1) ? flash : 0; warnStrips[-1].material.opacity = trainOn(-1) ? flash : 0; }
 function updateTrain(dt, live) {
   if (train.state === 'idle') {
@@ -4052,7 +4192,7 @@ function updateTrain(dt, live) {
     if (live) for (const f of fighters) {
       if (f.state === 'ko' || f.lives <= 0) continue;
       const s = Math.sign(f.pos.z);
-      if (!trainOn(s) || Math.abs(f.pos.z) <= PZ + 0.05 || f.pos.y > PIT_Y + 3.4) continue;
+      if (!trainOn(s) || Math.abs(f.pos.z) <= PZ + 0.05 || (TWIN && f.pos.z >= DB0 - 0.05) || f.pos.y > PIT_Y + 3.4) continue;
       const T = trainAt(s), tl = T.head - T.dir * TRAIN_LEN;
       const lo = Math.min(T.head, tl) - 0.4, hi = Math.max(T.head, tl) + 0.4;
       if (f.pos.x > lo && f.pos.x < hi) knockOut(f, T.dir);
@@ -4337,7 +4477,7 @@ function updateCamera(dt) {
     // follow the fight across the platform AND down onto either track (it used to stop at the platform's
     // edge, so a fight on the far track sat small at the top of the screen, under the tickets). On a short
     // screen aim a little past the fighters, which puts them lower, clear of the tickets.
-    tl.set(clamp(mid.x, -PLAY_X + 3.6, PLAY_X - 3.6), 0.2 + clamp(mid.y, -1.6, 2.5) * 0.4, clamp(mid.z, -5.6, h < 500 ? 4.8 : 3.8) * 0.82 + (h < 500 ? -0.2 : 0.45));   // (less far toward the near track on a tall screen: past its wall there is nothing to see)
+    tl.set(clamp(mid.x, -PLAY_X + 3.6, PLAY_X - 3.6), 0.2 + clamp(mid.y, -1.6, 2.5) * 0.4, (TWIN && mid.z > 3.8 ? 3.8 * 0.82 + (Math.min(mid.z, 12.6) - 3.8) : clamp(mid.z, -5.6, h < 500 ? 4.8 : 3.8) * 0.82) + (h < 500 ? -0.2 : 0.45));   // (less far toward the near track on a tall screen: past its wall there is nothing to see)
     d *= 1 - 0.09 * camKick;
     if (koCam.t > 0 && mode === 'fight') { koCam.t -= dt; tl.lerp(koCam.p, 0.75); d = Math.min(d, 10) * 0.8; k = 1 - Math.exp(-dt * 7); }
     else if (camKick > 0.02) k = Math.max(k, 1 - Math.exp(-dt * 14));
@@ -4365,6 +4505,7 @@ const modeCount = () => (NET.role && !MULTI) || gmode === 'duel' ? 2 : gmode ===
 // the tickets, score and tags for whoever is in this match (the host, a friend's page and offline all use it)
 function hudSetup() {
   const tp = teamPlay();
+  setMap(tp && fighters.length >= 8);
   for (const f of ALLF) {
     const on = fighters.includes(f);
     if (on) f.rig.root.visible = true; else if (f !== P && f !== C) hideRig(f);
@@ -4379,15 +4520,17 @@ function hudSetup() {
 }
 const START_X = { 2: [-3, 3], 3: [-6, 6, 0], 4: [-8, 8, -2.7, 2.7] };
 function placeForFight() {
+  setMap(teamPlay() && fighters.length >= 8);
   const tp = teamPlay(), xs = START_X[fighters.length] || START_X[2];
   fighters.forEach((f, i) => {
     f.reset(); f.stats = { hits: 0, maxCombo: 0, kos: 0 };
     if (tp) {   // each team on its own half, facing the other
       const slot = fighters.filter(o => o.team === f.team).indexOf(f);
-      f.pos.set((f.team === 0 ? -1 : 1) * (3.5 + 2.4 * slot), 0, [0, -1.5, 1.5, 0][slot] || 0);
+      if (TWIN) f.pos.set([-2.2, 2.2, -6.6, 6.6][slot] || 0, 0, f.team === 0 ? DBC : 0);   // each team on its own platform
+      else f.pos.set((f.team === 0 ? -1 : 1) * (3.5 + 2.4 * slot), 0, [0, -1.5, 1.5, 0][slot] || 0);
       f.lives = gmode === 'tdm' ? 99 : 1;
     } else f.pos.set(xs[i], 0, i === 2 ? -1.2 : i === 3 ? 1.2 : 0);
-    f.face = f.pos.x < 0 ? Math.PI / 2 : f.pos.x > 0 ? -Math.PI / 2 : 0;
+    f.face = tp && TWIN ? (f.team === 0 ? Math.PI : 0) : f.pos.x < 0 ? Math.PI / 2 : f.pos.x > 0 ? -Math.PI / 2 : 0;
     f.onGround = true;
     f.rig.root.rotation.set(0, f.face, 0);
   });
@@ -4513,6 +4656,7 @@ function fillResult(win) {
 }
 function toMenu() {
   if (NET.role) netLeave();
+  setMap(false);
   mode = 'menu';
   el.result.hidden = true; el.hud.hidden = true; el.touch.hidden = true; el.menu.hidden = false; el.warn.hidden = true;
   el.you.hidden = true;
@@ -4590,13 +4734,13 @@ function showScreen(s, kb) {
 const MODES = ['duel', 'ffa', 'tdm', 'elim'], SIZE_OPTS = { ffa: [3, 4], tdm: [2, 3, 4], elim: [2, 3, 4] };
 const MODE_HINT = { duel: '', ffa: 'كل واحد لنفسه', tdm: 'فريقين، واللي يقع يرجع', elim: 'فريقين، واللي يقع مايرجعش لآخر الجولة' };
 function renderMode() {
-  document.querySelectorAll('#modeB .tier').forEach(b => { const on = b.dataset.m === gmode; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
-  $('#modeV').textContent = MODE_HINT[gmode];
+  document.querySelectorAll('#modeB .tier, #onModeB .tier').forEach(b => { const on = b.dataset.m === gmode; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+  $('#modeV').textContent = MODE_HINT[gmode]; document.querySelectorAll('.onModeV').forEach(v => { v.textContent = MODE_HINT[gmode]; });
   const opts = SIZE_OPTS[gmode] || [];
-  $('#sizeB').hidden = !opts.length;
-  document.querySelectorAll('#sizeB .tier').forEach((b, i) => {
+  $('#sizeB').hidden = $('#onSizeB').hidden = !opts.length;
+  document.querySelectorAll('#sizeB .tier, #onSizeB .tier').forEach(b => { const i = +b.dataset.i;
     const v = opts[i]; b.hidden = v == null; if (v == null) return;
-    b.textContent = gmode === 'ffa' ? v + ' مقاتلين' : v + ' ضد ' + v;
+    b.textContent = gmode === 'ffa' ? v + ' مقاتلين' : v + ' ضد ' + v + (v === 4 ? ' · رصيفين' : '');
     const on = SIZES[gmode] === v; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false');
   });
 }
@@ -4840,7 +4984,7 @@ function tick(now) {
     if (slowT > 0) slowT -= dt;
     if (freeze > 0) freeze -= dt;
     else {
-      for (const f of fighters) stepFighter(f, sdt);
+      for (const f of fighters) { if (f.hitStop > 0) f.hitStop -= dt; else stepFighter(f, sdt); }
       for (let i = 0; i < fighters.length; i++) for (let j = i + 1; j < fighters.length; j++) separate(fighters[i], fighters[j]);
       for (const a of fighters) for (const b of fighters) if (!allies(a, b)) checkHit(a, b);
       updateShots(sdt);
@@ -4950,7 +5094,7 @@ function netLobbyReset() {
   const claim = needClaim();
   $('#onClaim').hidden = $('#claimGo').hidden = !claim;
   $('#onHost').hidden = $('#onJoinRow').hidden = claim;
-  $('#onCodeBox').hidden = true; $('#onStart').hidden = true; $('#onList').hidden = true; $('#onSet').hidden = true;
+  $('#onCodeBox').hidden = true; $('#onStart').hidden = true; $('#onList').hidden = true; $('#onSet').hidden = claim || !MULTI; renderMode();
   claimArm = 0; $('#claimBand').textContent = 'ثبّت الاسم';
   if (claim) { $('#claimIn').value = cleanName(el.nm.value, ''); $('#claimUntil').textContent = fmtDate(Date.now() + MONTH); }
   onStatus(claim ? '' : NAME_LOCK ? 'هتلعب باسم ' + myName() + '.' : '');
@@ -4989,7 +5133,7 @@ function netLost(msg) {
   if (inMatch) { toMenu(); }
   showScreen('online'); onStatus(msg, true);
 }
-const modeLabel = (m, z) => m === 'duel' ? '1 ضد 1' : m === 'ffa' ? 'كله في كله · ' + z + ' مقاتلين' : (m === 'tdm' ? 'الفتونة' : 'جولة عدالة') + ' · ' + z + ' ضد ' + z;
+const modeLabel = (m, z) => m === 'duel' ? '1 ضد 1' : m === 'ffa' ? 'كله في كله · ' + z + ' مقاتلين' : (m === 'tdm' ? 'الفتونة' : 'جولة عدالة') + ' · ' + z + ' ضد ' + z + (z === 4 ? ' · رصيفين' : '');
 // the room's ticket: the mode, who is in, how many seats the CPU takes. The host decides and tells the rest.
 function lobbyRender() {
   if (!NET.role || mode !== 'menu') return;
@@ -5074,7 +5218,7 @@ async function doJoin() {
   if (code.length !== 4) { onStatus('الكود 4 حروف وأرقام، زي K7P2.', true); return; }
   onStatus('بندخل الأوضة...');
   if (!(await netJoin('guest', code))) return;
-  $('#onHost').hidden = true; $('#onJoinRow').hidden = true;
+  $('#onHost').hidden = true; $('#onJoinRow').hidden = true; $('#onSet').hidden = true;   // (the host picks the mode)
   onStatus('بندوّر على الأوضة ' + code + '...');
   setTimeout(() => { if (NET.role === 'guest' && !NET.other) onStatus('مفيش أوضة بالكود ده لسه. اتأكد منه، أو استنى صاحبك يفتحها.', true); }, 6000);
 }
@@ -5082,8 +5226,9 @@ $('#onJoin').addEventListener('click', doJoin);
 $('#onIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); $('#onIn').blur(); doJoin(); } });
 $('#onStart').addEventListener('click', () => { if (NET.role === 'host' && NET.gs.size) startMatch(); });
 $('#onBack').addEventListener('click', () => { if (NET.role) netLeave(); showScreen('main'); });
-$('#onMode').addEventListener('click', () => { if (NET.role === 'host') { cycleMode(-1); lobbyRender(); } });
-$('#onSize').addEventListener('click', () => { if (NET.role === 'host') { if (gmode === 'duel') cycleMode(-1); else cycleSize(1); lobbyRender(); } });
+const canSetRoom = () => !NET.role || (NET.role === 'host' && mode === 'menu');
+$('#onModeB').addEventListener('click', e => { const t = e.target.closest('.tier'); if (!t || !canSetRoom()) return; gmode = t.dataset.m; renderMode(); savePrefs(); SFX.ui(true); lobbyRender(); });
+$('#onSizeB').addEventListener('click', e => { const t = e.target.closest('.tier'), o = SIZE_OPTS[gmode]; if (!t || !o || o[+t.dataset.i] == null || !canSetRoom()) return; SIZES[gmode] = o[+t.dataset.i]; renderMode(); savePrefs(); SFX.ui(true); lobbyRender(); });
 
 // ---- host: seats, looks, the friends' keys, and the match going out in presence ----
 // Who is in this match. The friends take seats in the order they came in; the CPU takes what is left.
@@ -5270,7 +5415,7 @@ function predictMe(g, age, dt) {
   if (!NET.predicting) {   // taking over from the host's copy (start, after a hit, after a respawn)
     NET.predicting = true; NET.hist.length = 0; NET.err.set(0, 0, 0); NET.recAt = NET.snapAt;
     P.pos.set(s[0] + s[3] * age, s[1] + s[4] * age, s[2] + s[5] * age); P.vel.set(s[3], s[4], s[5]);
-    P.face = s[6]; P.state = s[7]; P.onGround = !!s[10]; P.pit = Math.abs(P.pos.z) > PZ && P.pos.y < -0.02;
+    P.face = s[6]; P.state = s[7]; P.onGround = !!s[10]; P.pit = deckOf(P.pos.z) < 0 && P.pos.y < -0.02;
     P.atk = s[8] && MOVES[s[8]] ? { name: s[8], t: s[9] + age, m: MOVES[s[8]], hit: true } : null;
     if (P.state === 'attack' && !P.atk) P.state = 'idle';
   }
@@ -5338,7 +5483,7 @@ function guestStep(dt) {
   const age = Math.min(0.15, quiet / 1000);
   if (quiet > 15000) return netLost('الاتصال بصاحب الأوضة فصل.');
   netStall(quiet);
-  mode = g.m; matchT = g.t; countT = g.ct; shake = Math.max(shake, g.sh);
+  mode = g.m; matchT = g.t; countT = g.ct; if (!crowd()) shake = Math.max(shake, g.sh);
   if (g.sc) {   // the score, turned so that index 0 is OUR team
     const a = NET.myTeam === 1 ? 1 : 0;
     teamPts[0] = +g.sc[a] || 0; teamPts[1] = +g.sc[1 - a] || 0; rounds[0] = +g.sc[2 + a] || 0; rounds[1] = +g.sc[3 - a] || 0; roundNo = +g.sc[4] || 1;
@@ -5696,6 +5841,7 @@ function boot(data) {
   if (/[?&]debug\b/.test(location.search)) {
     window.__otman = { P, C, C2, C3, ALLF, teamPts, rounds, setMode(m, n) { gmode = m; if (n) SIZES[m] = n; renderMode(); }, get fighters() { return fighters; }, renderer, QUAL, applyQuality, scene, camera, sel, OPTS, train, trainObj, GLB, CHARS, streetBlocks, BUILDINGS, ambient, PROPS, buildGlbFighter, loadChar, lockOf, rebuildPlayer, startMatch, endMatch, toMenu, cam: null, spin: null, pause: false,
       get mode() { return mode; },
+      get fx() { return { camKick, shake, freeze }; },   // (tests: the camera effects right now)
       // run n frames by hand (a hidden tab gets no rAF)
       step(n = 20) { for (let i = 0; i < n; i++) { last = performance.now() - 33; tick(performance.now()); } } };
   }
