@@ -695,11 +695,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     <div class="mshade" aria-hidden="true"></div>
     <!-- the user's key art: five fighters on the left in front of Helwan station -->
     <div class="kart" aria-hidden="true">
-      <img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/keyart.webp" alt="">
+      <img src="assets/ui/keyart.webp" alt="">
       <div class="kart-you" id="kartYou"><span>إنت</span></div>
     </div>
     <div class="mcol">
-      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/logo.webp" alt=""></h1>
+      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="assets/ui/logo.webp" alt=""></h1>
       <p class="mtag">اللي يفضل واقف على الرصيف ياخد اللقب.</p>
 
       <section class="mscr" id="sMain" aria-label="القايمة">
@@ -711,7 +711,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <div class="mi tkt tkt-y tkt-char" id="charB" tabindex="0" role="group" aria-label="شخصيتك" hidden>
             <button type="button" class="tarr" id="charPrev" aria-label="الشخصية اللي قبل"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
             <span class="tkt-body"><small id="charN">شخصيتك</small><b id="charV">عتمان</b></span>
-            <img class="stampimg" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/badge.webp" alt="">
+            <img class="stampimg" src="assets/ui/badge.webp" alt="">
             <button type="button" class="tarr" id="charNext" aria-label="الشخصية اللي بعد"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
           </div>
           <!-- the mode: one against one, or everyone for himself with 3 or 4 on the platform -->
@@ -875,11 +875,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   <div id="touch" dir="ltr" hidden>
     <div id="stick"><div id="knob"></div></div>
     <div id="btns">
-      <button type="button" class="tb" data-b="light"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/icons/light.png" alt=""><span>خفيفة</span></button>
-      <button type="button" class="tb" data-b="heavy"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/icons/heavy.png" alt=""><span>تقيلة</span></button>
-      <button type="button" class="tb" data-b="jump"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/icons/jump.png" alt=""><span>نط</span></button>
-      <button type="button" class="tb" data-b="guard" aria-label="دفاع: دوسة سريعة تفادي، ودوسة طويلة دفاع"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/icons/guard.png" alt=""><span>دفاع</span></button>
-      <button type="button" class="tb" data-b="grab"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/icons/grab.png" alt=""><span>مسك</span></button>
+      <button type="button" class="tb" data-b="light"><img src="assets/ui/icons/light.png" alt=""><span>خفيفة</span></button>
+      <button type="button" class="tb" data-b="heavy"><img src="assets/ui/icons/heavy.png" alt=""><span>تقيلة</span></button>
+      <button type="button" class="tb" data-b="jump"><img src="assets/ui/icons/jump.png" alt=""><span>نط</span></button>
+      <button type="button" class="tb" data-b="guard" aria-label="دفاع: دوسة سريعة تفادي، ودوسة طويلة دفاع"><img src="assets/ui/icons/guard.png" alt=""><span>دفاع</span></button>
+      <button type="button" class="tb" data-b="grab"><img src="assets/ui/icons/grab.png" alt=""><span>مسك</span></button>
     </div>
   </div>
 
@@ -889,7 +889,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <div class="tkt rticket">
         <div class="rprint"><span>لقب · خط 1 · حلوان</span><span>رقم 0001</span></div>
         <div class="rtitle">عتمان الحقيقي هو</div>
-        <img class="rbadge" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/badge.webp" alt="">
+        <img class="rbadge" src="assets/ui/badge.webp" alt="">
         <div id="rName"></div>
         <p id="rSub"></p>
         <p id="rPts" class="rpts"></p>
@@ -1416,11 +1416,11 @@ function signText(g, txt, x, y, size, color) { g.font = `800 ${size}px ${SIGN}`;
 // our round metro mark (the user's badge): drawn into sign textures once it loads, and as a texture for pole signs
 const badgeImg = new Image();
 badgeImg.onload = () => fontRedraws.forEach(f => f());
-badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
+badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
 const badgeOk = () => badgeImg.complete && badgeImg.naturalWidth > 0;
 let badgeTex = null;
 function badgePole(x, z, h, r) {
-  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/badge.webp');
+  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('assets/ui/badge.webp');
   const g = new THREE.Group();
   const pole = mesh(cyl(r * 0.09, r * 0.11, h, 14), steelM(BLUE, 0.4, 0.55)); pole.position.y = h / 2; g.add(pole);
   const collar = mesh(cyl(r * 0.14, r * 0.14, 0.3, 14), steelM(0xc0c6cc, 0.4, 0.7)); collar.position.y = h - 0.1; g.add(collar);
@@ -1987,7 +1987,7 @@ function propModel(g, p) {
   const w = new THREE.Group(); w.add(m); return w;
 }
 async function loadProps() {
-  const get = n => glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
+  const get = n => glbGet('assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
   const [tuk, bus, kiosk] = await Promise.all([get('tuktuk'), get('microbus'), get('kiosk')]);
   if (tuk && ambient.tuk) { ambient.tuk.children.slice().forEach(c => ambient.tuk.remove(c)); ambient.tuk.add(tuk); }
   if (bus) { bus.position.set(30, 0, -11.4); bus.rotation.y = Math.PI; scene.add(bus); ambient.bus = bus; }
@@ -1995,7 +1995,7 @@ async function loadProps() {
 }
 function loadBuildings() {
   const ld = new THREE.TextureLoader();
-  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
+  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
     .then(list => placeBuildings(list.filter(Boolean)));
 }
 function placeBuildings(list) {
@@ -2452,32 +2452,32 @@ const GLB_Q = new URLSearchParams(location.search);
 const CHARS = [
   // cape: 'remove' drops the Meshy cape (cape-fix.js); null leaves the mesh as it is
   // art: where this fighter's head is in the menu key art (assets/ui/keyart.webp), in % of the picture
-  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
-  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وكروكس أحمر', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
-  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/karate.glb', wpn: 'bo', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
-  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
-  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/satohy.glb', wpn: 'nabboot', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
+  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
+  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وكروكس أحمر', src: 'assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
+  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/web/karate.glb', wpn: 'nunchaku', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
+  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
+  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/web/satohy.glb', wpn: 'zaffa', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
   // lock: 'premium' = only by buying it, 'ramadan' = earned in Ramadan (lockOf)
-  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
-  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
-  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
-  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/arees.glb', wpn: 'zaffa', toss: 'sling', cape: null },
-  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
-  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/feminist.glb', wpn: 'bat', toss: 'sling', cape: null },
+  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
+  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
+  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
+  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/web/arees.glb', wpn: 'sangah', toss: 'sling', cape: null },
+  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
+  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/web/feminist.glb', wpn: 'redbo', toss: 'sling', cape: null },
   // added 24 Nov 2026: pictures from Flow / ChatGPT -> Meshy (design/new-fighters/, meshy-tasks.md); weapons and throws are my picks
-  { id: 'zombie', n: 'علي الزومبي', note: 'نص نايم وشبشب في رجل واحدة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/zombie.glb', wpn: 'pillow', toss: 'brick', cape: null },
-  { id: 'arbawy', n: 'العرباوي', note: 'شماغ وعباية وبر على الكتف', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/arbawy.glb', wpn: 'camelstick', toss: 'brick', cape: null },
-  { id: 'khott', n: 'خط الصعيد', note: 'عمة بيضا وشنب مبروم وشال صوف', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/khott.glb', wpn: 'rifle', toss: 'brick', cape: null },
-  { id: 'hanouty', n: 'الحنوتي', note: 'جلابية مغبرة ومفاتيح وفانوس', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/hanouty.glb', wpn: 'shovel', toss: 'brick', cape: null },
-  { id: 'baz', n: 'باز لا يطير', note: 'بدلة فضاء سودا في أصفر وجناحين صغيرين', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/baz.glb', wpn: 'hose', toss: 'sling', cape: null },
-  { id: 'gorilla', n: 'غوريلا الحفلات', note: 'بدلة غوريلا بتاعة الأفراح', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/gorilla.glb', wpn: 'balloon', toss: 'brick', cape: null },
-  { id: 'panda', n: 'باندا الحفلات', note: 'بدلة باندا منفوخة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/panda.glb', wpn: 'horn', toss: 'sling', cape: null },
-  { id: 'khafif', n: 'كابتن خفيف', note: 'طقم برتقالي وشارة كابتن وصفارة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/khafif.glb', wpn: 'flag', toss: 'brick', cape: null },
-  { id: 'madiha', n: 'مديحة التنين', note: 'جاكيت تنين ورينج لايت', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/madiha.glb', wpn: 'selfie', toss: 'sling', cape: null },
-  { id: 'sally', n: 'سالي خنافس', note: 'عباية خنافس دهبي ومبخرة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/sally.glb', wpn: 'censer', toss: 'sling', cape: null },
-  { id: 'temsah', n: 'تمساح النيل', note: 'بدلة تمساح وحزام نوبي', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/temsah.glb', wpn: 'oar', toss: 'brick', cape: null },
-  { id: 'koky', n: 'سوبر كوكي', note: 'فستان مشجر وبوت كاوتش', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/koky.glb', wpn: 'ladle', toss: 'brick', cape: null },
-  { id: 'amsha', n: 'العمشة', note: 'عباية سودا وعين سودا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/amsha.glb', wpn: 'knotstick', toss: 'brick', cape: null },
+  { id: 'zombie', n: 'علي الزومبي', note: 'نص نايم وشبشب في رجل واحدة', src: 'assets/models/web/zombie.glb', wpn: 'pillow', toss: 'brick', cape: null },
+  { id: 'arbawy', n: 'العرباوي', note: 'شماغ وعباية وبر على الكتف', src: 'assets/models/web/arbawy.glb', wpn: 'camelstick', toss: 'brick', cape: null },
+  { id: 'khott', n: 'خط الصعيد', note: 'عمة بيضا وشنب مبروم وشال صوف', src: 'assets/models/web/khott.glb', wpn: 'rifle', toss: 'brick', cape: null },
+  { id: 'hanouty', n: 'الحنوتي', note: 'جلابية مغبرة ومفاتيح وفانوس', src: 'assets/models/web/hanouty.glb', wpn: 'shovel', toss: 'brick', cape: null },
+  { id: 'baz', n: 'باز لا يطير', note: 'بدلة فضاء سودا في أصفر وجناحين صغيرين', src: 'assets/models/web/baz.glb', wpn: 'hose', toss: 'sling', cape: null },
+  { id: 'gorilla', n: 'غوريلا الحفلات', note: 'بدلة غوريلا بتاعة الأفراح', src: 'assets/models/web/gorilla.glb', wpn: 'balloon', toss: 'brick', cape: null },
+  { id: 'panda', n: 'باندا الحفلات', note: 'بدلة باندا منفوخة', src: 'assets/models/web/panda.glb', wpn: 'horn', toss: 'sling', cape: null },
+  { id: 'khafif', n: 'كابتن خفيف', note: 'طقم برتقالي وشارة كابتن وصفارة', src: 'assets/models/web/khafif.glb', wpn: 'flag', toss: 'brick', cape: null },
+  { id: 'madiha', n: 'مديحة التنين', note: 'جاكيت تنين ورينج لايت', src: 'assets/models/web/madiha.glb', wpn: 'selfie', toss: 'sling', cape: null },
+  { id: 'sally', n: 'سالي خنافس', note: 'عباية خنافس دهبي ومبخرة', src: 'assets/models/web/sally.glb', wpn: 'censer', toss: 'sling', cape: null },
+  { id: 'temsah', n: 'تمساح النيل', note: 'بدلة تمساح وحزام نوبي', src: 'assets/models/web/temsah.glb', wpn: 'oar', toss: 'brick', cape: null },
+  { id: 'koky', n: 'سوبر كوكي', note: 'فستان مشجر وبوت كاوتش', src: 'assets/models/web/koky.glb', wpn: 'ladle', toss: 'brick', cape: null },
+  { id: 'amsha', n: 'العمشة', note: 'عباية سودا وعين سودا', src: 'assets/models/web/amsha.glb', wpn: 'knotstick', toss: 'brick', cape: null },
 ];
 // test only (not used on the public page unless ?hd is in the address): the new high-detail بطل السيدة زينب
 const LITE = !GLB_Q.has('full') && (GLB_Q.has('lite') || (window.matchMedia && matchMedia('(pointer: coarse)').matches));
@@ -2500,13 +2500,13 @@ function hdPump() {
     GLB.hd[ch.id] = 2; hdBusy = false; hdPump();
   };
   img.onerror = () => { hdBusy = false; hdPump(); };
-  img.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/hd/' + ch.id + '.webp';
+  img.src = 'assets/models/hd/' + ch.id + '.webp';
 }
-if (GLB_Q.has('hd')) { CHARS[1].src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
+if (GLB_Q.has('hd')) { CHARS[1].src = 'assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
 // ?hy: بطل السيدة زينب made with Hunyuan 3D (80k triangles, test only, 24 Nov 2026), rigged by Meshy
-if (GLB_Q.has('hy')) CHARS[1].src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/kofeyya-hy.glb';
+if (GLB_Q.has('hy')) CHARS[1].src = 'assets/models/web/kofeyya-hy.glb';
 // ?m71: بطل السيدة زينب made again on Meshy at its top settings (7.1, Ultra geometry 4k, 4K texture, 80k triangles; test only, 24 Nov 2026)
-if (GLB_Q.has('m71')) { CHARS[1].src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/kofeyya-m71u.glb'; CHARS[1].smooth = true; }   // (Meshy's remesh comes faceted: smooth its normals)
+if (GLB_Q.has('m71')) { CHARS[1].src = 'assets/models/web/kofeyya-m71u.glb'; CHARS[1].smooth = true; }   // (Meshy's remesh comes faceted: smooth its normals)
 const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {}, failed: {}, hd: {}, allIn: false };
 // the CPU's (or the online friend's) character, an index into CHARS
 let cpuChar = 1;
@@ -2551,6 +2551,26 @@ function loadChar(i) {
   if (GLB.models[c.id]) return Promise.resolve();
   // phones get the half-detail copies (assets/models/lite/, same look from fight distance); computers the full ones
   const src = LITE && !c.smooth ? c.src.replace('/models/web/', '/models/lite/') : c.src;
+  if (GLB.loading[c.id]) return GLB.loading[c.id];
+  // one fighter downloads at a time (25 Nov 2026: flicking through the pick screen started a download for every
+  // fighter passed, so on a slow line the one you stopped on shared the bandwidth with fifteen others). The queue
+  // always takes the fighter you are looking at first, then the CPU's, then the rest in order.
+  let w = dlq.want.get(c.id);
+  if (!w) { let ok, no; const pr = new Promise((a, b) => { ok = a; no = b; }); w = { i, src, pr, ok, no }; dlq.want.set(c.id, w); }
+  dlqPump();
+  return w.pr;
+}
+const dlq = { busy: false, want: new Map() };
+function dlqPump() {
+  if (dlq.busy || !dlq.want.size) return;
+  const ids = [CHARS[sel.char] && CHARS[sel.char].id, typeof cpuChar === 'number' && CHARS[cpuChar] && CHARS[cpuChar].id];
+  const id = ids.find(k => k && dlq.want.has(k)) || [...dlq.want.keys()].sort((x, y) => dlq.want.get(x).i - dlq.want.get(y).i)[0];
+  const w = dlq.want.get(id); dlq.want.delete(id); dlq.busy = true;
+  const done = () => { dlq.busy = false; dlqPump(); };
+  charFetch(w.i, w.src).then(() => { w.ok(); done(); }, e => { w.no(e); done(); });
+}
+function charFetch(i, src) {
+  const c = CHARS[i];
   return GLB.loading[c.id] || (GLB.loading[c.id] = glbGet(src).then(g => {
     g.scene.traverse(o => {
       // the user asked to drop the capes altogether (the re-tied ones still looked torn)
@@ -2632,15 +2652,15 @@ function lockOf(i) {
 }
 async function loadGlb() {
   // kept next to the game (a second CDN was one more slow or blocked host before anything showed)
-  await Promise.all(['https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/js/GLTFLoader.js', 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/js/meshopt_decoder.js'].map(loadScript));
-  await loadScript('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/js/SkeletonUtils.js');
+  await Promise.all(['assets/js/GLTFLoader.js', 'assets/js/meshopt_decoder.js'].map(loadScript));
+  await loadScript('assets/js/SkeletonUtils.js');
   const ld = new THREE.GLTFLoader();
   // the fighters are packed with gltfpack (tools/pack-models.sh): ~1/3 smaller, moves ~5x
   await MeshoptDecoder.ready; ld.setMeshoptDecoder(MeshoptDecoder);
   glbGet = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
   // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
   if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
-  const [moves] = await Promise.all([glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
+  const [moves] = await Promise.all([glbGet('assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
   // the clips were made on Otman's skeleton and also carry his bone lengths (every bone's position);
   // played on a fighter with other proportions they dragged his head points ~20 cm (Robin's warped
   // face, سطوحي's long neck). Keep only the rotations (+ the hips' height), so each keeps its own lengths.
@@ -2761,6 +2781,35 @@ const WEAPONS = {
     const red = L({ color: 0xb3161f, emissive: 0x1a0000 }), blk = L({ color: 0x141414 });
     const sh = mesh(cyl(0.045, 0.022, 0.95, 12), red); sh.position.y = 0.475; g.add(sh);
     g.add(ring(0.025, 0.28, blk, 0.16)); const kn = mesh(cyl(0.034, 0.034, 0.02, 12), blk); g.add(kn);
+  } },
+  // ---- 25 Nov 2026 (user): كابتن كراتيه gets a نيتشاكو, عريس الجنة a سنجة (سطوحي took his زفة stick) ----
+  // nunchaku: the fist holds one black handle, a short chain, the second handle hangs on
+  nunchaku: { grip: 0.14, make(g) {
+    const wood = L({ color: 0x1d1a18 }), red = L({ color: 0xb3161f }), steel = L({ color: 0xa8adb3, emissive: 0x151515 });
+    const h1 = mesh(cyl(0.022, 0.022, 0.32, 10), wood); h1.position.y = 0.16; g.add(h1);
+    for (const y of [0.05, 0.27]) g.add(ring(0.024, 0.025, red, y));
+    for (let i = 0; i < 4; i++) { const l = mesh(new THREE.TorusGeometry(0.014, 0.004, 4, 8), steel); l.position.y = 0.335 + i * 0.022; l.rotation.y = i % 2 ? Math.PI / 2 : 0; g.add(l); }
+    const h2 = mesh(cyl(0.022, 0.022, 0.32, 10), wood); h2.position.set(0.05, 0.57, 0); h2.rotation.z = -0.32; g.add(h2);
+    const b2 = ring(0.024, 0.025, red, 0); b2.position.set(0.085, 0.68, 0); b2.rotation.z = -0.32; g.add(b2);
+  } },
+  // سوبر فيمنست (user, 25 Nov 2026: a long red staff instead of the bat): glossy red bo with black and gold bands
+  redbo: { grip: 0.5, make(g) {
+    const red = L({ color: 0xc0141f, emissive: 0x220000 }), blk = L({ color: 0x141414 }), gold = L({ color: 0xd8b23a, emissive: 0x221800 });
+    const sh = mesh(cyl(0.024, 0.024, 1.65, 12), red); sh.position.y = 0.825; g.add(sh);
+    for (const y of [0.42, 0.6, 1.05, 1.23]) g.add(ring(0.027, 0.045, blk, y));
+    for (const y of [0.02, 1.63]) g.add(ring(0.028, 0.04, gold, y));
+  } },
+  // sangah: a wide curved Egyptian cleaver-knife, wooden handle with brass rivets
+  sangah: { grip: 0.08, make(g) {
+    const wood = L({ color: 0x5a3a1e }), brass = L({ color: 0xc9a13a, emissive: 0x221500 }), steel = L({ color: 0xc4c9cf, emissive: 0x1a1a1a });
+    const hd = mesh(box(0.034, 0.17, 0.026), wood); hd.position.y = 0.085; g.add(hd);
+    for (const y of [0.05, 0.12]) { const rv = mesh(cyl(0.007, 0.007, 0.03, 6), brass); rv.rotation.x = Math.PI / 2; rv.position.y = y; g.add(rv); }
+    const gd = mesh(box(0.07, 0.02, 0.03), brass); gd.position.y = 0.18; g.add(gd);
+    const sh = new THREE.Shape();   // the blade, back straight, edge bellied, tip curving back
+    sh.moveTo(-0.018, 0); sh.lineTo(-0.02, 0.4); sh.quadraticCurveTo(-0.01, 0.5, 0.05, 0.53);
+    sh.quadraticCurveTo(0.1, 0.42, 0.085, 0.2); sh.quadraticCurveTo(0.07, 0.06, 0.03, 0); sh.closePath();
+    const bl = mesh(new THREE.ExtrudeGeometry(sh, { depth: 0.008, bevelEnabled: false }), steel);
+    bl.position.set(0, 0.19, -0.004); g.add(bl);
   } },
   // ---- the 13 fighters added on 24 Nov 2026 ----
   // علي الزومبي: his own pillow, held by a corner
@@ -3319,7 +3368,7 @@ const Music = {
     for (const k of ['menu', 'fight']) {
       try {
         const a = new Audio();
-        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@1fcf93d8e30d/assets/' + k + '.mp3';
+        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'assets/' + k + '.mp3';
         this.tracks[k] = a;
       } catch (e) {}
     }
@@ -3769,7 +3818,7 @@ function doJump(f) {
 }
 // which heavy a weapon gives its fighter (the code-built fighter and unknown weapons keep the uppercut)
 const WCLASS = { shoma: 'hammer', studded: 'hammer', pipe: 'hammer', bat: 'hammer', bo: 'thrust', nabboot: 'thrust', was: 'thrust',
-  khayazan: 'lash', zaffa: 'lash', broom: 'sweep', bag: 'spin',
+  khayazan: 'lash', zaffa: 'lash', broom: 'sweep', bag: 'spin', nunchaku: 'lash', sangah: 'hammer', redbo: 'thrust',
   // the 13 added on 24 Nov 2026
   pillow: 'lash', camelstick: 'lash', hose: 'lash', knotstick: 'lash', rifle: 'hammer', shovel: 'hammer', balloon: 'hammer',
   oar: 'hammer', ladle: 'hammer', horn: 'thrust', flag: 'thrust', selfie: 'thrust', censer: 'spin' };
