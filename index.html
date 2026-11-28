@@ -425,12 +425,12 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 /* main menu, user's call 7 Nov 2026: the key art shows exactly as drawn (nothing on top of it),
    the logo sits on the right above the options, and a light see-through brown panel holds them */
 .kart-you{display:none}
-#menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="scores"] .mcol,#menu[data-screen="char"] .mcol{top:max(14px,2.4vh);bottom:auto;right:max(20px,2.4vw);width:min(470px,42vw);max-height:calc(100vh - 28px);box-sizing:border-box;padding:14px 26px 24px 26px;gap:12px;background:rgba(72,42,22,.62);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="play"] .mcol,#menu[data-screen="settings"] .mcol,#menu[data-screen="scores"] .mcol,#menu[data-screen="char"] .mcol{top:max(14px,2.4vh);bottom:auto;right:max(20px,2.4vw);width:min(470px,42vw);max-height:calc(100vh - 28px);box-sizing:border-box;padding:14px 26px 24px 26px;gap:12px;background:rgba(72,42,22,.62);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.35);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
 #menu[data-screen="main"] .logo--img{position:static;align-self:center;margin:0;font-size:clamp(56px,13vh,104px);transform:rotate(-2deg)}
 #menu[data-screen="main"] .logo-img{height:1.55em}
 #menu[data-screen="main"] ~ .mkeys,#menu[data-screen="main"] .mkeys{display:none}
 @media (max-height:450px){
-  #menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="scores"] .mcol{top:8px;padding:8px 16px 12px;gap:7px;width:min(360px,44vw);max-height:calc(100vh - 16px)}
+  #menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="play"] .mcol,#menu[data-screen="settings"] .mcol,#menu[data-screen="scores"] .mcol{top:8px;padding:8px 16px 12px;gap:7px;width:min(360px,44vw);max-height:calc(100vh - 16px)}
   #menu[data-screen="main"] .logo--img{font-size:27px}
   #menu[data-screen="main"] .mlist{gap:7px}
   #go .band{height:36px;font-size:26px}
@@ -505,7 +505,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 @media (orientation:portrait) and (max-width:700px){
   .kart{left:0;top:0;transform:none;height:44vh;width:calc(44vh * 1.777)}
   #rot{display:none!important}
-  #menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="scores"] .mcol,#menu[data-screen="char"] .mcol{
+  #menu[data-screen="main"] .mcol,#menu[data-screen="online"] .mcol,#menu[data-screen="play"] .mcol,#menu[data-screen="settings"] .mcol,#menu[data-screen="scores"] .mcol,#menu[data-screen="char"] .mcol{
     left:0;right:0;top:auto;bottom:0;width:auto;max-height:calc(100% - 30vh);border-radius:0;box-shadow:none;
     -webkit-backdrop-filter:none;backdrop-filter:none;gap:12px;
     padding:30px 18px calc(18px + env(safe-area-inset-bottom,0px));
@@ -685,6 +685,224 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   #quit{font-size:11px;padding:3px 8px;min-height:26px;border-width:1.5px}
   .hsnd{min-height:26px;min-width:28px;padding:0 5px;border-width:1.5px}
 }
+
+/* ---- the menu split into screens + the card pick screen (27 Nov 2026; user: like Darb Nar's split menu, the pick
+   screen like the card on the promo site, and don't cram everything on the main screen) ---- */
+#charB .tarr{display:none}
+.tmatch{display:flex;align-items:center;gap:12px;text-align:start}
+.tmatch .tkt-body b{font-size:clamp(17px,2.6vh,22px)}
+#sPlay .mlist,#sSet .mlist{display:flex;flex-direction:column;gap:12px}
+#sSet .tname{flex:1}
+#menu[data-screen="pick"] .mcol,#menu[data-screen="pick"] .kart{display:none}
+/* (the old card + tiles pick screen was replaced by menu v4's carousel, 28 Nov 2026) */
+
+/* ================= menu v4 (28 Nov 2026, the user's Claude Design canvas) =================
+   main = the key art + a plain list on glass (like Firewatch); the match type and the fighter pick are full
+   screens; no black magnetic stripe on any ticket; small lines in the user's Zain font. */
+@font-face{font-family:Zain;src:url(assets/fonts/zain.ttf) format('truetype');font-display:swap}
+:root{--zn:Zain,'IBM Plex Sans Arabic',sans-serif;--glass:rgba(16,10,24,.4);--ink2:#16110a;--cream:#f3ede2}
+#menu .mshade{background:none}
+#menu .mtag,#charB,#menu .mkeys{display:none!important}
+/* the neon button without the stripe, everywhere */
+.mi.go,.mi.go.cur{background:#EEF33B;color:var(--ink2);border:0;border-radius:12px;box-shadow:0 8px 24px rgba(238,243,59,.28);transform:none;-webkit-text-stroke:0;text-shadow:none}
+.mi.go .band{background:none!important;color:inherit!important}
+.mi.go.cur,.mi.go:hover{box-shadow:0 10px 30px rgba(238,243,59,.45);transform:translateY(-2px)}
+/* the side panel: glass */
+#menu .mcol{background:var(--glass)!important;-webkit-backdrop-filter:blur(14px) saturate(1.2);backdrop-filter:blur(14px) saturate(1.2);border:1px solid rgba(255,255,255,.2);border-radius:24px!important;box-shadow:0 20px 50px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16)!important}
+#menu .mcol .logo-img{width:min(230px,60%);height:auto!important;max-height:none!important;display:block;margin:0 auto;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
+#menu .mcol .logo{text-align:center;margin:0}
+/* main: a plain list */
+#menu[data-screen="main"] .mcol{width:min(380px,40vw)!important;padding:22px 22px 16px!important;align-items:center;max-height:calc(100vh - 28px)}
+.v4list{align-items:center!important;gap:0!important;width:100%}
+.v4list #go.mi.go{display:flex;flex-direction:column;align-items:center;width:auto;padding:0;margin:0 0 8px;background:none;box-shadow:none;transform:none;border:0}
+.v4list #go .band{height:auto;padding:0;font:400 clamp(34px,6.2vh,46px)/1.25 var(--rk);color:#F4E31C!important;text-shadow:0 2px 0 rgba(0,0,0,.55),0 0 18px rgba(0,0,0,.6)}
+.v4list #go .msub{font:500 15px/1.4 var(--zn);color:rgba(243,237,226,.85);text-shadow:0 1px 4px rgba(0,0,0,.8)}
+.v4list #go.cur .band,.v4list #go:hover .band{color:#fff!important}
+.v4list #go.cur,.v4list #go:hover{transform:scale(1.05);box-shadow:none;background:none}
+.mi.v4i{display:block;margin:0 auto;padding:0 .2em;font:400 clamp(24px,4.4vh,32px)/1.5 var(--rk);color:var(--cream);-webkit-text-stroke:0;text-shadow:0 2px 0 rgba(0,0,0,.55),0 0 18px rgba(0,0,0,.6);background:none;box-shadow:none;transition:color .15s,transform .15s}
+.mi.v4i.cur,.mi.v4i:hover{background:none;color:#F4E31C;transform:scale(1.06);box-shadow:none}
+.mi.v4i.v4sm{font-size:22px}
+.mhello{margin:8px 0 0;font:500 14px/1.4 var(--zn);color:rgba(243,237,226,.75);text-align:center}
+.qsnd{position:absolute;left:28px;bottom:24px;display:none;gap:10px;pointer-events:auto}
+#menu[data-screen="main"] .qsnd{display:flex}
+.qsnd button{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:rgba(14,9,20,.45);border:1.5px solid rgba(243,237,226,.35);color:var(--cream);cursor:pointer;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.qsnd button:hover{border-color:#F4E31C}
+.qsnd .x{display:none;stroke:#F29DB3;stroke-width:2.6}
+.qsnd .off{opacity:.65}.qsnd .off .x{display:inline}.qsnd #qSfx.off .w{display:none}
+/* the other side screens keep the panel, in glass */
+#menu:not([data-screen="main"]) .mcol .mh{color:var(--cream);-webkit-text-stroke:0;text-shadow:0 3px 10px rgba(0,0,0,.6)}
+.onote,.keys{font-family:var(--zn)!important}
+
+/* full screens: the match type and the fighter pick */
+#menu[data-screen="play"] .mcol,#menu[data-screen="play"] .kart,#menu[data-screen="pick"] .kart,#menu[data-screen="pick"] .mcol{display:none!important}
+.v4full{position:absolute;inset:0;pointer-events:auto;background:radial-gradient(ellipse 70% 60% at 50% 40%,#1c1428,#0b0910 75%);color:var(--cream);font-family:'IBM Plex Sans Arabic',sans-serif;padding:22px 40px 26px;box-sizing:border-box;display:flex;flex-direction:column;gap:0;overflow:hidden}
+.v4full[hidden]{display:none}
+.v4head{display:flex;align-items:center;gap:16px;z-index:20}
+.v4head h2{margin:0;font:400 clamp(28px,5vh,38px)/1.2 var(--rk);color:var(--cream)}
+.v4head i{font:500 15px var(--zn);color:rgba(243,237,226,.7);font-style:normal}
+.mi.v4back{width:46px;height:46px;margin:0;padding:0;border-radius:50%;border:1.5px solid rgba(243,237,226,.4);background:rgba(255,255,255,.06);display:grid;place-items:center;color:var(--cream);-webkit-text-stroke:0;text-shadow:none;box-shadow:none;transform:none}
+.mi.v4back.cur,.mi.v4back:hover{border-color:#F4E31C;background:rgba(255,255,255,.1);transform:none}
+.mi.v4go{margin:0;font:400 clamp(24px,4.4vh,30px)/1.2 var(--rk);background:#EEF33B;color:var(--ink2);border-radius:12px;padding:10px 32px;-webkit-text-stroke:0;text-shadow:none;box-shadow:0 8px 24px rgba(238,243,59,.3);transform:none}
+.mi.v4go.cur,.mi.v4go:hover{background:#EEF33B;color:var(--ink2);transform:translateY(-2px);box-shadow:0 10px 30px rgba(238,243,59,.5)}
+/* match type: slanted panels with the user's pictures; the picked one grows */
+.mi.mpanels{display:flex;flex-direction:row;gap:14px;margin:18px 18px 0;padding:0;height:clamp(240px,58vh,470px);transform:none;background:none;font-size:16px;-webkit-text-stroke:0;text-shadow:none}
+.mi.mpanels.cur{outline:none}
+.mpanel{position:relative;flex:1 1 0;min-width:0;height:100%!important;border:0;padding:0;cursor:pointer;overflow:hidden;border-radius:14px;transform:skewX(-7deg);background:var(--mbg);filter:brightness(.62) saturate(.8);transition:flex-grow .4s cubic-bezier(.2,.8,.2,1),filter .3s}
+.mpanel.on{flex-grow:2.1;filter:none;outline:3px solid #EEF33B;outline-offset:4px;border:0;box-shadow:none;transform:skewX(-7deg)}
+.mpanel:hover{filter:brightness(.85)}.mpanel.on:hover{filter:none}
+.mpanel img{position:absolute;top:0;left:-40px;width:calc(100% + 80px);height:100%;object-fit:cover;object-position:center 22%;transform:skewX(7deg)}
+.mp-txt{position:absolute;left:-30px;right:-30px;bottom:0;padding:70px 64px 18px;transform:skewX(7deg);background:linear-gradient(180deg,rgba(12,8,16,0),rgba(12,8,16,.92) 70%);color:#fff;text-align:right;display:flex;flex-direction:column;gap:2px}
+.mp-txt b{font:400 clamp(24px,4vh,32px)/1.15 var(--rk);text-shadow:0 2px 6px rgba(0,0,0,.6);white-space:nowrap}
+.mpanel.on .mp-txt b{font-size:clamp(30px,5.4vh,44px)}
+.mp-txt small{font:500 15px/1.4 var(--zn);opacity:.9;display:none}
+.mpanel.on .mp-txt small{display:block}
+.v4bar{margin-top:auto;display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding:0 18px}
+.v4opts{display:flex;flex-direction:column;gap:10px}
+.v4opts .mi.tiers{flex-direction:row;align-items:center;gap:10px;transform:none;padding:0}
+.v4opts .tiers-k{font:700 14px var(--body,'IBM Plex Sans Arabic');color:rgba(243,237,226,.8);min-width:52px}
+.v4opts .tiers-k i{display:none}
+.v4opts .tiers-row{gap:8px;align-items:center}
+.v4opts .tier{flex:none;height:auto!important;background:#e9e2d6;color:var(--ink2);border:0;border-radius:10px;padding:8px 14px;font:700 15px 'IBM Plex Sans Arabic',sans-serif;box-shadow:none;transform:none!important;cursor:pointer}
+.v4opts .tier.on{background:#EEF33B}
+.v4opts .tier.lvl b,.v4opts .tier.lvl small{font:700 15px 'IBM Plex Sans Arabic',sans-serif;display:inline}
+.v4opts .tier.lvl small{opacity:.7;margin-inline-start:6px}
+.v4opts .mi.tiers.cur .tiers-row{outline:2px solid #EEF33B;outline-offset:4px;border-radius:12px}
+/* the fighter pick: a carousel */
+#sPick{--cw:clamp(170px,min(21vw,38vh),272px);z-index:5}
+.pk-glow{position:absolute;left:50%;top:6%;width:min(760px,70vw);height:62%;transform:translateX(-50%);background:radial-gradient(ellipse 50% 45% at 50% 46%,var(--g,rgba(244,227,28,.4)),rgba(11,9,16,0) 70%);transition:background .45s;pointer-events:none}
+.pk-stage{position:absolute;left:0;right:0;top:calc(70px + 2vh);height:calc(var(--cw) * 1.44);touch-action:pan-y}
+.pcard{position:absolute;left:50%;top:0;width:var(--cw);height:calc(var(--cw) * 1.44);border:0;padding:0;border-radius:16px;overflow:hidden;cursor:pointer;background:var(--cbg);box-shadow:0 18px 40px rgba(0,0,0,.55);transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .45s,filter .45s;outline:none}
+.pcard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top}
+.pc-shade{position:absolute;left:0;right:0;bottom:0;height:52%;background:linear-gradient(180deg,rgba(0,0,0,0),var(--cdeep))}
+.pc-lock{position:absolute;top:12px;left:12px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;display:grid;place-items:center}
+.pc-txt{position:absolute;right:14px;left:14px;bottom:14px;text-align:right;color:#fff;display:flex;flex-direction:column}
+.pc-txt b{font:400 calc(var(--cw) * .1)/1.15 var(--rk);text-shadow:0 2px 4px rgba(0,0,0,.45)}
+.pc-txt small{font:700 13px/1.5 'IBM Plex Sans Arabic',sans-serif;opacity:.9}
+@keyframes pkRun{to{transform:rotate(360deg)}}
+@keyframes pkPulse{0%,100%{box-shadow:0 0 22px 2px var(--g)}50%{box-shadow:0 0 38px 8px var(--g)}}
+.pk-ring{position:absolute;left:50%;top:-6px;width:calc(var(--cw) + 12px);height:calc(var(--cw) * 1.44 + 12px);transform:translateX(-50%);border-radius:21px;overflow:hidden;z-index:9;pointer-events:none;animation:pkPulse 2.4s ease-in-out infinite}
+.pk-ring span{position:absolute;inset:-60%;background:conic-gradient(from 0deg,rgba(255,255,255,0) 0 60%,var(--rc,#F4E31C) 72%,#fff 80%,var(--rc,#F4E31C) 88%,rgba(255,255,255,0) 96%);animation:pkRun 2.2s linear infinite}
+.pk-info{position:absolute;left:0;right:0;top:calc(70px + 2vh + var(--cw) * 1.44 + 18px);display:flex;justify-content:center;align-items:center;gap:26px}
+.pk-txt{width:min(520px,60vw);text-align:center;display:flex;flex-direction:column;gap:2px}
+.pk-txt b{font:400 clamp(28px,5vh,40px)/1.2 var(--rk)}
+.pk-txt span{font:500 16px/1.4 var(--zn);opacity:.85}
+.pk-txt .pk-lock{color:#F29DB3;opacity:1}
+.mi.pk-arw{width:54px;height:54px;margin:0;padding:0;border-radius:50%;border:1.5px solid rgba(243,237,226,.4);background:rgba(255,255,255,.06);display:grid;place-items:center;color:var(--cream);-webkit-text-stroke:0;text-shadow:none;box-shadow:none;transform:none}
+.mi.pk-arw.cur,.mi.pk-arw:hover{border-color:#F4E31C;transform:none;background:rgba(255,255,255,.1)}
+.pk-bottom{position:absolute;left:40px;right:40px;bottom:24px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.pk-chips{display:flex;gap:10px}
+.pk-chips .chip{border:1.5px solid rgba(243,237,226,.28);border-radius:10px;padding:7px 14px;display:flex;flex-direction:column;line-height:1.3;font-family:'IBM Plex Sans Arabic',sans-serif}
+.pk-chips .chip i{font-style:normal;font-size:12px;font-weight:600;opacity:.65}
+.pk-chips .chip em{font-style:normal;font-size:16px;font-weight:700}
+.pk-btns{display:flex;gap:12px;align-items:center}
+.mi.pk-3d{margin:0;font:700 16px 'IBM Plex Sans Arabic',sans-serif;border:1.5px solid rgba(243,237,226,.4);color:var(--cream);border-radius:12px;padding:12px 20px;-webkit-text-stroke:0;text-shadow:none;box-shadow:none;transform:none;background:none}
+.mi.pk-3d.cur,.mi.pk-3d:hover{border-color:#F4E31C;background:none;color:var(--cream);transform:none}
+.mi.pk-ok{margin:0;background:#EEF33B;color:var(--ink2);border-radius:12px;padding:8px 34px;font:400 clamp(24px,4.4vh,30px)/1.2 var(--rk);-webkit-text-stroke:0;text-shadow:none;box-shadow:0 8px 24px rgba(238,243,59,.35);transform:none}
+.mi.pk-ok.cur,.mi.pk-ok:hover{background:#EEF33B;color:var(--ink2);transform:translateY(-2px)}
+.mi.pk-ok.locked{background:#E3BB93;box-shadow:none}
+@keyframes nopeShake{0%,100%{transform:none}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.nope{animation:nopeShake .35s}
+/* online: tabs, play with people */
+.ontabs{display:flex;gap:6px;background:rgba(255,255,255,.08);padding:5px;border-radius:999px;align-self:stretch}
+.mi.ontab{flex:1;justify-content:center;margin:0;padding:8px 12px;border-radius:999px;font:700 15px 'IBM Plex Sans Arabic',sans-serif;color:var(--cream);-webkit-text-stroke:0;text-shadow:none;background:none;box-shadow:none;transform:none}
+.mi.ontab.on{background:#EEF33B;color:var(--ink2)}
+.mi.ontab.cur:not(.on){background:rgba(255,255,255,.12);color:var(--cream);transform:none;box-shadow:none}
+#onQuick,#onFriends{display:flex;flex-direction:column;gap:12px}
+#onQuick[hidden],#onFriends[hidden]{display:none}
+.qmodes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.qmode{position:relative;height:clamp(84px,15vh,126px);border:0;padding:0;border-radius:12px;overflow:hidden;cursor:pointer;background:var(--mbg);filter:brightness(.65);transition:filter .2s,transform .2s}
+.qmode img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 20%}
+.qmode span{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 6px;background:linear-gradient(180deg,rgba(12,8,16,0),rgba(12,8,16,.88));color:#fff;text-align:right;display:flex;flex-direction:column}
+.qmode b{font:400 20px/1.1 var(--rk)}.qmode small{font:500 12px var(--zn);opacity:.85}
+.qmode.on{filter:none;outline:3px solid #EEF33B;outline-offset:2px}
+.qmode.off{filter:grayscale(1) brightness(.4);cursor:not-allowed}
+.qbox{background:rgba(255,255,255,.06);border:1.5px solid rgba(243,237,226,.16);border-radius:14px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;color:var(--cream)}
+.qbox small{font:700 13px 'IBM Plex Sans Arabic',sans-serif;opacity:.75}
+.qbox b{font:700 19px/1.4 'IBM Plex Sans Arabic',sans-serif}
+.qslots{display:flex;gap:10px;margin-top:8px}
+.qs{display:flex;flex-direction:column;align-items:center;gap:3px}
+.qs i{width:42px;height:42px;border-radius:50%;border:2px dashed rgba(243,237,226,.35);transition:background .2s}
+.qs.on i{border-style:solid;border-color:#EEF33B;background:#EEF33B}
+.qs em{font:700 11px 'IBM Plex Sans Arabic',sans-serif;font-style:normal;opacity:.8}
+#qFind.mi.v4go{align-self:stretch;justify-content:center;text-align:center}
+/* first time: the name window */
+#welcome{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(5,3,10,.55);font-family:'IBM Plex Sans Arabic',sans-serif;color:var(--cream);direction:rtl;padding:16px;box-sizing:border-box;overflow:auto}
+#welcome[hidden]{display:none}
+.wl-box{width:min(560px,94vw);box-sizing:border-box;padding:26px 34px;display:flex;flex-direction:column;align-items:center;gap:10px;background:rgba(16,10,24,.55);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.2);border-radius:24px;box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.wl-box[hidden],.wl-pick[hidden]{display:none}
+.wl-logo{width:min(190px,50vw)}
+#welcome h2{margin:0;font:400 clamp(30px,6vh,40px)/1.2 var(--rk)}
+#welcome p{margin:0;font:500 17px/1.5 var(--zn);opacity:.9;text-align:center}
+#welcome label{align-self:stretch;font-weight:700;font-size:14px}
+#wlIn{align-self:stretch;font:700 24px 'IBM Plex Sans Arabic',sans-serif;text-align:center;border:0;border-radius:12px;padding:12px;background:#F29DB3;color:var(--ink2);outline:none}
+.wl-warn{font:700 14px/1.5 'IBM Plex Sans Arabic',sans-serif;color:#F29DB3;text-align:center}
+.wl-small{font:500 13px var(--zn);opacity:.75}.wl-small.bad{color:#ff9d8a;opacity:1}
+.wl-go{margin-top:4px;border:0;cursor:pointer;background:#EEF33B;color:var(--ink2);border-radius:14px;padding:10px 48px;font:400 30px var(--rk);box-shadow:0 8px 24px rgba(238,243,59,.3)}
+.wl-pick{width:min(840px,94vw);display:flex;flex-direction:column;align-items:center;gap:16px}
+.wl-row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-self:stretch}
+.wl-ch{border:0;cursor:pointer;border-radius:16px;padding:18px 20px;text-align:right;font-family:inherit;display:flex;flex-direction:column;gap:6px;transition:transform .15s}
+.wl-ch:hover{transform:translateY(-3px)}
+.wl-ch small{font-weight:700;font-size:13px;opacity:.7}.wl-ch b{font:400 clamp(28px,5vh,38px)/1.15 var(--rk)}.wl-ch span{font:500 15px/1.6 var(--zn)}
+.wl-learn{background:#F4E31C;color:var(--ink2);box-shadow:0 10px 30px rgba(244,227,28,.25)}
+.wl-skip{background:rgba(255,255,255,.1);color:var(--cream);border:1.5px solid rgba(243,237,226,.35)}
+/* the practice */
+#tut{position:fixed;top:12px;right:12px;z-index:30;width:min(330px,46vw);box-sizing:border-box;padding:14px 16px;background:rgba(16,10,24,.62);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);border-radius:18px;color:var(--cream);font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl}
+#tut[hidden]{display:none}
+.tut-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.tut-h b{font:400 24px var(--rk)}
+#tutSkip{border:0;background:none;color:#F4E31C;font:700 14px 'IBM Plex Sans Arabic',sans-serif;cursor:pointer}
+#tutList{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+#tutList li{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:10px;opacity:.5;font-weight:700;font-size:14px}
+#tutList li.now{opacity:1;background:rgba(244,227,28,.18)}
+#tutList li.ok{opacity:1}
+#tutList i{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:13px;background:rgba(243,237,226,.3);color:var(--ink2);flex:none}
+#tutList li.now i{background:#F4E31C}#tutList li.ok i{background:#8FCFAE}
+#tutList span{flex:1}
+#tutList kbd{font:700 12px 'IBM Plex Sans Arabic',sans-serif;background:var(--cream);color:var(--ink2);border-radius:6px;padding:2px 7px}
+#tutBig{position:fixed;left:50%;bottom:16%;transform:translateX(-50%);z-index:30;font:400 clamp(30px,6vh,46px) var(--rk);color:#F4E31C;text-shadow:0 3px 10px rgba(0,0,0,.7);pointer-events:none;white-space:nowrap}
+#tutBig[hidden]{display:none}
+@keyframes tutPop{0%{transform:translateX(-50%) scale(.6);opacity:0}60%{transform:translateX(-50%) scale(1.08);opacity:1}100%{transform:translateX(-50%) scale(1)}}
+#tutBig.pop{animation:tutPop .45s ease-out}
+#hud.tutorial #timer,#hud.tutorial #cardC,#hud.tutorial #foes{visibility:hidden}
+
+/* upright phones: the list sits in the panel under the key art; full screens stack */
+@media (orientation:portrait) and (max-width:700px){
+  #menu[data-screen="main"] .mcol{width:auto!important;left:12px!important;right:12px!important;bottom:12px!important;top:auto!important;padding:14px 16px!important}
+  #menu .mcol .logo-img{width:150px}
+  .mi.v4i{font-size:24px;line-height:1.4}
+  .v4list #go .band{font-size:36px}
+  .qsnd{top:12px;left:12px;bottom:auto}.qsnd button{width:44px;height:44px}
+  .v4full{padding:14px 14px 16px}
+  .mi.mpanels{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));height:auto;margin:12px 0 0;gap:10px}
+  .mpanel,.mpanel.on{height:clamp(140px,24vh,220px)!important;transform:none}.mpanel img{transform:none;left:0;width:100%}.mp-txt{transform:none;left:0;right:0;padding:40px 12px 10px}
+  .mp-txt small{display:none!important}.mpanel.on .mp-txt b{font-size:28px}
+  .v4bar{flex-direction:column;align-items:stretch;padding:0}
+  .v4opts .tiers-row{flex-wrap:wrap}
+  .mi.v4go{justify-content:center}
+  #sPick{--cw:clamp(130px,40vw,200px)}
+  .pk-txt b{font-size:28px}
+  .pk-bottom{left:14px;right:14px;flex-direction:column;align-items:stretch}
+  .pk-chips{justify-content:center}.pk-btns{justify-content:center}
+  .wl-row{grid-template-columns:1fr}
+  #tut{width:min(300px,70vw)}
+}
+/* sideways phones: everything a little smaller */
+@media (max-height:500px){
+  #menu[data-screen="main"] .mcol{padding:12px 16px!important}
+  #menu .mcol .logo-img{width:150px}
+  .mi.v4i{font-size:21px;line-height:1.35}
+  .v4list #go .band{font-size:30px}
+  .v4full{padding:10px 24px 12px}
+  .mi.mpanels{height:52vh;margin-top:8px}
+  .mp-txt{padding:40px 50px 10px}.mpanel.on .mp-txt b{font-size:28px}
+  .v4opts{gap:6px}.v4opts .tier{padding:5px 10px;font-size:13px}
+  #sPick{--cw:clamp(120px,30vh,170px)}
+  .pk-stage{top:56px}.pk-info{top:calc(56px + var(--cw) * 1.44 + 8px);gap:14px}
+  .pk-txt b{font-size:24px}.pk-txt span{font-size:13px}
+  .pk-bottom{bottom:10px}.pk-chips .chip{padding:4px 10px}
+  .mi.pk-ok{font-size:22px;padding:6px 24px}
+  .qmodes{grid-template-columns:repeat(4,minmax(0,1fr))}.qmode{height:74px}.qmode b{font-size:14px}.qmode small{font-size:10px}
+}
 </style>
 </head>
 <body>
@@ -695,52 +913,84 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
     <div class="mshade" aria-hidden="true"></div>
     <!-- the user's key art: five fighters on the left in front of Helwan station -->
     <div class="kart" aria-hidden="true">
-      <img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/keyart.webp" alt="">
+      <img src="assets/ui/keyart.webp" alt="">
       <div class="kart-you" id="kartYou"><span>إنت</span></div>
     </div>
+
+    <!-- pick a fighter (menu v4): cards in a row, the middle one big and lit, a light running round it -->
+    <section class="mscr v4full" id="sPick" aria-label="اختار شخصيتك" hidden>
+      <div class="v4head"><button class="mi v4back" type="button" data-to="main" aria-label="رجوع"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button><h2>اختار شخصيتك</h2></div>
+      <div class="pk-glow" id="pkGlow" aria-hidden="true"></div>
+      <div class="pk-stage" id="pkStage"><div class="pk-ring" id="pkRing" aria-hidden="true"><span></span></div></div>
+      <div class="pk-info">
+        <button class="mi pk-arw" type="button" id="pkPrev" aria-label="اللي قبله"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
+        <div class="pk-txt"><b id="pkName"></b><span id="pkNote"></span><span class="pk-lock" id="pkLock" hidden></span></div>
+        <button class="mi pk-arw" type="button" id="pkNext" aria-label="اللي بعده"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
+      </div>
+      <div class="pk-bottom">
+        <div class="pk-chips"><span class="chip"><i>السلاح</i><em id="pkW"></em></span><span class="chip"><i>الرمية</i><em id="pkT"></em></span><span class="chip"><i>التقيلة</i><em id="pkH"></em></span></div>
+        <div class="pk-btns"><button class="mi pk-3d" type="button" id="pk3d">لفّه وشوفه 3D</button><button class="mi pk-ok" type="button" id="pkOk">اختاره</button></div>
+      </div>
+    </section>
+    <!-- the match type (menu v4): a picture per mode, how many, the opponent -->
+    <section class="mscr v4full" id="sPlay" aria-label="اختار الخناقة" hidden>
+      <div class="v4head"><button class="mi v4back" type="button" data-to="main" aria-label="رجوع"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button><h2>اختار الخناقة</h2><i id="modeV"></i></div>
+      <div class="mi mpanels" id="modeB" tabindex="0" role="radiogroup" aria-label="الطور">
+          <button type="button" role="radio" class="tier mpanel" data-m="duel" style="--mbg:#efcf0f"><img src="assets/ui/modes/duel.webp" alt="" loading="lazy"><span class="mp-txt"><b>1 ضد 1</b><small>إنت وهو، واللي يقع في السكة يروح المرج</small></span></button>
+          <button type="button" role="radio" class="tier mpanel" data-m="ffa" style="--mbg:#80c7a9"><img src="assets/ui/modes/ffa.webp" alt="" loading="lazy"><span class="mp-txt"><b>كله في كله</b><small>كل واحد لنفسه، وآخر واحد واقف ياخد اللقب</small></span></button>
+          <button type="button" role="radio" class="tier mpanel" data-m="tdm" style="--mbg:#ea899f"><img src="assets/ui/modes/tdm.webp" alt="" loading="lazy"><span class="mp-txt"><b>الفتونة</b><small>فريق قصاد فريق، كل وقعة نقطة</small></span></button>
+          <button type="button" role="radio" class="tier mpanel" data-m="elim" style="--mbg:#d4a575"><img src="assets/ui/modes/elim.webp" alt="" loading="lazy"><span class="mp-txt"><b>جولة عدالة</b><small>روح واحدة في الجولة، وأول فريق يكسب جولتين</small></span></button>
+      </div>
+      <div class="v4bar">
+        <div class="v4opts">
+          <div class="mi tiers" id="sizeB" tabindex="0" role="radiogroup" aria-label="العدد" hidden>
+            <span class="tiers-k">العدد</span>
+            <span class="tiers-row"><button type="button" role="radio" class="tier mt" data-i="0"></button><button type="button" role="radio" class="tier mt" data-i="1"></button><button type="button" role="radio" class="tier mt" data-i="2"></button></span>
+          </div>
+          <div class="mi tiers" id="diff" tabindex="0" role="radiogroup" aria-label="مستوى الخصم">
+            <span class="tiers-k">الخصم<i id="diffV"></i></span>
+            <span class="tiers-row"><button type="button" role="radio" class="tier lvl" data-d="auto"><b>بيتعلم منك</b><small id="lvlV">4 من 10</small></button><button type="button" role="radio" class="tier" data-d="easy">سهل</button><button type="button" role="radio" class="tier" data-d="normal">متوسط</button><button type="button" role="radio" class="tier" data-d="hard">صعب</button></span>
+          </div>
+        </div>
+        <button class="mi v4go" type="button" data-to="pick">اختار شخصيتك</button>
+      </div>
+    </section>
     <div class="mcol">
-      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/logo.webp" alt=""></h1>
+      <h1 class="logo logo--img" aria-label="عتمان في حلوان"><img class="logo-img" src="assets/ui/logo.webp" alt=""></h1>
       <p class="mtag">اللي يفضل واقف على الرصيف ياخد اللقب.</p>
 
       <section class="mscr" id="sMain" aria-label="القايمة">
-        <div class="mlist">
-          <!-- 1 · the one main action: the back of a ticket, neon with the black magnetic stripe -->
-          <button class="mi go" id="go" type="button"><span class="tl"><span>تذكرة دخول · خط 1</span><span>حلوان ← المرج</span></span><span class="band">انزل الرصيف</span><span class="tl tl-end" data-kb>Enter</span><span class="tl tl-rot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="2"></rect><path d="M3 8a9 9 0 0 1 4-4M21 16a9 9 0 0 1-4 4"></path></svg> لف الموبايل بالعرض لما الماتش يبدأ</span></button>
-          <button class="mi" type="button" id="tailorB" data-to="tailor">فصّل بدلتك</button>
-          <!-- 2 · your fighter: a yellow ticket with our mark, ‹ › to switch -->
+        <!-- menu v4 (28 Nov 2026): one plain list on glass; each choice opens its own screen -->
+        <div class="mlist v4list">
+          <button class="mi go" id="go" type="button"><span class="band">انزل الرصيف</span><span class="msub" id="matchV">1 ضد 1</span></button>
+          <button class="mi v4i" type="button" data-to="play">نوع الخناقة</button>
+          <button class="mi v4i" type="button" data-to="pick">الشخصيات</button>
+          <button class="mi v4i" type="button" id="tailorB" data-to="tailor">فصّل بدلتك</button>
+          <button class="mi v4i" type="button" data-to="online">العب أونلاين</button>
+          <button class="mi v4i" type="button" data-to="scores">الأسكورات</button>
+          <button class="mi v4i" type="button" data-to="moves">الكومبوهات</button>
+          <button class="mi v4i" type="button" data-to="settings">الإعدادات</button>
           <div class="mi tkt tkt-y tkt-char" id="charB" tabindex="0" role="group" aria-label="شخصيتك" hidden>
             <button type="button" class="tarr" id="charPrev" aria-label="الشخصية اللي قبل"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg></button>
             <span class="tkt-body"><small id="charN">شخصيتك</small><b id="charV">عتمان</b></span>
-            <img class="stampimg" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/badge.webp" alt="">
+            <img class="stampimg" src="assets/ui/badge.webp" alt="">
             <button type="button" class="tarr" id="charNext" aria-label="الشخصية اللي بعد"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></button>
           </div>
-          <!-- the mode: one against one, or everyone for himself with 3 or 4 on the platform -->
-          <div class="mi tiers" id="modeB" tabindex="0" role="radiogroup" aria-label="الطور">
-            <span class="tiers-k">الطور<i id="modeV"></i></span>
-            <span class="tiers-row"><button type="button" role="radio" class="tkt tkt-y tier mt" data-m="duel">1 ضد 1</button><button type="button" role="radio" class="tkt tkt-s tier mt" data-m="ffa">كله في كله</button><button type="button" role="radio" class="tkt tkt-g tier mt" data-m="tdm">الفتونة</button><button type="button" role="radio" class="tkt tkt-p tier mt" data-m="elim">جولة عدالة</button></span>
-          </div>
-          <!-- how many: fighters in a free-for-all, or fighters a side (hidden for one against one) -->
-          <div class="mi tiers" id="sizeB" tabindex="0" role="radiogroup" aria-label="العدد" hidden>
-            <span class="tiers-k">العدد</span>
-            <span class="tiers-row"><button type="button" role="radio" class="tkt tkt-y tier mt" data-i="0"></button><button type="button" role="radio" class="tkt tkt-g tier mt" data-i="1"></button><button type="button" role="radio" class="tkt tkt-p tier mt" data-i="2"></button></span>
-          </div>
-          <!-- 3 · the opponent: one that learns from you (its level follows the player), or a fixed easy / medium / hard -->
-          <div class="mi tiers" id="diff" tabindex="0" role="radiogroup" aria-label="مستوى الخصم">
-            <span class="tiers-k">الخصم<i id="diffV"></i></span>
-            <span class="tiers-row"><button type="button" role="radio" class="tkt tkt-s tier lvl" data-d="auto"><b>بيتعلم منك</b><small id="lvlV">4 من 10</small></button><button type="button" role="radio" class="tkt tkt-y tier" data-d="easy">سهل</button><button type="button" role="radio" class="tkt tkt-g tier" data-d="normal">متوسط</button><button type="button" role="radio" class="tkt tkt-p tier" data-d="hard">صعب</button></span>
-          </div>
-          <!-- online 1v1 with a friend (green = the opponent) and the scores -->
-          <div class="trow">
-            <button class="mi tkt tkt-g tonline" type="button" data-to="online"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="8" r="3"></circle><circle cx="17" cy="8" r="3"></circle><path d="M2 20c0-3 2.2-5 5-5s5 2 5 5M12 20c0-3 2.2-5 5-5s5 2 5 5"></path></svg><span class="tkt-body"><small>خط 1 · إنت وصحابك · لحد 8</small><b>العب أونلاين</b></span></button>
-            <button class="mi tkt tkt-y tstub" type="button" data-to="scores"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z"></path><path d="M8 6H5a3 3 0 0 0 3 4M16 6h3a3 3 0 0 1-3 4"></path><path d="M12 13v4M8 20h8"></path></svg><small>الأسكورات</small></button>
-          </div>
-          <!-- 4 · your name on a pink ticket, the combos and the sound as small stubs -->
-          <div class="trow">
-            <label class="tkt tkt-p tname"><small id="nmNote">اسم الراكب</small><input id="nm" maxlength="18" value="عتمان حلوان" autocomplete="off" spellcheck="false"></label>
-            <button class="mi tkt tkt-g tstub" type="button" data-to="moves"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h11a3 3 0 0 1 3 3v11H7a3 3 0 0 1-3-3z"></path><path d="M8 9h6M8 13h6"></path></svg><small>الكومبوهات</small></button>
+        </div>
+        <p class="mhello" id="mHello"></p>
+      </section>
+
+      <!-- settings: your name and the sound -->
+      <section class="mscr" id="sSet" aria-label="الإعدادات" hidden>
+        <h2 class="mh">الإعدادات</h2>
+        <div class="mlist">
+          <div class="trow"><label class="tkt tkt-p tname"><small id="nmNote">اسم الراكب</small><input id="nm" maxlength="18" value="عتمان حلوان" autocomplete="off" spellcheck="false"></label></div>
+          <div class="trow" hidden>
             <button class="mi tkt tkt-s tstub" type="button" id="mute"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 5l4 4H7v6h4l4 4V5H11"></path><path d="M3 9v6h4"></path><path d="M19 9a4 4 0 0 1 0 6"></path></svg><small>الضرب <span id="muteV">شغال</span></small></button>
             <button class="mi tkt tkt-s tstub" type="button" id="muteM"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="17" cy="16" r="3"></circle></svg><small>المزيكا <span id="muteMV">شغالة</span></small></button>
           </div>
+          <button class="mi v4i v4sm" type="button" id="tutB">التدريب من الأول</button>
+          <div class="mrow"><button class="mi sm go" type="button" data-to="main">رجوع</button></div>
         </div>
       </section>
 
@@ -794,14 +1044,25 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       </section>
 
       <section class="mscr" id="sOnline" aria-label="العب أونلاين" hidden>
-        <h2 class="mh">العب مع صحابك</h2>
+        <h2 class="mh">أونلاين</h2>
+        <div class="ontabs" role="tablist"><button class="mi ontab on" type="button" id="tabQuick" role="tab">العب مع ناس</button><button class="mi ontab" type="button" id="tabFriends" role="tab">العب مع صحابك</button></div>
+        <!-- play with people (28 Nov 2026, the user: like PUBG, pick a fight and the game gathers players) -->
+        <div id="onQuick">
+          <p class="onote">اختار الخناقة، واللعبة تجمعلك ناس من أي حتة.</p>
+          <div class="qmodes" id="qModes"><button type="button" class="qmode" data-m="duel" style="--mbg:#efcf0f"><img src="assets/ui/modes/duel.webp" alt="" loading="lazy"><span><b>1 ضد 1</b><small>لاعيبين</small></span></button><button type="button" class="qmode" data-m="ffa" style="--mbg:#80c7a9"><img src="assets/ui/modes/ffa.webp" alt="" loading="lazy"><span><b>كله في كله</b><small>4 لاعيبة</small></span></button><button type="button" class="qmode" data-m="tdm" style="--mbg:#ea899f"><img src="assets/ui/modes/tdm.webp" alt="" loading="lazy"><span><b>الفتونة</b><small>2 ضد 2</small></span></button><button type="button" class="qmode" data-m="elim" style="--mbg:#d4a575"><img src="assets/ui/modes/elim.webp" alt="" loading="lazy"><span><b>جولة عدالة</b><small>2 ضد 2</small></span></button></div>
+          <div class="qbox"><small id="qTitle"></small><b id="qLine"></b><div class="qslots" id="qSlots"></div></div>
+          <button class="mi v4go" type="button" id="qFind">دوّر على خناقة</button>
+          <button class="mi v4i v4sm" type="button" id="qCancel" hidden>إلغي</button>
+          <div class="mrow"><button class="mi sm" type="button" id="qBack">رجوع</button></div>
+        </div>
+        <div id="onFriends" hidden>
         <p class="onote">اختار الطور والعدد، واعمل أوضة وابعت الكود لصحابك. اللي يدخل بالكود يلعب، والأماكن الفاضية بياخدها الكمبيوتر.</p>
         <div class="mlist">
           <!-- first time online: pick a name; it is yours alone and fixed for 30 days -->
           <div class="tkt tkt-p claimbox" id="onClaim" hidden>
             <small>اختار اسمك في الأونلاين</small>
             <input id="claimIn" maxlength="18" autocomplete="off" spellcheck="false">
-            <p class="claimwarn">خد بالك: الاسم ده هيتثبت عليك شهر كامل ومحدش غيرك يقدر ياخده، ومش هتقدر تغيره قبل <b id="claimUntil"></b>.</p>
+            <p class="claimwarn">خد بالك: الاسم ده هيتثبت عليك 3 شهور ومحدش غيرك يقدر ياخده، ومش هتقدر تغيره قبل <b id="claimUntil"></b>.</p>
           </div>
           <button class="mi go" id="claimGo" type="button" hidden><span class="band" id="claimBand">ثبّت الاسم</span></button>
           <!-- the room's mode and size: chosen before making the room, and by the host while friends come in -->
@@ -827,6 +1088,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
           <p class="ostatus" id="onStatus" role="status"></p>
           <div class="mrow"><button class="mi sm" type="button" id="onBack">رجوع</button></div>
         </div>
+        </div>
       </section>
 
       <section class="mscr" id="sScores" aria-label="الأسكورات" hidden>
@@ -839,8 +1101,41 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
 
       <p id="rot" class="hint" hidden>لف الموبايل بالعرض عشان تشوف الرصيف كله.</p>
     </div>
+    <!-- music and hit sounds right on the main screen (user, 28 Nov 2026) -->
+    <div class="qsnd" id="qSnd">
+      <button type="button" id="qMusic" aria-label="المزيكا"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle><path class="x" d="M3 3l18 18"></path></svg></button>
+      <button type="button" id="qSfx" aria-label="صوت الضرب"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H2v6h4l5 4z"></path><path class="w" d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"></path><path class="x" d="M16 9l6 6M22 9l-6 6"></path></svg></button>
+    </div>
     <div class="mkeys" data-kb aria-hidden="true"><span><kbd>↑</kbd> <kbd>↓</kbd> اختار</span><span><kbd>Enter</kbd> ادخل</span><span><kbd>Esc</kbd> رجوع</span></div>
   </div>
+
+  <!-- first time: your name, then a short practice or skip (user, 28 Nov 2026) -->
+  <div id="welcome" hidden>
+    <div class="wl-box" id="wlName">
+      <img class="wl-logo" src="assets/ui/logo.webp" alt="عتمان في حلوان">
+      <h2>نوّرت حلوان!</h2>
+      <p>قبل ما تنزل الرصيف، الناس هتعرفك بإيه؟</p>
+      <label for="wlIn">اسمك</label>
+      <input id="wlIn" maxlength="18" autocomplete="off" spellcheck="false" placeholder="اكتب اسمك هنا">
+      <span class="wl-warn">الاسم بيتثبت 3 شهور ومش هيتغير، فاختاره كويس</span>
+      <span class="wl-small" id="wlMsg">من 2 لـ 18 حرف · مفيش اتنين بنفس الاسم</span>
+      <button type="button" class="wl-go" id="wlGo">يلا</button>
+    </div>
+    <div class="wl-pick" id="wlPick" hidden>
+      <h2 id="wlHi">أهلاً</h2>
+      <p>أول مرة تتخانق هنا؟</p>
+      <div class="wl-row">
+        <button type="button" class="wl-ch wl-learn" id="wlLearn"><small>دقيقة واحدة</small><b>علّمني الأول</b><span>تدريب صغير على الرصيف: تمشي، تنط، تضرب، تدافع. واللي بيدربك واقف مبيردّش.</span></button>
+        <button type="button" class="wl-ch wl-skip" id="wlSkip"><small>إنت عارف الدنيا</small><b>تخطّي</b><span>على المنيو على طول. التدريب هتلاقيه بعدين في الإعدادات.</span></button>
+      </div>
+    </div>
+  </div>
+  <!-- the practice: steps on the platform with a fighter that only stands there -->
+  <div id="tut" hidden>
+    <div class="tut-h"><b>التدريب</b><button type="button" id="tutSkip">تخطّي</button></div>
+    <ol id="tutList"></ol>
+  </div>
+  <div id="tutBig" hidden></div>
 
   <div id="hud" hidden>
     <div class="card" id="cardP">
@@ -875,11 +1170,11 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
   <div id="touch" dir="ltr" hidden>
     <div id="stick"><div id="knob"></div></div>
     <div id="btns">
-      <button type="button" class="tb" data-b="light"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/icons/light.png" alt=""><span>خفيفة</span></button>
-      <button type="button" class="tb" data-b="heavy"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/icons/heavy.png" alt=""><span>تقيلة</span></button>
-      <button type="button" class="tb" data-b="jump"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/icons/jump.png" alt=""><span>نط</span></button>
-      <button type="button" class="tb" data-b="guard" aria-label="دفاع: دوسة سريعة تفادي، ودوسة طويلة دفاع"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/icons/guard.png" alt=""><span>دفاع</span></button>
-      <button type="button" class="tb" data-b="grab"><img src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/icons/grab.png" alt=""><span>مسك</span></button>
+      <button type="button" class="tb" data-b="light"><img src="assets/ui/icons/light.png" alt=""><span>خفيفة</span></button>
+      <button type="button" class="tb" data-b="heavy"><img src="assets/ui/icons/heavy.png" alt=""><span>تقيلة</span></button>
+      <button type="button" class="tb" data-b="jump"><img src="assets/ui/icons/jump.png" alt=""><span>نط</span></button>
+      <button type="button" class="tb" data-b="guard" aria-label="دفاع: دوسة سريعة تفادي، ودوسة طويلة دفاع"><img src="assets/ui/icons/guard.png" alt=""><span>دفاع</span></button>
+      <button type="button" class="tb" data-b="grab"><img src="assets/ui/icons/grab.png" alt=""><span>مسك</span></button>
     </div>
   </div>
 
@@ -889,7 +1184,7 @@ kbd{font:600 11px ui-monospace,monospace;background:var(--chalk);color:var(--sig
       <div class="tkt rticket">
         <div class="rprint"><span>لقب · خط 1 · حلوان</span><span>رقم 0001</span></div>
         <div class="rtitle">عتمان الحقيقي هو</div>
-        <img class="rbadge" src="https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/badge.webp" alt="">
+        <img class="rbadge" src="assets/ui/badge.webp" alt="">
         <div id="rName"></div>
         <p id="rSub"></p>
         <p id="rPts" class="rpts"></p>
@@ -1416,11 +1711,11 @@ function signText(g, txt, x, y, size, color) { g.font = `800 ${size}px ${SIGN}`;
 // our round metro mark (the user's badge): drawn into sign textures once it loads, and as a texture for pole signs
 const badgeImg = new Image();
 badgeImg.onload = () => fontRedraws.forEach(f => f());
-badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
+badgeImg.crossOrigin = 'anonymous'; badgeImg.src = 'assets/ui/badge.webp';   // CDN-served: must stay drawable into the sign canvases
 const badgeOk = () => badgeImg.complete && badgeImg.naturalWidth > 0;
 let badgeTex = null;
 function badgePole(x, z, h, r) {
-  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/badge.webp');
+  if (!badgeTex) badgeTex = new THREE.TextureLoader().load('assets/ui/badge.webp');
   const g = new THREE.Group();
   const pole = mesh(cyl(r * 0.09, r * 0.11, h, 14), steelM(BLUE, 0.4, 0.55)); pole.position.y = h / 2; g.add(pole);
   const collar = mesh(cyl(r * 0.14, r * 0.14, 0.3, 14), steelM(0xc0c6cc, 0.4, 0.7)); collar.position.y = h - 0.1; g.add(collar);
@@ -1630,11 +1925,31 @@ function buildStation() {
   // the sulphur springs and the donkey-cart rescue on the right; the outer two repeat
   const adTex = {};
   const ADS = [['tahya', -5.2], ['fadl', -10.6], ['mech', -16.0], ['center', -21.4], ['kebritag', 5.2], ['winch', 10.6], ['center', 16.0], ['fadl', 21.4]];
+  // the user's own painted ads (28 Nov 2026): pictures in assets/ui/ads/<k>.webp, about 2:1, shown 4.8 m wide;
+  // if a picture fails to load, the old canvas-drawn ad of the same name takes its place
+  // painted into the brick like the user's Photoshop test (28 Nov 2026: blend mode Darken): drawn with min(ad, wall),
+  // so the white paper vanishes and the wall shows through the worn paint (tools/wall-ads.py whitens paper + wear);
+  // lit like the wall (Lambert) so it darkens with it
+  const adLd = new THREE.TextureLoader(), AD_W = 3.7;
+  const plasterTex = adLd.load('assets/ui/ads/plaster.webp');
+  plasterTex.anisotropy = maxAniso;
   ADS.forEach(([k, x], i) => {
-    const t = adTex[k] || (adTex[k] = wallAdTex(k, 7 + i * 13));
-    const p = mesh(new THREE.PlaneGeometry(5.0, 2.0), B({ map: t, transparent: true, alphaTest: 0.4, color: 0xd6d0c4 }));
-    p.position.set(x, 0.12, -OUT_Z + 0.012);
-    scene.add(p);
+    const place = (t, w, h, cut) => {
+      const y = cut ? 0.12 : 0.08;   // top at ~1.1 m, so the fight camera sees the titles
+      if (!cut && plasterTex) {       // the whitewashed patch it is painted on, a bit bigger than the ad
+        const pl = mesh(new THREE.PlaneGeometry(w * 1.1, h * 1.16), L({ map: plasterTex, transparent: true, depthWrite: false }));
+        pl.position.set(x, y, -OUT_Z + 0.008); pl.renderOrder = 1; pl.receiveShadow = true; scene.add(pl);
+      }
+      const p = mesh(new THREE.PlaneGeometry(w, h), cut ? B({ map: t, transparent: true, alphaTest: 0.4, color: 0xd6d0c4 })
+        : L({ map: t, transparent: true, depthWrite: false, blending: THREE.CustomBlending, blendEquation: THREE.MinEquation }));
+      p.position.set(x, y, -OUT_Z + 0.012); p.renderOrder = 2; p.receiveShadow = !cut;
+      scene.add(p);
+    };
+    const old = () => place(adTex[k] || (adTex[k] = wallAdTex(k, 7 + i * 13)), 5.0, 2.0, true);
+    adLd.load('assets/ui/ads/' + k + '.webp', t => {
+      t.anisotropy = maxAniso;
+      place(t, AD_W, AD_W * t.image.height / t.image.width, false);
+    }, undefined, old);
   });
   const graffiti = tex(512, 160, (g, w, h) => {
     g.save(); g.translate(w / 2, h / 2); g.rotate(-0.06);
@@ -1987,7 +2302,7 @@ function propModel(g, p) {
   const w = new THREE.Group(); w.add(m); return w;
 }
 async function loadProps() {
-  const get = n => glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
+  const get = n => glbGet('assets/models/game/' + n + '.glb').then(g => propModel(g, PROPS[n])).catch(() => null);
   const [tuk, bus, kiosk] = await Promise.all([get('tuktuk'), get('microbus'), get('kiosk')]);
   if (tuk && ambient.tuk) { ambient.tuk.children.slice().forEach(c => ambient.tuk.remove(c)); ambient.tuk.add(tuk); }
   if (bus) { bus.position.set(30, 0, -11.4); bus.rotation.y = Math.PI; scene.add(bus); ambient.bus = bus; }
@@ -1995,7 +2310,7 @@ async function loadProps() {
 }
 function loadBuildings() {
   const ld = new THREE.TextureLoader();
-  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
+  return Promise.all(BUILDINGS.map(b => new Promise(ok => ld.load('assets/ui/bld/' + b.f + '.webp', t => ok({ ...b, t }), undefined, () => ok(null)))))
     .then(list => placeBuildings(list.filter(Boolean)));
 }
 function placeBuildings(list) {
@@ -2449,36 +2764,38 @@ function disposeRig(r) {
    made by tools/glb-slim.py (see CLAUDE.md). Open with ?proc to keep the old
    code-built fighters. Until the models load, or if they fail, those stay. */
 const GLB_Q = new URLSearchParams(location.search);
+// ?kit: TEST ONLY (27 Nov 2026, not published): five fighters with their own moves, an ultimate and a coloured hit light (section `fighter kits`)
+const KIT_ON = GLB_Q.has('kit');
 const CHARS = [
   // cape: 'remove' drops the Meshy cape (cape-fix.js); null leaves the mesh as it is
   // art: where this fighter's head is in the menu key art (assets/ui/keyart.webp), in % of the picture
-  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
-  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وكروكس أحمر', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
-  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/karate.glb', wpn: 'nunchaku', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
-  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
-  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/satohy.glb', wpn: 'zaffa', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
+  { id: 'otman', n: 'عتمان', note: 'خوذة صفرا', src: 'assets/models/web/otman.glb', wpn: 'shoma', toss: 'sling', badge: { x: 0, y: 1.29, r: 0.08 }, cape: 'remove', art: { x: 27.6, y: 29 } },
+  { id: 'kofeyya', n: 'بطل السيدة زينب', note: 'كوفية وجاكيت ترينج وكروكس أحمر', src: 'assets/models/web/kofeyya.glb', wpn: 'khayazan', toss: 'brick', cape: null, art: { x: 35.6, y: 26 } },
+  { id: 'karate', n: 'كابتن كراتيه', note: 'بدلة كراتيه وحزام أسود', src: 'assets/models/web/karate.glb', wpn: 'nunchaku', toss: 'brick', cape: null, art: { x: 18.5, y: 34 } },
+  { id: 'robin', n: 'روبن عبود', note: 'كابيشون وقناع وحزام ع', src: 'assets/models/web/robin.glb', wpn: 'pipe', toss: 'sling', cape: null, art: { x: 7, y: 33 } },
+  { id: 'satohy', n: 'سطوحي', note: 'عمة حمرا وشال منقّط', src: 'assets/models/web/satohy.glb', wpn: 'zaffa', toss: 'brick', cape: null, art: { x: 47.5, y: 33 } },
   // lock: 'premium' = only by buying it, 'ramadan' = earned in Ramadan (lockOf)
-  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
-  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
-  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
-  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/arees.glb', wpn: 'sangah', toss: 'sling', cape: null },
-  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
-  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/feminist.glb', wpn: 'redbo', toss: 'sling', cape: null },
+  { id: 'ankh', n: 'العنخ', note: 'فرعون ملفوف بالكتان', src: 'assets/models/web/ankh.glb', wpn: 'was', toss: 'sling', cape: null, lock: 'premium' },
+  { id: 'abubakarir', n: 'أبو البكارير', note: 'جلابية وصديري وشنطة جلد', src: 'assets/models/web/abubakarir.glb', wpn: 'broom', toss: 'sling', cape: null, lock: 'ramadan' },
+  { id: 'abushogy', n: 'أبو شوجي', note: 'أسد أبيض بجلابية سودا', src: 'assets/models/web/abushogy.glb', wpn: 'studded', toss: 'brick', cape: null },
+  { id: 'arees', n: 'عريس الجنة', note: 'كاب وصديري منفوخ وجينز مقطع', src: 'assets/models/web/arees.glb', wpn: 'sangah', toss: 'sling', cape: null },
+  { id: 'afaf', n: 'مدام عفاف', note: 'موظفة المعاشات: شنطة جلد وكارنيه', src: 'assets/models/web/afaf.glb', wpn: 'bag', toss: 'brick', cape: null },
+  { id: 'feminist', n: 'سوبر فيمنست', note: 'بدلة حمرا وسودا وبوت أحمر', src: 'assets/models/web/feminist.glb', wpn: 'redbo', toss: 'sling', cape: null },
   // added 24 Nov 2026: pictures from Flow / ChatGPT -> Meshy (design/new-fighters/, meshy-tasks.md); weapons and throws are my picks
-  { id: 'zombie', n: 'علي الزومبي', note: 'نص نايم وشبشب في رجل واحدة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/zombie.glb', wpn: 'pillow', toss: 'brick', cape: null },
-  { id: 'arbawy', n: 'العرباوي', note: 'شماغ وعباية وبر على الكتف', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/arbawy.glb', wpn: 'camelstick', toss: 'brick', cape: null },
-  { id: 'khott', n: 'خط الصعيد', note: 'عمة بيضا وشنب مبروم وشال صوف', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/khott.glb', wpn: 'rifle', toss: 'gun', cape: null },
-  { id: 'hanouty', n: 'الحنوتي', note: 'جلابية مغبرة ومفاتيح وفانوس', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/hanouty.glb', wpn: 'shovel', toss: 'brick', cape: null },
-  { id: 'baz', n: 'باز لا يطير', note: 'بدلة فضاء سودا في أصفر وجناحين صغيرين', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/baz.glb', wpn: 'hose', toss: 'sling', cape: null },
-  { id: 'gorilla', n: 'غوريلا الحفلات', note: 'بدلة غوريلا بتاعة الأفراح', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/gorilla.glb', wpn: 'balloon', toss: 'brick', cape: null },
-  { id: 'panda', n: 'باندا الحفلات', note: 'بدلة باندا منفوخة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/panda.glb', wpn: 'horn', toss: 'sling', cape: null },
-  { id: 'khafif', n: 'كابتن خفيف', note: 'طقم برتقالي وشارة كابتن وصفارة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/khafif.glb', wpn: 'flag', toss: 'brick', cape: null },
-  { id: 'madiha', n: 'مديحة التنين', note: 'جاكيت تنين ورينج لايت', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/madiha.glb', wpn: 'selfie', toss: 'sling', cape: null },
-  { id: 'sally', n: 'سالي خنافس', note: 'عباية خنافس دهبي ومبخرة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/sally.glb', wpn: 'censer', toss: 'sling', cape: null },
-  { id: 'temsah', n: 'تمساح النيل', note: 'بدلة تمساح وحزام نوبي', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/temsah.glb', wpn: 'oar', toss: 'brick', cape: null },
-  { id: 'koky', n: 'سوبر كوكي', note: 'بدلة كتكوت صفرا وبوت رجلين فرخة', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/koky.glb', wpn: 'ladle', toss: 'brick', cape: null },
-  { id: 'amsha', n: 'العمشة', note: 'عباية سودا وعين سودا', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/amsha.glb', wpn: 'knotstick', toss: 'brick', cape: null },
-  { id: 'saalouk', n: 'صعلوك الغية', note: 'بالطو مرقع وحمامة على كتفه', src: 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/saalouk.glb', wpn: 'cane', toss: 'brick', cape: null },
+  { id: 'zombie', n: 'علي الزومبي', note: 'نص نايم وشبشب في رجل واحدة', src: 'assets/models/web/zombie.glb', wpn: 'pillow', toss: 'brick', cape: null },
+  { id: 'arbawy', n: 'العرباوي', note: 'شماغ وعباية وبر على الكتف', src: 'assets/models/web/arbawy.glb', wpn: 'camelstick', toss: 'brick', cape: null },
+  { id: 'khott', n: 'خط الصعيد', note: 'عمة بيضا وشنب مبروم وشال صوف', src: 'assets/models/web/khott.glb', wpn: 'rifle', toss: 'gun', cape: null },
+  { id: 'hanouty', n: 'الحنوتي', note: 'جلابية مغبرة ومفاتيح وفانوس', src: 'assets/models/web/hanouty.glb', wpn: 'shovel', toss: 'brick', cape: null },
+  { id: 'baz', n: 'باز لا يطير', note: 'بدلة فضاء سودا في أصفر وجناحين صغيرين', src: 'assets/models/web/baz.glb', wpn: 'hose', toss: 'sling', cape: null },
+  { id: 'gorilla', n: 'غوريلا الحفلات', note: 'بدلة غوريلا بتاعة الأفراح', src: 'assets/models/web/gorilla.glb', wpn: 'balloon', toss: 'brick', cape: null },
+  { id: 'panda', n: 'باندا الحفلات', note: 'بدلة باندا منفوخة', src: 'assets/models/web/panda.glb', wpn: 'horn', toss: 'sling', cape: null },
+  { id: 'khafif', n: 'كابتن خفيف', note: 'طقم برتقالي وشارة كابتن وصفارة', src: 'assets/models/web/khafif.glb', wpn: 'flag', toss: 'brick', cape: null },
+  { id: 'madiha', n: 'مديحة التنين', note: 'جاكيت تنين ورينج لايت', src: 'assets/models/web/madiha.glb', wpn: 'selfie', toss: 'sling', cape: null },
+  { id: 'sally', n: 'سالي خنافس', note: 'عباية خنافس دهبي ومبخرة', src: 'assets/models/web/sally.glb', wpn: 'censer', toss: 'sling', cape: null },
+  { id: 'temsah', n: 'تمساح النيل', note: 'بدلة تمساح وحزام نوبي', src: 'assets/models/web/temsah.glb', wpn: 'oar', toss: 'brick', cape: null },
+  { id: 'koky', n: 'سوبر كوكي', note: 'بدلة كتكوت صفرا وبوت رجلين فرخة', src: 'assets/models/web/koky.glb', wpn: 'ladle', toss: 'brick', cape: null },
+  { id: 'amsha', n: 'العمشة', note: 'عباية سودا وعين سودا', src: 'assets/models/web/amsha.glb', wpn: 'knotstick', toss: 'brick', cape: null },
+  { id: 'saalouk', n: 'صعلوك الغية', note: 'بالطو مرقع وحمامة على كتفه', src: 'assets/models/web/saalouk.glb', wpn: 'cane', toss: 'brick', cape: null },
 ];
 // test only (not used on the public page unless ?hd is in the address): the new high-detail بطل السيدة زينب
 const LITE = !GLB_Q.has('full') && (GLB_Q.has('lite') || (window.matchMedia && matchMedia('(pointer: coarse)').matches));
@@ -2501,13 +2818,13 @@ function hdPump() {
     GLB.hd[ch.id] = 2; hdBusy = false; hdPump();
   };
   img.onerror = () => { hdBusy = false; hdPump(); };
-  img.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/hd/' + ch.id + '.webp';
+  img.src = 'assets/models/hd/' + ch.id + '.webp';
 }
-if (GLB_Q.has('hd')) { CHARS[1].src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
+if (GLB_Q.has('hd')) { CHARS[1].src = 'assets/models/web/kofeyya-hd.glb'; CHARS[1].smooth = true; }
 // ?hy: بطل السيدة زينب made with Hunyuan 3D (80k triangles, test only, 24 Nov 2026), rigged by Meshy
-if (GLB_Q.has('hy')) CHARS[1].src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/kofeyya-hy.glb';
+if (GLB_Q.has('hy')) CHARS[1].src = 'assets/models/web/kofeyya-hy.glb';
 // ?m71: بطل السيدة زينب made again on Meshy at its top settings (7.1, Ultra geometry 4k, 4K texture, 80k triangles; test only, 24 Nov 2026)
-if (GLB_Q.has('m71')) { CHARS[1].src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/kofeyya-m71u.glb'; CHARS[1].smooth = true; }   // (Meshy's remesh comes faceted: smooth its normals)
+if (GLB_Q.has('m71')) { CHARS[1].src = 'assets/models/web/kofeyya-m71u.glb'; CHARS[1].smooth = true; }   // (Meshy's remesh comes faceted: smooth its normals)
 const GLB = { on: !GLB_Q.has('proc'), h: 2.1, srcH: 1.8, models: {}, clips: {}, ready: false, loading: {}, failed: {}, hd: {}, allIn: false };
 // the CPU's (or the online friend's) character, an index into CHARS
 let cpuChar = 1;
@@ -2653,15 +2970,16 @@ function lockOf(i) {
 }
 async function loadGlb() {
   // kept next to the game (a second CDN was one more slow or blocked host before anything showed)
-  await Promise.all(['https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/js/GLTFLoader.js', 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/js/meshopt_decoder.js'].map(loadScript));
-  await loadScript('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/js/SkeletonUtils.js');
+  await Promise.all(['assets/js/GLTFLoader.js', 'assets/js/meshopt_decoder.js'].map(loadScript));
+  await loadScript('assets/js/SkeletonUtils.js');
   const ld = new THREE.GLTFLoader();
   // the fighters are packed with gltfpack (tools/pack-models.sh): ~1/3 smaller, moves ~5x
   await MeshoptDecoder.ready; ld.setMeshoptDecoder(MeshoptDecoder);
   glbGet = u => new Promise((ok, no) => ld.load(u, ok, undefined, no));
   // the menu waits only for the moves, your fighter and one opponent; the rest come in behind
   if (cpuChar === sel.char || cpuChar >= CHARS.length) cpuChar = sel.char === 0 ? 1 : 0;
-  const [moves] = await Promise.all([glbGet('https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/models/web/moves.glb'), loadChar(sel.char), loadChar(cpuChar)]);
+  const [moves, kitMoves] = await Promise.all([glbGet('assets/models/web/moves.glb'), KIT_ON ? glbGet('assets/models/web/kit-moves.glb') : null, loadChar(sel.char), loadChar(cpuChar)]);
+  if (kitMoves) moves.animations.push(...kitMoves.animations);   // ?kit: the 15 moves bought for the five test fighters (same skeleton)
   // the clips were made on Otman's skeleton and also carry his bone lengths (every bone's position);
   // played on a fighter with other proportions they dragged his head points ~20 cm (Robin's warped
   // face, سطوحي's long neck). Keep only the rotations (+ the hips' height), so each keeps its own lengths.
@@ -3078,7 +3396,7 @@ function buildGlbFighter(ch, ringColor) {
   const feet = footSetup(root, model, meshes.find(m => m.isSkinnedMesh));
   const dummy = () => new THREE.Group();
   return { root, body, legL: dummy(), legR: dummy(), armL: dummy(), armR: dummy(), head: dummy(), torso: dummy(), cape: null, capeBase: null, stick,
-    sling, toss: ch.toss || 'sling', wpn: ch.wpn, bag: bagHit || null, feet, ikW: 0, glb: { mixer, actions, cur: actions.Combat_Stance, key: '', ph: 0, ot: 0 }, badge, ...fighterExtras(root, body, ringColor) };
+    sling, toss: ch.toss || 'sling', wpn: ch.wpn, cid: ch.id, bag: bagHit || null, feet, ikW: 0, glb: { mixer, actions, cur: actions.Combat_Stance, key: '', ph: 0, ot: 0 }, badge, ...fighterExtras(root, body, ringColor) };
 }
 // In the fight stance the clips (made on Otman) left most fighters' soles 4-10 cm under the floor,
 // أبو البكارير (a kid, shorter legs) 20 cm above it, and the feet ~50 cm off the fighter's own point, so
@@ -3180,7 +3498,7 @@ function glbAnim(f, r, dt, sp) {
     const cm = CLIP_MOVE[f.atk.name], m = f.atk.m, x = f.atk.t;
     const a0 = cm.start || 0, hitT = (m.act[0] + m.act[1]) / 2;
     clip = cm.c; key = f.atk;
-    t = x < hitT ? a0 + (cm.hit - a0) * x / hitT : cm.hit + (cm.end - cm.hit) * Math.min(1, (x - hitT) / Math.max(0.01, m.dur - hitT));
+    t = cm.lin ? a0 + (cm.end - a0) * Math.min(1, x / m.dur) : x < hitT ? a0 + (cm.hit - a0) * x / hitT : cm.hit + (cm.end - cm.hit) * Math.min(1, (x - hitT) / Math.max(0.01, m.dur - hitT));
   } else if (s === 'guard') { clip = 'Block1'; t = 1.1; }
   else if (s === 'holding') { clip = 'Left_Jab_from_Guard'; t = 0.55; }
   else if (s === 'grabbed') { clip = 'Face_Punch_Reaction'; t = 0.35; }
@@ -3229,7 +3547,9 @@ function hideRig(f) {
   if (r.badge && r.badge.m) r.badge.m.visible = false;
 }
 function pickCpuChar() {
-  const ok = CHARS.map((c, i) => i).filter(i => i !== sel.char && charReady(i) && !lockOf(i));
+  // ?kit&vs=<id>: the test picks the opponent (the user wanted عتمان against بطل السيدة زينب)
+  if (KIT_ON && GLB_Q.get('vs')) { const v = CHARS.findIndex(c => c.id === GLB_Q.get('vs')); if (v >= 0 && v !== sel.char) return v; }
+  const ok = CHARS.map((c, i) => i).filter(i => i !== sel.char && charReady(i) && !lockOf(i) && (!KIT_ON || KITS[CHARS[i].id]));
   return ok.length ? pick(ok) : (sel.char === 0 ? 1 : 0);
 }
 
@@ -3279,7 +3599,7 @@ class Fighter {
   constructor(isCPU) {
     this.isCPU = isCPU;
     this.pos = new V3(); this.vel = new V3();
-    this.ctrl = { mx: 0, mz: 0, guard: false, aim: false, jump: false, light: false, heavy: false, grab: false, shot: false, dodge: false };
+    this.ctrl = { mx: 0, mz: 0, guard: false, aim: false, jump: false, light: false, heavy: false, grab: false, shot: false, dodge: false, ult: false };
     this.anim = { t: 0, phase: 0 };
     this.reset();
   }
@@ -3289,7 +3609,8 @@ class Fighter {
     this.dmg = 0; this.lives = 3; this.guard = 100; this.atk = null; this.buffer = null; this.bufferT = 0;
     this.chain = 0; this.chainT = 0; this.stunT = 0; this.inv = 0; this.combo = 0; this.comboT = 0;
     this.holding = null; this.heldBy = null; this.holdT = 0; this.koT = 0; this.lastHitBy = null; this.lastHitT = -1e9;
-    this.grabCd = 0; this.grabMsgT = -9; this.shotCd = 0;
+    this.grabCd = 0; this.grabMsgT = -9; this.shotCd = 0; this.ult = KIT_ON && GLB_Q.has('full') ? 100 : 0;   // (?kit&full: the meter starts full, to try the ultimates at once)
+    this.ledgeUsed = false; this.airDodges = 0;
     this.dodgeT = 0; this.dodgeInv = 0; this.dodgeCd = 0; this.airDodged = false; this.pitChase = 0;
     this.stats = { hits: 0, maxCombo: 0, kos: 0 };
     this.aiT = 0; this.guardT = 0; this.queue = []; this.dance = false; this.foe = null; this.tgtT = 0;
@@ -3369,7 +3690,14 @@ const SFX = {
   horn() { [311, 370].forEach(f => this.tone(f, 0.85, 'sawtooth', 0.06)); },
   ko() { this.tone(640, 0.7, 'sawtooth', 0.12, 70); },
   beep(hi) { this.tone(hi ? 880 : 440, 0.18, 'square', 0.08); },
-  ui(hi) { this.tone(hi ? 660 : 520, 0.05, 'triangle', 0.05, hi ? 990 : 600); },
+  // menu sounds: ui(true) = a choice (whoosh), ui() = the cursor moving (tick), ui(false) = not allowed
+  ui(hi) { if (hi === false) return this.nope(); if (hi) return this.move(); this.tone(880, 0.04, 'triangle', 0.035, 1100); },
+  move() { this.burst(0.2, 900, 0.18, 'bandpass', 2600); this.tone(520, 0.06, 'triangle', 0.04, 780); },
+  pick() { this.burst(0.12, 320, 0.45, 'lowpass', 120); this.tone(150, 0.25, 'sine', 0.45, 55); this.tone(1320, 0.45, 'triangle', 0.06, 1300); this.tone(1980, 0.35, 'sine', 0.035, 1960); },
+  nope() { this.tone(180, 0.12, 'square', 0.08, 140); setTimeout(() => this.tone(180, 0.12, 'square', 0.08, 140), 140); },
+  tick() { this.tone(880, 0.09, 'triangle', 0.1, 1320); },
+  found() { [660, 880, 1320].forEach((f, i) => setTimeout(() => this.tone(f, 0.18, 'triangle', 0.1), i * 100)); this.burst(0.3, 500, 0.12, 'bandpass', 3000); },
+  back() { this.tone(600, 0.1, 'sine', 0.08, 380); },
   rumble(on) {
     if (!this.ctx) return;
     const t = this.ctx.currentTime;
@@ -3394,7 +3722,7 @@ const Music = {
     for (const k of ['menu', 'fight']) {
       try {
         const a = new Audio();
-        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'https://cdn.jsdelivr.net/gh/abdelrahmanelsayed252-blip/otman-helwan@9692e69a6cb2/assets/' + k + '.mp3';
+        a.loop = true; a.preload = k === 'menu' ? 'auto' : 'none'; a.volume = 0; a.src = 'assets/' + k + '.mp3';
         this.tracks[k] = a;
       } catch (e) {}
     }
@@ -3567,6 +3895,7 @@ function setFlash(r, k, col = FLASH_WHITE) {
 }
 const TRAIL_COL = d => d >= 100 ? 0xf0483a : d >= 50 ? 0xf7df3a : 0xf4f1e8;
 function fighterFx(f, dt) {
+  if (f === ALLF[0]) kitFrame(dt);
   const r = f.rig, s = f.state, live = mode === 'fight' || mode === 'over';
   const x = f.fx || (f.fx = { dmg: f.dmg, flash: 0, lit: false, ground: true, vy: 0, ko: s === 'ko', trail: 0, slide: 0, atk: null, atkAt: -9 });
   // a hit landed: the damage went up
@@ -3578,9 +3907,9 @@ function fighterFx(f, dt) {
   }
   x.dmg = f.dmg;
   x.flash = Math.max(0, x.flash - dt);
-  const k = clamp(x.flash / 0.1, 0, 1), dk = s === 'dodge' ? 0.55 : 0;
+  const k = clamp(x.flash / 0.1, 0, 1), dk = s === 'dodge' ? 0.55 : kitGlow(f);
   if (k > 0 || dk > 0 || x.lit) {
-    setFlash(r, k > 0 ? k : dk, k > 0 ? FLASH_WHITE : DODGE_TINT); x.lit = k > 0 || dk > 0;
+    setFlash(r, k > 0 ? k : dk, k > 0 ? FLASH_WHITE : s === 'dodge' ? DODGE_TINT : kitCol(f)); x.lit = k > 0 || dk > 0;
     if (k > 0 && s !== 'ko') { r.root.position.x += Math.sin(clock * 95) * 0.055 * k; r.root.position.z += Math.cos(clock * 83) * 0.03 * k; }
   }
   if (live && s === 'dodge') {
@@ -3602,12 +3931,237 @@ function fighterFx(f, dt) {
   const a = f.atk;
   if (live && s === 'attack' && a && !a.m.shot && !a.m.grab && a.t >= a.m.act[0] && x.atk !== a && !(x.atkName === a.name && clock - x.atkAt < a.m.dur)) {
     x.atk = a; x.atkName = a.name; x.atkAt = clock;
-    const m = a.m, fd = faceDir(f.face), col = f === P ? 0xffe9b0 : 0xc4ecff, size = (m.rad + 0.45) * (m.stick ? 1.25 : 1.05);
+    const m = a.m, fd = faceDir(f.face), col = kitHex(f) || (f === P ? 0xffe9b0 : 0xc4ecff), size = (m.rad + 0.45) * (m.stick ? 1.25 : 1.05);
     const px = f.pos.x + fd.x * m.range * 0.85, py = f.pos.y + m.hy, pz = f.pos.z + fd.z * m.range * 0.85 + 0.25;
     const side = fd.x >= 0 ? 0 : Math.PI, tilt = fd.x >= 0 ? 1 : -1;
     if (m.anim === 'airspin' || m.anim === 'spinw') shockRing(f.pos.x, f.pos.y + 1, f.pos.z, col, m.anim === 'spinw' ? 0.95 : 0.75, 0.24);
     else slash(px, py, pz, m.anim === 'upper' ? Math.PI / 2 : m.anim === 'smash' || m.anim === 'slam' ? -Math.PI / 2 + tilt * 0.35 : m.anim === 'kick' ? side + tilt * 0.45 : side + rand(-0.25, 0.25), size, col, m.stick ? 0.2 : 0.14);
   }
+}
+
+/* ---------------- fighter kits: TEST ONLY with ?kit (27 Nov 2026, the user: try it first, never publish) ----------------
+   Five fighters get their own last hit of the light combo, their own heavy, an ultimate and a passive, plus a hit light
+   in their own colour. The ultimate fills a meter (عداد العتمة) as you hit and get hit; press E (or Q, or the gold touch
+   button) when it is full. Clips: 15 Meshy moves on Otman's rig (animation tasks 01a21e30-0f84… and 01a21e30-1221…,
+   45 credits), in assets/models/web/kit-moves.glb, loaded only with ?kit. Strike times measured from the hand's / foot's
+   fastest point. Offline only (online doesn't send the meter or the new moves). Without ?kit nothing here runs. */
+const KITS = {
+  otman:   { col: 0xffc21a, fin: 'k_otman_fin', heavy: 'k_otman_heavy', ult: 'u_otman', perk: 'ledge', ultReach: 7 },
+  kofeyya: { col: 0x35c8ff, fin: 'k_kof_fin', heavy: 'k_kof_heavy', ult: 'u_kofeyya', perk: 'speed', ultReach: 2.8 },
+  karate:  { col: 0xff3b30, fin: 'k_kar_fin', heavy: 'k_kar_heavy', ult: 'u_karate', perk: 'air2', ultReach: 1.7 },
+  afaf:    { col: 0xc07bff, fin: 'k_afaf_fin', heavy: 'k_afaf_heavy', ult: 'u_afaf', perk: 'grab3', ultReach: 2.7 },
+  khott:   { col: 0xff8a1a, fin: 'k_khott_fin', heavy: 'k_khott_heavy', ult: 'u_khott', perk: 'gun2', ultReach: 10 },
+};
+Object.assign(CLIP_MOVE, {
+  k_otman_fin: { c: 'Right_Upper_Hook_from_Guard', start: 0.2, hit: 0.7, end: 1.2 },
+  k_otman_heavy: { c: 'Charged_Axe_Chop', start: 3.7, hit: 4.4, end: 4.9 },
+  u_otman: { c: 'Weapon_Combo_2', start: 0.6, end: 3.5, lin: true },
+  k_kof_fin: { c: 'Left_Hook_from_Guard', start: 0, hit: 0.33, end: 0.8 },
+  k_kof_heavy: { c: 'Charged_Slash', start: 0.6, hit: 1.17, end: 1.6 },
+  u_kofeyya: { c: 'Double_Blade_Spin', start: 0.3, end: 2.0, lin: true },
+  k_kar_fin: { c: 'Roundhouse_Kick', start: 0.5, hit: 1.4, end: 1.9 },
+  k_kar_heavy: { c: 'Flying_Fist_Kick', start: 1.6, hit: 2.9, end: 3.4 },
+  u_karate: { c: 'Weapon_Combo', start: 0.3, end: 3.1, lin: true },
+  k_afaf_fin: { c: 'Left_Short_Hook_from_Guard', start: 0.05, hit: 0.4, end: 0.85 },
+  k_afaf_heavy: { c: 'Shield_Push_Left', start: 0.5, hit: 1.13, end: 1.6 },
+  u_afaf: { c: 'Charged_Ground_Slam', start: 0.6, hit: 1.67, end: 2.3 },
+  k_khott_fin: { c: 'Boxing_Guard_Step_Knee_Strike', start: 0.3, hit: 0.85, end: 1.4 },
+  k_khott_heavy: { c: 'Reaping_Swing', start: 3.5, hit: 4.2, end: 4.8 },
+  u_khott: { c: 'Walk_Forward_While_Shooting_inplace', start: 0, end: 3.2, lin: true },
+});
+// the ultimates: `hits` = strike windows (each target can be hit once per window), `mid` / `last` = the numbers for
+// the strikes before the last one and for the last one; `aoe` = all round him instead of in front; `fire` = shots
+Object.assign(MOVES, {
+  k_otman_fin: { dur: .5, act: [.2, .3], range: 1.0, rad: .75, hy: 1.3, dmg: 9, kb: 6, kbg: .09, up: .7, stun: .45, anim: 'upper', lunge: 3, name: 'خطّافية حلوان!' },
+  k_otman_heavy: { dur: .75, act: [.42, .52], range: 1.3, rad: 1.0, hy: 1.0, dmg: 16, kb: 7.5, kbg: .12, up: .25, stun: .55, anim: 'smash', lunge: 3, stick: true, quake: true, name: 'رزعة العتمة!' },
+  k_kof_fin: { dur: .42, act: [.15, .24], range: .95, rad: .7, hy: 1.35, dmg: 8, kb: 5.5, kbg: .085, up: .4, stun: .4, anim: 'punchL', lunge: 3, name: 'خطّافية الحارة!' },
+  k_kof_heavy: { dur: .5, act: [.22, .32], range: 1.55, rad: .8, hy: 1.25, dmg: 11, kb: 6.2, kbg: .1, up: .4, stun: .42, anim: 'swipe', lunge: 3, stick: true, name: 'لسعة الخيزرانة!' },
+  k_kar_fin: { dur: .5, act: [.22, .32], range: 1.15, rad: .85, hy: 1.3, dmg: 9, kb: 6.5, kbg: .095, up: .45, stun: .42, anim: 'kick', lunge: 3, name: 'كيك الحزام الأسود!' },
+  k_kar_heavy: { dur: .7, act: [.36, .48], range: 1.3, rad: .85, hy: 1.2, dmg: 13, kb: 7.5, kbg: .11, up: .5, stun: .5, anim: 'kick', lunge: 8, hop: 4, name: 'الطيارة!' },
+  k_afaf_fin: { dur: .4, act: [.15, .24], range: .9, rad: .7, hy: 1.4, dmg: 7, kb: 5, kbg: .08, up: .3, stun: .45, anim: 'punchL', lunge: 2.5, name: 'قلم!' },
+  k_afaf_heavy: { dur: .6, act: [.3, .4], range: 1.05, rad: .9, hy: 1.1, dmg: 5, kb: 11, kbg: .16, up: .15, stun: .5, anim: 'swipe', lunge: 4, name: 'زقة الطابور!' },
+  k_khott_fin: { dur: .48, act: [.2, .3], range: .9, rad: .75, hy: 1.0, dmg: 9, kb: 6, kbg: .09, up: .55, stun: .45, anim: 'kick', lunge: 4, name: 'ركبة صعيدي!' },
+  k_khott_heavy: { dur: .7, act: [.36, .5], range: 1.3, rad: 1.15, hy: .9, dmg: 12, kb: 6.5, kbg: .1, up: .35, stun: .55, anim: 'swipe', lunge: 2.5, stick: true, name: 'كنسة الدبشك!' },
+  u_otman: { ult: true, unblock: true, dur: 1.7, act: [.27, 1.48], hits: [[.27, .37], [.78, .88], [1.38, 1.48]], range: 1.15, rad: .95, hy: 1.2, stick: true, anim: 'smash', blink: .22, dark: 1.8, step: 3.5,
+    mid: { dmg: 7, kb: 1.2, kbg: .01, up: .1, stun: .55 }, last: { dmg: 12, kb: 9, kbg: .13, up: .6, stun: .6 }, name: 'عتمة!' },
+  u_kofeyya: { ult: true, unblock: true, dur: 1.5, act: [.4, 1.18], hits: [[.4, .5], [.8, .9], [1.06, 1.18]], aoe: true, range: 0, rad: 2.0, hy: 1.1, stick: true, anim: 'spinw', pull: 3.6,
+    mid: { dmg: 6, kb: 1.5, kbg: 0, up: .3, stun: .5 }, last: { dmg: 10, kb: 8, kbg: .12, up: .9, stun: .6 }, name: 'مولد السيدة!' },
+  u_karate: { ult: true, unblock: true, dur: 1.6, act: [.1, 1.52], hits: [[.1, .19], [.5, .6], [.63, .72], [1.05, 1.15], [1.42, 1.52]], range: 1.1, rad: .95, hy: 1.2, stick: true, anim: 'swipe', lunge: 2, step: 3,
+    mid: { dmg: 5, kb: 1.1, kbg: 0, up: .15, stun: .45 }, last: { dmg: 10, kb: 8.5, kbg: .13, up: .7, stun: .6 }, name: 'هييياااه!' },
+  u_afaf: { ult: true, unblock: true, dur: 1.0, act: [.55, .66], hits: [[.55, .66]], aoe: true, range: 0, rad: 2.6, hy: .9, stick: true, anim: 'slam', dizzy: 1.5, quake: true,
+    last: { dmg: 8, kb: 3, kbg: .02, up: .2, stun: .3 }, name: 'تعالى بكرة!' },
+  u_khott: { ult: true, dur: 1.7, act: [9, 9], hits: [], fire: [.25, .45, .65, .85, 1.05, 1.25], range: 0, rad: 0, hy: 1.35, anim: 'punchR', name: 'التار!' },
+});
+const kitOf = f => KIT_ON && f && f.rig && f.rig.cid ? KITS[f.rig.cid] || null : null;
+const kitMove = (f, k) => { const K = kitOf(f); return K && K[k]; };
+const kitPerk = (f, p) => { const K = kitOf(f); return !!K && K.perk === p; };
+const kitSpeed = f => kitPerk(f, 'speed') ? 1.1 : 1;
+const kitAirDodges = f => kitPerk(f, 'air2') ? 2 : 1;
+const kitGrabCd = f => kitPerk(f, 'grab3') ? 3 : GRAB_CD;
+const kitShotCd = f => kitPerk(f, 'gun2') ? 2 : SHOT_CD;
+const ultArmor = t => t.state === 'attack' && !!t.atk && !!t.atk.m.ult;
+const kitCanUlt = f => !!kitOf(f) && f.ult >= 100 && f.onGround && mode === 'fight';
+const kitCols = {};
+const kitHex = f => { const K = kitOf(f); return K ? K.col : 0; };
+function kitCol(f) { const h = kitHex(f) || 0xffffff; return kitCols[h] || (kitCols[h] = new THREE.Color(h)); }
+let kitDark = 0, kitDarkLights = null, kitFullSaid = false;
+// the coloured hit light: a few point lights reused round-robin (made once, so no shader rebuild mid-fight)
+const kitLights = [];
+if (KIT_ON) for (let i = 0; i < 4; i++) { const l = new THREE.PointLight(0xffffff, 0, 7, 2); l.userData.kit = true; scene.add(l); kitLights.push({ l, t: 0, life: 1, pow: 0 }); }
+let kitLi = 0;
+function kitGlowAt(p, hex, pow, life = 0.24) {
+  const e = kitLights[kitLi++ % kitLights.length]; if (!e) return;
+  e.l.position.set(p.x, p.y + 0.2, p.z + 0.35); e.l.color.setHex(hex); e.l.distance = 5 + pow * 4;
+  e.t = life; e.life = life; e.pow = pow;
+}
+function startUlt(f) {
+  const K = kitOf(f), m = MOVES[K.ult];
+  f.ult = 0; if (f === P) kitFullSaid = false;
+  startAttack(f, K.ult);
+  f.atk.got = new Set(); f.atk.fi = 0;
+  popup(m.name, f, 'combo c5', 44);
+  if (m.dark) kitDark = m.dark;
+  kitGlowAt(tmpV.set(f.pos.x, f.pos.y + 1.2, f.pos.z), K.col, 1.6, 0.5);
+  shockRing(f.pos.x, f.pos.y + 0.15, f.pos.z, K.col, 1.1, 0.45);
+  emitLocal(tmpV.set(f.pos.x, f.pos.y + 1, f.pos.z), K.col, 16, 6, 0.6, 0.5, 2);
+  if (!crowd() || f === P) shake = Math.min(0.6, shake + 0.25);
+  SFX.brk();
+}
+// strikes of an ultimate: several windows, everyone in reach can be hit once per window
+function kitCheckMulti(f, t) {
+  const a = f.atk, m = a.m; if (!a.got) a.got = new Set();
+  const w = m.hits.findIndex(h => a.t >= h[0] && a.t <= h[1]); if (w < 0) return;
+  const key = t.idx * 16 + w; if (a.got.has(key)) return;
+  if (t.state === 'ko' || t.state === 'grabbed' || t.inv > 0 || ultArmor(t)) return;
+  const fd = faceDir(f.face), hx = f.pos.x + (m.aoe ? 0 : fd.x * m.range), hz = f.pos.z + (m.aoe ? 0 : fd.z * m.range), hy = f.pos.y + m.hy;
+  const cy = clamp(hy, t.pos.y + 0.25, t.pos.y + 1.85);
+  if (Math.hypot(hx - t.pos.x, hy - cy, hz - t.pos.z) > m.rad + 0.32) return;
+  a.got.add(key);
+  if (t.dodgeInv > 0) { popup('فلت!', t, t === P ? '' : 'cpu'); return; }
+  const last = w === m.hits.length - 1;
+  const hm = Object.assign({}, m, last ? m.last : m.mid, { name: last ? '' : '' });
+  applyHit(f, t, hm, new V3(m.aoe ? t.pos.x : hx, cy, m.aoe ? t.pos.z : hz));
+  if (last && m.dizzy && t.state === 'hitstun') {
+    t.state = 'dizzy'; t.stunT = m.dizzy; t.vel.x *= 0.3; t.vel.z *= 0.3;
+    popup('مرفوض!', t, 'bad', 26);
+  }
+}
+// after every landed hit (from applyHit): the coloured light and sparks, and the meter
+function kitAfterHit(f, t, m, hp, kb) {
+  if (!KIT_ON) return;
+  const hex = kitHex(f);
+  if (hex) {
+    kitGlowAt(hp, hex, clamp(0.5 + kb * 0.07, 0.6, 1.6) * (m.ult ? 1.4 : 1));
+    emitLocal(hp, hex, 6 + (kb | 0), 4 + kb * 0.35, 0.5, 0.32);
+    if (kb > 7) shockRing(hp.x, hp.y, hp.z, hex, 0.55 + kb * 0.04, 0.28);
+  }
+  if (m.ult) return;
+  if (kitOf(f)) f.ult = Math.min(100, f.ult + (m.dmg || 0) * 1.8);
+  if (kitOf(t)) t.ult = Math.min(100, t.ult + (m.dmg || 0) * 0.8);
+}
+// things an attack does while it runs: Otman's blink out of the dark, the keffiyeh spin's pull, the shots, the heavy's quake
+function kitAttackTick(f, dt) {
+  const a = f.atk; if (!a || !KIT_ON) return;
+  const m = a.m;
+  if (m.hop && !a.hopped && f.onGround) { a.hopped = true; f.vel.y = m.hop; }
+  if (m.blink && !a.blinked && a.t >= m.blink) {
+    a.blinked = true;
+    const foe = nearestFoe(f);
+    if (foe && foe.onGround && !foe.pit && !f.pit && Math.abs(foe.pos.y - f.pos.y) < 0.8) {
+      let dx = foe.pos.x - f.pos.x, dz = foe.pos.z - f.pos.z; const d = Math.hypot(dx, dz);
+      if (d < (kitOf(f) || {}).ultReach + 0.5 && d > 1.2) {
+        dx /= d; dz /= d;
+        for (let i = 0; i < 6; i++) puff(f.pos.x + rand(-0.3, 0.3), f.pos.y + rand(0.3, 1.6), f.pos.z + rand(-0.3, 0.3), 0x14110c, 0.6, 0.35, 0, 0.6, 0);
+        f.pos.x = foe.pos.x - dx * 0.95; f.pos.z = foe.pos.z - dz * 0.95; f.vel.x = f.vel.z = 0; collide(f);
+        f.face = Math.atan2(dx, dz);
+        for (let i = 0; i < 6; i++) puff(f.pos.x + rand(-0.3, 0.3), f.pos.y + rand(0.3, 1.6), f.pos.z + rand(-0.3, 0.3), 0x14110c, 0.6, 0.35, 0, 0.6, 0);
+      }
+    }
+  }
+  // a short step in before each strike, so the ones after the first still reach
+  if (m.step && f.onGround) m.hits.forEach((h, i) => { if (a.t >= h[0] - 0.06 && !(a.stepped & (1 << i))) { a.stepped = (a.stepped || 0) | (1 << i); const d = faceDir(f.face); f.vel.x += d.x * m.step; f.vel.z += d.z * m.step; } });
+  if (m.pull && a.t < 1.0) for (const o of fighters) {
+    if (o === f || allies(o, f) || o.state === 'ko' || o.state === 'grabbed' || o.lives <= 0) continue;
+    const dx = f.pos.x - o.pos.x, dz = f.pos.z - o.pos.z, d = Math.hypot(dx, dz);
+    if (d < m.pull && d > 0.9) { o.vel.x += dx / d * 16 * dt; o.vel.z += dz / d * 16 * dt; }
+  }
+  if (m.fire && NET.role !== 'guest') while (a.fi < m.fire.length && a.t >= m.fire[a.fi]) {
+    a.fi++;
+    const foe = nearestFoe(f);
+    if (foe && Math.hypot(foe.pos.x - f.pos.x, foe.pos.z - f.pos.z) < 14) f.face = Math.atan2(foe.pos.x - f.pos.x, foe.pos.z - f.pos.z);
+    fireShot(f);
+    kitGlowAt(tmpV.set(f.pos.x + faceDir(f.face).x, f.pos.y + 1.35, f.pos.z + faceDir(f.face).z), kitHex(f), 1.1, 0.12);
+  }
+  if (m.quake && !a.quaked && a.t >= m.act[0]) {
+    a.quaked = true;
+    const fd = faceDir(f.face), qx = f.pos.x + (m.aoe ? 0 : fd.x * m.range), qz = f.pos.z + (m.aoe ? 0 : fd.z * m.range);
+    shockRing(qx, f.pos.y + 0.1, qz, kitHex(f), m.aoe ? 1.6 : 0.9, 0.4);
+    for (let i = 0; i < 8; i++) { const an = rand(0, 6.3); puff(qx, f.pos.y + 0.1, qz, 0xb9b2a2, 0.5, 0.4, Math.cos(an) * 3, 0.4, Math.sin(an) * 3); }
+    if (!crowd() || f === P) shake = Math.min(0.6, shake + 0.2);
+  }
+}
+// عتمان's passive: the first time each life he is knocked off the platform he catches the edge
+function kitLedge(f) {
+  if (!kitPerk(f, 'ledge') || f.ledgeUsed || TWIN || f.state === 'ko' || f.state === 'grabbed') return;
+  const az = Math.abs(f.pos.z);
+  if (f.pos.y < -0.25 && f.vel.y < 0 && az > PZ && az < PZ + 1.6 && Math.abs(f.pos.x) < PLAY_X) {
+    f.ledgeUsed = true;
+    f.pos.z = Math.sign(f.pos.z) * (PZ - 0.4); f.pos.y = 0.05; f.vel.set(0, 3, 0); f.pit = false;
+    f.state = 'idle'; f.atk = null; f.stunT = 0;
+    popup('اتسند على الحرف!', f, f === P ? 'move' : 'cpu');
+    emitLocal(tmpV.set(f.pos.x, f.pos.y + 0.2, f.pos.z), kitHex(f), 8, 3, 0.4, 0.3);
+  }
+}
+// the CPU fires its ultimate when it is full and a foe is in reach
+function kitAiUlt(ai, foe, c) {
+  const K = kitOf(ai);
+  if (!K || !foe || ai.ult < 100 || ai.state !== 'idle' || !ai.onGround) return false;
+  const d = Math.hypot(foe.pos.x - ai.pos.x, foe.pos.z - ai.pos.z);
+  if (d > K.ultReach || foe.state === 'ko' || Math.random() > 0.08) return false;
+  ai.face = Math.atan2(foe.pos.x - ai.pos.x, foe.pos.z - ai.pos.z); c.ult = true; return true;
+}
+const kitGlow = f => kitOf(f) && ultArmor(f) ? 0.45 + Math.sin(clock * 30) * 0.15 : 0;
+// once a frame: lights fade, the dark of Otman's ultimate, the meters on the tickets, the touch button
+let kitStyled = false, kitBtn = null;
+function kitFrame(dt) {
+  if (!KIT_ON) return;
+  for (const e of kitLights) { e.t = Math.max(0, e.t - dt); const k = e.t / e.life; e.l.intensity = e.pow * 3.2 * k * k; }
+  // the dark: every other light in the station drops to a sliver while it lasts
+  if (kitDark > 0 || kitDarkLights) {
+    if (!kitDarkLights) { kitDarkLights = []; scene.traverse(o => { if (o.isLight && !o.userData.kit) kitDarkLights.push([o, o.intensity]); }); }
+    kitDark = Math.max(0, kitDark - dt);
+    const k = kitDark > 0 ? Math.min(1, (1.8 - kitDark) / 0.15, kitDark / 0.3) : 0;
+    for (const [o, i0] of kitDarkLights) o.intensity = i0 * (1 - 0.85 * k);
+    if (kitDark <= 0) kitDarkLights = null;
+  }
+  if (!kitStyled) {
+    kitStyled = true;
+    const st = document.createElement('style');
+    st.textContent = `.ultb{position:relative;height:8px;margin-top:5px;background:rgba(20,17,10,.22);border-radius:2px;overflow:hidden}
+.ultb i{position:absolute;inset:0 auto 0 0;width:0;background:linear-gradient(90deg,#a87b00,#ffc21a);transition:width .12s}
+.ultb.full i{background:linear-gradient(90deg,#ffc21a,#fff3a0,#ffc21a);animation:ultp .5s infinite alternate}
+.ultb b{position:absolute;right:4px;top:-1px;font:700 8px/10px 'IBM Plex Sans Arabic',sans-serif;color:#14110c}
+@keyframes ultp{from{filter:brightness(1)}to{filter:brightness(1.35)}}
+#kitUlt{position:fixed;right:calc(var(--mr,18px) + var(--s,64px) * .5);bottom:calc(var(--mb,18px) + var(--s,64px) * 2 + var(--g,10px) * 2 + 10px);
+width:var(--s,64px);height:var(--s,64px);border-radius:50%;border:3px solid #14110c;background:radial-gradient(circle,#fff3a0,#ffc21a 60%,#a87b00);
+font:700 13px 'Rakkas',serif;color:#14110c;box-shadow:0 0 18px #ffc21a;z-index:30;touch-action:none;animation:ultp .5s infinite alternate}`;
+    document.head.appendChild(st);
+    kitBtn = document.createElement('button'); kitBtn.id = 'kitUlt'; kitBtn.type = 'button'; kitBtn.textContent = 'ألتميت'; kitBtn.hidden = true;
+    kitBtn.addEventListener('pointerdown', e => { e.preventDefault(); if (mode === 'fight') P.ctrl.ult = true; });
+    (document.querySelector('#btns') || document.body).appendChild(kitBtn);
+  }
+  for (const f of ALLF) {
+    if (!f.hud) continue;
+    const K = kitOf(f), show = !!K && fighters.includes(f);
+    if (!f.hud.ub) { const d = document.createElement('div'); d.className = 'ultb'; d.innerHTML = '<i></i><b>عتمة · E</b>'; f.hud.card.appendChild(d); f.hud.ub = d; f.hud.ui = d.firstChild; f.hud.ub.hidden = true; }
+    if (f.hud.ub.hidden === show) f.hud.ub.hidden = !show;
+    if (!show) continue;
+    const w = Math.round(f.ult) + '%'; if (f.hud.ui.style.width !== w) f.hud.ui.style.width = w;
+    f.hud.ub.classList.toggle('full', f.ult >= 100);
+    if (f !== P) f.hud.ub.lastChild.textContent = 'عتمة';
+  }
+  if (P.ult >= 100 && kitOf(P) && !kitFullSaid && mode === 'fight') { kitFullSaid = true; popup(coarse ? 'العتمة اتملت! دوس ألتميت' : 'العتمة اتملت! دوس E', P, 'move', 30); }
+  if (kitBtn) { const on = coarse && mode === 'fight' && kitCanUlt(P); if (kitBtn.hidden === on) kitBtn.hidden = !on; }
 }
 
 /* ---------------- DOM refs ---------------- */
@@ -3851,8 +4405,8 @@ const WCLASS = { shoma: 'hammer', studded: 'hammer', pipe: 'hammer', bat: 'hamme
 const weaponHeavy = f => (f.rig && WCLASS[f.rig.wpn]) || 'heavy';
 // running = on the ground, at most of full speed, still pushing the stick
 const running = f => f.onGround && Math.hypot(f.vel.x, f.vel.z) > SPEED * 0.7 && Math.hypot(f.ctrl.mx, f.ctrl.mz) > 0.5;
-function lightName(f) { return f.chainT > 0 && f.chain === 1 ? 'jab2' : f.chainT > 0 && f.chain === 2 ? 'kick' : running(f) ? 'dashk' : 'jab1'; }
-function heavyName(f) { return f.onGround ? (f.chainT > 0 && f.chain === 2 ? 'fin' : running(f) ? 'swing' : weaponHeavy(f)) : 'spike'; }
+function lightName(f) { return f.chainT > 0 && f.chain === 1 ? 'jab2' : f.chainT > 0 && f.chain === 2 ? (kitMove(f, 'fin') || 'kick') : running(f) ? 'dashk' : 'jab1'; }
+function heavyName(f) { return f.onGround ? (f.chainT > 0 && f.chain === 2 ? 'fin' : running(f) ? 'swing' : (kitMove(f, 'heavy') || weaponHeavy(f))) : 'spike'; }
 // a grab (hit or miss) can't be tried again for GRAB_CD seconds (user, 10 Nov 2026: grabbing and
 // throwing was too easy)
 const GRAB_CD = 5;
@@ -3862,13 +4416,14 @@ function startAttack(f, name) {
       if (f === P && clock - f.grabMsgT > 0.9) { f.grabMsgT = clock; popup('المسكة بعد ' + Math.ceil(f.grabCd), P, 'move'); }
       return;
     }
-    f.grabCd = GRAB_CD;
+    f.grabCd = kitGrabCd(f);
   }
   if (name === 'shot') {
     if (f.shotCd > 0) return;
-    f.shotCd = SHOT_CD;
+    f.shotCd = kitShotCd(f);
   }
   const m = MOVES[name];
+  if (TUT.on && f === P) tutEvent('atk', name);
   f.state = 'attack'; f.atk = { name, m, t: 0, hit: false }; f.buffer = null;
   f.chain = m.chain || 0;
   const foe = nearestFoe(f);
@@ -3892,7 +4447,7 @@ function startDodge(f) {
     f.vel.x = c.mx / ml * v; f.vel.z = c.mz / ml * v;
     if (!f.onGround) f.vel.y = Math.max(f.vel.y, 3.5);
   } else { f.vel.x *= 0.2; f.vel.z *= 0.2; if (!f.onGround) f.vel.y = Math.max(f.vel.y, 2); }
-  if (!f.onGround) f.airDodged = true;
+  if (!f.onGround) { f.airDodges = (f.airDodges || 0) + 1; f.airDodged = f.airDodges >= kitAirDodges(f); }
   ownSfx(f, 'whoosh');
   return true;
 }
@@ -3909,6 +4464,7 @@ function positionHeld(f) {
 function doThrow(f) {
   const t = f.holding; release(f);
   if (!t) return;
+  if (TUT.on && f === P) tutEvent('throw');
   const d = faceDir(f.face);
   t.dmg += 9;
   const kb = 7 + t.dmg * 0.11;
@@ -3947,7 +4503,7 @@ function applyHit(f, t, m, hp) {
     SFX.grab(); popup('مسكه!', f, f === P ? '' : 'cpu');
     return;
   }
-  if (t.state === 'guard') {
+  if (t.state === 'guard' && !m.unblock) {
     const tf = faceDir(t.face);
     if (tf.x * -nx + tf.z * -nz > 0.1) {
       t.guard -= m.dmg * 3.2;
@@ -3980,14 +4536,16 @@ function applyHit(f, t, m, hp) {
   if (m.name) popup(m.name, f, f === P ? 'move' : 'cpu');
   if (f.combo >= 2) popup(comboWord(f.combo), f, 'combo c' + Math.min(f.combo, 6), 34);
   cardJolt(t);
+  kitAfterHit(f, t, m, hp, kb);
 }
 function checkHit(f, t) {
   const a = f.atk;
   if (f.state !== 'attack' || !a || a.hit) return;
   const m = a.m;
   if (m.shot) return;
+  if (m.hits) return kitCheckMulti(f, t);
   if (a.t < m.act[0] || a.t > m.act[1]) return;
-  if (t.state === 'ko' || t.state === 'grabbed' || t.inv > 0) return;
+  if (t.state === 'ko' || t.state === 'grabbed' || t.inv > 0 || ultArmor(t)) return;
   const fd = faceDir(f.face);
   const hx = f.pos.x + fd.x * m.range, hz = f.pos.z + fd.z * m.range, hy = f.pos.y + m.hy;
   const cy = clamp(hy, t.pos.y + 0.25, t.pos.y + 1.85);
@@ -4025,7 +4583,7 @@ function respawn(f) {
   const sx = teamPlay() ? (f.team === 0 ? -1 : 1) * (3.5 + 2.2 * Math.max(0, slot)) : ([-3.5, 3.5, -7.5, 7.5][f.idx] || 0);
   f.pos.set(sx, 6, teamPlay() ? [0, -1.4, 1.4, 0][slot] || 0 : 0); f.vel.set(0, 0, 0);
   if (TWIN) f.pos.set([-2.2, 2.2, -6.6, 6.6][slot] || 0, 6, f.team === 0 ? DBC : 0);   // back on your own platform
-  f.dmg = 0; f.guard = 100; f.inv = 2;
+  f.dmg = 0; f.guard = 100; f.inv = 2; f.ledgeUsed = false;
   f.face = TWIN ? (f.team === 0 ? Math.PI : 0) : sx < 0 ? Math.PI / 2 : -Math.PI / 2;
   f.rig.root.rotation.set(0, f.face, 0);
 }
@@ -4043,7 +4601,7 @@ function separate(a, b) {
 // online, the friend's phone plays its own jump/whoosh the moment it moves, so the host doesn't send those
 // (the event carries whose sound it is, so that player's page skips it and everyone else hears it)
 function ownSfx(f, n) { if (NET.role === 'host' && f.net) { NET.sfxBy = fighters.indexOf(f); SFX[n](); NET.sfxBy = -1; } else SFX[n](); }
-function clearPresses(c) { c.jump = c.light = c.heavy = c.grab = c.shot = c.dodge = false; }
+function clearPresses(c) { c.jump = c.light = c.heavy = c.grab = c.shot = c.dodge = c.ult = false; }
 
 // ---- نبلة (slingshot): a pebble flies from the hand; light damage, a guard facing it blocks it ----
 const SHOT_CD = 3, SHOT_SPEED = 19, SHOT_HIT = { dmg: 5, kb: 4.5, kbg: .05, up: .25, stun: .3 };
@@ -4099,7 +4657,7 @@ function updateShots(dt) {
     for (const t of fighters) {
       if (allies(t, s.owner)) continue;
       const dx = s.p.x - t.pos.x, dz = s.p.z - t.pos.z, dy = s.p.y - t.pos.y;
-      if (t.state !== 'ko' && t.state !== 'grabbed' && t.inv <= 0 && t.dodgeInv <= 0 && Math.hypot(dx, dz) < 0.5 && dy > 0.15 && dy < 2.0) { got = t; break; }
+      if (t.state !== 'ko' && t.state !== 'grabbed' && t.inv <= 0 && t.dodgeInv <= 0 && !ultArmor(t) && Math.hypot(dx, dz) < 0.5 && dy > 0.15 && dy < 2.0) { got = t; break; }
     }
     if (got) { applyHit(s.owner, got, SHOT_HIT, s.p.clone()); dropShot(i); continue; }
     if (s.t > 1.4 || s.p.y < PIT_Y) dropShot(i);
@@ -4123,7 +4681,7 @@ function stepFighter(f, dt) {
   f.inv = Math.max(0, f.inv - dt);
   f.grabCd = Math.max(0, f.grabCd - dt); f.shotCd = Math.max(0, f.shotCd - dt);
   f.dodgeCd = Math.max(0, f.dodgeCd - dt); f.dodgeInv = Math.max(0, f.dodgeInv - dt);
-  if (f.onGround) f.airDodged = false;
+  if (f.onGround) { f.airDodged = false; f.airDodges = 0; }
   if (f.state !== 'dodge') f.dodgeInv = 0;
   if (f.state !== 'guard' && f.state !== 'dizzy') f.guard = Math.min(100, f.guard + 14 * dt);
   f.comboT -= dt; f.chainT -= dt; f.bufferT -= dt;
@@ -4149,6 +4707,7 @@ function stepFighter(f, dt) {
   } else if (f.state === 'attack') {
     const a = f.atk;
     a.t += dt;
+    kitAttackTick(f, dt);
     if (c.light) { f.buffer = 'light'; f.bufferT = 0.3; }
     if (c.heavy) { f.buffer = 'heavy'; f.bufferT = 0.3; }
     if (c.jump) { f.buffer = 'jump'; f.bufferT = 0.25; }
@@ -4173,6 +4732,7 @@ function stepFighter(f, dt) {
   if (f.state === 'guard' && c.grab && f.onGround) { f.state = 'idle'; startAttack(f, 'grab'); c.grab = false; }
   if ((f.state === 'idle' || f.state === 'guard') && c.dodge) startDodge(f);
 
+  if (f.state === 'idle' && c.ult && kitCanUlt(f)) startUlt(f);
   if (f.state === 'idle') {
     if (c.jump) doJump(f);
     if (c.light) startAttack(f, f.onGround ? lightName(f) : 'air');
@@ -4186,7 +4746,7 @@ function stepFighter(f, dt) {
     let tx = 0, tz = 0;
     if (ml > 0.12 && c.aim && f.onGround) f.face = turnTo(f.face, Math.atan2(c.mx, c.mz), dt * 9);   // aiming the brick: turn on the spot
     else if (ml > 0.12) {
-      const s = Math.min(1, ml) * SPEED;
+      const s = Math.min(1, ml) * SPEED * kitSpeed(f);
       tx = c.mx / ml * s; tz = c.mz / ml * s;
       f.face = turnTo(f.face, Math.atan2(c.mx, c.mz), dt * 14);
     }
@@ -4208,6 +4768,7 @@ function stepFighter(f, dt) {
   pushFromPosts(f);
   pushFromBoxes(f);
   collide(f);
+  kitLedge(f);
 }
 
 /* ---------------- AI ---------------- */
@@ -4228,6 +4789,7 @@ function aiTarget(ai, dt) {
 function aiThink(ai, foe, dt) {
   const c = ai.ctrl, D = aiParams();
   if (ai.state === 'ko' || ai.state === 'grabbed') { c.mx = c.mz = 0; c.guard = false; return; }
+  if (kitAiUlt(ai, foe, c)) return;
   if (ai.guardT > 0) { ai.guardT -= dt; c.guard = true; } else c.guard = false;
   // continue a planned combo
   if (ai.state === 'attack' && ai.queue.length && ai.atk && ai.atk.t > ai.atk.m.act[1] && !ai.buffer) {
@@ -4462,7 +5024,7 @@ function animate(f, dt) {
   if (r.glb) { glbAnim(f, r, dt, sp); plantFeet(f, r, dt, sp); }
   r.stick.visible = stickOn;
   if (r.bag) r.bag.worn.visible = !stickOn;
-  if (r.sling) r.sling.visible = s === 'attack' && !!f.atk && !!f.atk.m.shot;
+  if (r.sling) r.sling.visible = s === 'attack' && !!f.atk && !!(f.atk.m.shot || f.atk.m.fire);
   if (r.sling && r.sling.visible && r.toss === 'gun') aimGun(r.sling, f.face);
   r.stars.visible = s === 'dizzy';
   if (s === 'dizzy') r.stars.rotation.y += dt * 6;
@@ -4518,13 +5080,13 @@ let touchGuard = false;
 // the stick (an arrow on the ground) and throws on release.
 const TAP_MS = 200, AIM_MS = 350;
 let guardAt = 0, lightAt = 0, lightHeld = false, touchAim = false;
-const KEYMAP = { Space: 'jump', KeyJ: 'light', KeyK: 'heavy', KeyL: 'grab', KeyZ: 'light', KeyX: 'heavy', KeyC: 'grab', KeyU: 'shot', KeyV: 'shot', KeyO: 'dodge', KeyB: 'dodge' };
+const KEYMAP = { Space: 'jump', KeyJ: 'light', KeyK: 'heavy', KeyL: 'grab', KeyZ: 'light', KeyX: 'heavy', KeyC: 'grab', KeyU: 'shot', KeyV: 'shot', KeyO: 'dodge', KeyB: 'dodge', KeyE: 'ult', KeyQ: 'ult' };
 addEventListener('keydown', e => {
   if (e.target && e.target.tagName === 'INPUT') return;
   if (['Space', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.code)) e.preventDefault();
   keys.add(e.code);
   if (mode === 'fight' && !e.repeat && KEYMAP[e.code]) P.ctrl[KEYMAP[e.code]] = true;
-  if (mode === 'menu') menuKey(e);
+  if (mode === 'menu') { if ($('#welcome').hidden) menuKey(e); }
   else if (mode === 'over' && !el.result.hidden && !e.repeat) {
     if (e.code === 'Enter' || e.code === 'NumpadEnter') { e.preventDefault(); startMatch(); }
     else if (e.code === 'Escape') toMenu();
@@ -4739,7 +5301,8 @@ function placeForFight() {
 }
 function startMatch() {
   if (NET.role === 'guest') return guestAgain();   // only the room's host starts a match
-  if (GLB.ready && lockOf(sel.char)) { renderChar(); $('#charB').classList.remove('nope'); void $('#charB').offsetWidth; $('#charB').classList.add('nope'); SFX.init(); SFX.ui(false); return; }
+  if (GLB.ready && lockOf(sel.char)) { renderChar(); const b = el.go; b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); SFX.init(); SFX.ui(false); return; }
+  SFX.init(); SFX.pick();
   SFX.init();
   savePrefs();
   const n = modeCount();
@@ -4857,6 +5420,7 @@ function fillResult(win) {
   $('#rPts').textContent = '+' + fmtN(matchPoints(mine, P.stats.kos, P.stats.maxCombo, !NET.role)) + ' نقطة' + (NET.role ? '' : diff === 'auto' ? ' · الخصم مستوى ' + skillLevel() : ' · الخصم ' + DIFF_LABEL[diff]);
 }
 function toMenu() {
+  if (TUT.on) { TUT.on = false; gmode = TUT.prevMode || gmode; $('#tut').hidden = true; $('#tutBig').hidden = true; el.hud.classList.remove('tutorial'); }
   if (NET.role) netLeave();
   setMap(false);
   mode = 'menu';
@@ -4886,9 +5450,9 @@ const OPT_NOTE = {
 };
 const SLOTS = ['mask', 'chest', 'cape', 'legs'];
 const DIFF_ORDER = ['auto', 'easy', 'normal', 'hard'], DIFF_LABEL = { auto: 'بيتعلم منك', easy: 'سهل', normal: 'متوسط', hard: 'صعب' };
-const scr = { main: $('#sMain'), char: $('#sChar'), tailor: $('#sTailor'), moves: $('#sMoves'), online: $('#sOnline'), scores: $('#sScores') };
+const scr = { main: $('#sMain'), play: $('#sPlay'), settings: $('#sSet'), pick: $('#sPick'), char: $('#sChar'), tailor: $('#sTailor'), moves: $('#sMoves'), online: $('#sOnline'), scores: $('#sScores') };
 const tabsEl = $('#tabs'), optsEl = $('#opts');
-let mscreen = 'main', tailSlot = 'mask', cur = 0;
+let mscreen = 'main', tailSlot = 'mask', cur = 0, prevScr = 'main';
 tabsEl.innerHTML = SLOTS.map(k => `<button class="tab" type="button" role="tab" data-k="${k}">${SLOT_LABEL[k]}</button>`).join('');
 if (coarse) document.querySelectorAll('[data-kb]').forEach(n => n.hidden = true);
 
@@ -4922,16 +5486,18 @@ function setCur(i, kb) {
   }
 }
 function showScreen(s, kb) {
-  if (mscreen === 'online' && s !== 'online' && NET.role) netLeave();
+  if (mscreen === 'online' && s !== 'online') { mmCancel(true); if (NET.role) netLeave(); }
   if (s === 'char' && mscreen !== 'char') { spinYaw = 0.3; spinVel = 0; }
   if (mscreen === 'char' && s !== 'char') { P.dance = false; document.querySelectorAll('.cpdance .mi').forEach(b => b.classList.remove('on')); }
-  if (s === 'online') netLobbyReset();
+  if (s === 'online') { netLobbyReset(); onTab(onTabNow); }
   if (s === 'scores') loadScores();
   mscreen = s; el.menu.dataset.screen = s;
   for (const k in scr) scr[k].hidden = k !== s;
   if (s === 'tailor') buildOpts();
-  setCur(s === 'tailor' ? sel[tailSlot] : s === 'char' ? Math.max(0, items().indexOf($('#cpOk'))) : 0, kb);
-  SFX.ui(true);
+  if (s === 'pick') renderPick();
+  setCur(s === 'tailor' ? sel[tailSlot] : s === 'char' ? Math.max(0, items().indexOf($('#cpOk'))) : s === 'pick' ? Math.max(0, items().indexOf($('#pkOk'))) : 0, kb);
+  if (s === 'main' && prevScr !== 'main') SFX.back(); else SFX.ui(true);
+  prevScr = s;
 }
 const MODES = ['duel', 'ffa', 'tdm', 'elim'], SIZE_OPTS = { ffa: [3, 4], tdm: [2, 3, 4], elim: [2, 3, 4] };
 const MODE_HINT = { duel: '', ffa: 'كل واحد لنفسه', tdm: 'فريقين، واللي يقع يرجع', elim: 'فريقين، واللي يقع مايرجعش لآخر الجولة' };
@@ -4945,6 +5511,13 @@ function renderMode() {
     b.textContent = gmode === 'ffa' ? v + ' مقاتلين' : v + ' ضد ' + v + (v === 4 ? ' · رصيفين' : '');
     const on = SIZES[gmode] === v; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false');
   });
+  renderMatch();
+}
+// the main screen's match ticket says what is set on the match screen
+function renderMatch() {
+  const n = SIZES[gmode], m = gmode === 'duel' ? '1 ضد 1' : gmode === 'ffa' ? 'كله في كله · ' + n : (gmode === 'tdm' ? 'الفتونة · ' : 'جولة عدالة · ') + n + ' ضد ' + n;
+  const d = diff === 'auto' ? 'الخصم بيتعلم منك' : 'الخصم ' + ({ easy: 'سهل', normal: 'متوسط', hard: 'صعب' })[diff];
+  const t = $('#matchV'); if (t) t.textContent = m + ' · ' + d;
 }
 function cycleMode(d) { gmode = MODES[(MODES.indexOf(gmode) + d + 4) % 4]; renderMode(); savePrefs(); SFX.ui(true); }
 function cycleSize(d) { const o = SIZE_OPTS[gmode]; if (!o) return; SIZES[gmode] = o[(o.indexOf(SIZES[gmode]) + d + o.length) % o.length]; renderMode(); savePrefs(); SFX.ui(true); }
@@ -4954,6 +5527,7 @@ function renderDiff() {
   $('#lvlV').textContent = skillLevel() + ' من 10';
   $('#diffV').textContent = diff === 'auto' ? 'بيقوى لما تكسب ويهدى لما تخسر' : '';
   document.querySelectorAll('#diff .tier').forEach(b => { const on = b.dataset.d === diff; b.classList.toggle('on', on); b.setAttribute('aria-checked', on ? 'true' : 'false'); });
+  renderMatch();
 }
 // once the 3D characters are in, the tailor gives way to picking a character
 function renderChar() {
@@ -4971,6 +5545,7 @@ function renderChar() {
   you.hidden = !on || !art;
   if (art) { you.style.left = art.x + '%'; you.style.top = art.y + '%'; }
   $('#back').textContent = on ? 'غيّر الشخصية' : 'غيّر البدلة';
+  if (pickBuilt) renderPick();
 }
 function cycleChar(d) { sel.char = (sel.char + d + CHARS.length) % CHARS.length; renderChar(); rebuildPlayer(); savePrefs(); P.anim.t = 0; SFX.ui(true); }
 function renderMute() {
@@ -4978,6 +5553,7 @@ function renderMute() {
   $('#muteMV').textContent = Music.off ? 'مقفولة' : 'شغالة';
   $('#hMute').classList.toggle('off', SFX.muted); $('#hMuteM').classList.toggle('off', Music.off);
   $('#mute').classList.toggle('off', SFX.muted); $('#muteM').classList.toggle('off', Music.off);
+  $('#qSfx').classList.toggle('off', SFX.muted); $('#qMusic').classList.toggle('off', Music.off);
 }
 // hit/effect sounds and the music switch apart, from the menu, the in-game buttons or N / M
 function toggleSfx() { SFX.setMute(!SFX.muted); renderMute(); savePrefs(); }
@@ -5011,7 +5587,7 @@ $('#diff').addEventListener('click', e => {
 $('#charB').addEventListener('click', e => {
   const a = e.target.closest('#charPrev, #charNext');
   if (a) cycleChar(a.id === 'charPrev' ? -1 : 1);
-  if (GLB.ready) showScreen('char', e.detail === 0);
+  if (GLB.ready) showScreen('pick', e.detail === 0);
 });
 $('#cpPrev').addEventListener('click', () => cycleChar(-1));
 let spinYaw = 0.3, spinVel = 0, spinDrag = null;
@@ -5035,9 +5611,71 @@ function previewDance(name) {
 $('#cpD1').addEventListener('click', () => previewDance('dance'));
 $('#cpD2').addEventListener('click', () => previewDance('dance2'));
 $('#cpNext').addEventListener('click', () => cycleChar(1));
+// ---- the card pick screen: the big card on one side, every fighter as a tile (pictures from the promo site,
+// made smaller into assets/ui/chars/: <id>.webp full body, <id>-b.webp the head and chest) ----
+const CARD = {
+  otman: ['yel', 'شومة', 'نبلة', 'رزعة'], kofeyya: ['grn', 'خيزرانة', 'طوبة', 'لسعة'], karate: ['pink', 'نيتشاكو', 'طوبة', 'لسعة'],
+  robin: ['sand', 'ماسورة حديد بكوع', 'نبلة', 'رزعة'], feminist: ['pink', 'عصاية بو حمرا', 'نبلة', 'نغزة'], satohy: ['yel', 'عصاية زفة', 'طوبة', 'لسعة'],
+  ankh: ['grn', 'عصا فرعوني دهب', 'نبلة', 'نغزة'], abubakarir: ['pink', 'مقشة', 'نبلة', 'كنسة'], madiha: ['grn', 'عصاية سيلفي', 'نبلة', 'نغزة'],
+  abushogy: ['sand', 'شومة سودا بمسامير', 'طوبة', 'رزعة'], arees: ['yel', 'سنجة', 'نبلة', 'رزعة'], afaf: ['grn', 'شنطتها الجلد', 'طوبة', 'شنطة'],
+  zombie: ['pink', 'مخدة', 'طوبة', 'لسعة'], amsha: ['sand', 'عصاية بطلاسم', 'طوبة', 'لسعة'], hanouty: ['yel', 'جاروف', 'طوبة', 'رزعة'],
+  arbawy: ['grn', 'عصاية هجّانة', 'طوبة', 'لسعة'], sally: ['pink', 'مبخرة', 'نبلة', 'شنطة'], khott: ['sand', 'بندقية قديمة', 'عيار', 'رزعة'],
+  baz: ['pink', 'خرطوم هوا', 'نبلة', 'لسعة'], koky: ['yel', 'مغرفة', 'طوبة', 'رزعة'], gorilla: ['grn', 'بالونة طويلة', 'طوبة', 'رزعة'],
+  panda: ['sand', 'زمارة حفلات', 'نبلة', 'نغزة'], khafif: ['yel', 'راية الكورنر', 'طوبة', 'نغزة'], temsah: ['pink', 'مجداف', 'طوبة', 'رزعة'],
+  saalouk: ['sand', 'عكاز', 'طوبة', 'رزعة'],
+};
+const cardOf = i => CARD[CHARS[i].id] || ['yel', '', '', ''];
+// the carousel (menu v4, 28 Nov 2026; the user's reference video): every fighter is a card, the picked one
+// big in the middle with a glow in its colour and a light running round its edge, the others smaller and
+// dimmer to both sides. A tap on a side card, the arrows, or ← → move it; each move whooshes.
+const CARD_COL = { yel: ['#F4E31C', 'rgba(110,80,0,.92)', 'rgba(244,227,28,.42)'], grn: ['#8FCFAE', 'rgba(12,70,52,.92)', 'rgba(143,207,174,.4)'],
+  pink: ['#F29DB3', 'rgba(110,20,52,.92)', 'rgba(242,157,179,.42)'], sand: ['#E3BB93', 'rgba(90,50,18,.92)', 'rgba(227,187,147,.4)'] };
+let pickBuilt = false;
+function buildPick() {
+  pickBuilt = true;
+  $('#pkStage').insertAdjacentHTML('beforeend', CHARS.map((c, i) => { const k = cardOf(i), col = CARD_COL[k[0]] || CARD_COL.yel;
+    return `<button type="button" class="pcard" data-i="${i}" aria-label="${c.n}" style="--cbg:${col[0]};--cdeep:${col[1]}"><img loading="lazy" src="assets/ui/chars/${c.id}-b.webp" alt=""><span class="pc-shade"></span><span class="pc-lock" hidden><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg></span><span class="pc-txt"><b>${c.n}</b><small>${k[1]} · ${k[2]}</small></span></button>`; }).join(''));
+}
+function renderPick() {
+  if (!pickBuilt) buildPick();
+  const i = sel.char, c = CHARS[i], k = cardOf(i), lk = lockOf(i), N = CHARS.length, col = CARD_COL[k[0]] || CARD_COL.yel;
+  $('#pkName').textContent = c.n; $('#pkNote').textContent = c.note || '';
+  $('#pkW').textContent = k[1]; $('#pkT').textContent = k[2]; $('#pkH').textContent = k[3];
+  $('#pkLock').hidden = !lk; $('#pkLock').textContent = lk ? '🔒 ' + lk : '';
+  $('#pkOk').textContent = lk ? 'مقفول' : 'اختاره'; $('#pkOk').classList.toggle('locked', !!lk);
+  $('#pkGlow').style.setProperty('--g', col[2]); $('#pkRing').style.setProperty('--rc', col[0]); $('#pkRing').style.setProperty('--g', col[2]);
+  const X = [0, 0.86, 1.5, 1.98], SC = [1, 0.84, 0.7, 0.58], OP = [1, 0.62, 0.34, 0.14], BR = [1, 0.62, 0.45, 0.35];
+  document.querySelectorAll('#pkStage .pcard').forEach(t => {
+    const j = +t.dataset.i; let d = j - i; if (d > N / 2) d -= N; if (d < -N / 2) d += N;
+    const a = Math.min(Math.abs(d), 3), far = Math.abs(d) > 3, sg = d < 0 ? 1 : -1, lkj = lockOf(j);
+    t.style.transform = `translateX(calc(-50% + ${sg * X[a]} * var(--cw))) scale(${SC[a]})`;
+    t.style.opacity = far ? 0 : OP[a]; t.style.zIndex = 10 - a; t.style.pointerEvents = far ? 'none' : 'auto';
+    t.style.filter = `brightness(${BR[a]})` + (lkj ? ' grayscale(.7)' : '');
+    t.classList.toggle('on', d === 0); t.tabIndex = d === 0 ? 0 : -1;
+    t.querySelector('.pc-lock').hidden = !lkj;
+  });
+}
+$('#pkStage').addEventListener('click', e => {
+  const t = e.target.closest('.pcard'); if (!t) return;
+  const i = +t.dataset.i; if (i === sel.char) return $('#pkOk').click();
+  sel.char = i; renderChar(); rebuildPlayer(); savePrefs(); P.anim.t = 0; SFX.init(); SFX.ui(true);
+});
+$('#pkPrev').addEventListener('click', () => { SFX.init(); cycleChar(-1); });
+$('#pkNext').addEventListener('click', () => { SFX.init(); cycleChar(1); });
+// a swipe on the cards moves them too (phones)
+{ let sx = null; const st = $('#pkStage');
+  st.addEventListener('pointerdown', e => { sx = e.clientX; });
+  st.addEventListener('pointerup', e => { if (sx == null) return; const dx = e.clientX - sx; sx = null; if (Math.abs(dx) > 40) { SFX.init(); cycleChar(dx > 0 ? 1 : -1); } }); }
+$('#pkOk').addEventListener('click', () => {
+  SFX.init();
+  if (lockOf(sel.char)) { const b = $('#pkOk'); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); SFX.ui(false); return; }
+  SFX.pick(); showScreen('main', true);
+});
+$('#pk3d').addEventListener('click', () => { if (GLB.ready) showScreen('char', true); });
+
 $('#cpOk').addEventListener('click', () => {
   if (lockOf(sel.char)) { const b = $('#cpOk'); b.classList.remove('nope'); void b.offsetWidth; b.classList.add('nope'); SFX.ui(false); return; }
-  showScreen('main', true);
+  showScreen('pick', true);
 });
 $('#rnd').addEventListener('click', () => {
   for (const k of SLOTS) sel[k] = rand(0, OPTS[k].length) | 0;
@@ -5045,11 +5683,196 @@ $('#rnd').addEventListener('click', () => {
 });
 el.mute.addEventListener('click', toggleSfx);
 $('#muteM').addEventListener('click', toggleMusic);
+$('#qMusic').addEventListener('click', () => { SFX.init(); toggleMusic(); SFX.ui(true); });
+$('#qSfx').addEventListener('click', () => { SFX.init(); toggleSfx(); SFX.ui(true); });
 $('#hMute').addEventListener('click', e => { e.currentTarget.blur(); toggleSfx(); });
 $('#hMuteM').addEventListener('click', e => { e.currentTarget.blur(); toggleMusic(); });
 addEventListener('keydown', e => { if (e.target && e.target.tagName === 'INPUT') return; if (e.code === 'KeyN') toggleSfx(); else if (e.code === 'KeyM') toggleMusic(); });
 el.nm.addEventListener('change', savePrefs);
 el.nm.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === 'Escape') el.nm.blur(); });
+
+
+/* ---------------- online: play with people (matchmaking) ---------------- */
+// (user, 28 Nov 2026: "like PUBG, pick a fight and the game gathers players")
+// Built on the same rooms as the friends' rooms, no server change: everyone looking for the same fight sits
+// in one waiting room (otman-mm-<mode>). The one who has waited longest decides: when enough are in (or after
+// 25 s with at least two, for the 4-player fights; the CPU takes the empty places), he picks a room code and
+// names who goes, then opens that room as its host and the others join it as friends. The host starts the
+// match when they are all in.
+let onTabNow = 'quick';
+const MM = { on: false, r: null, unsub: null, m: 'duel', peers: null, me: null, t0: 0, timer: null, going: false, need: 2, hostWait: null };
+const mmNeed = m => m === 'duel' ? 2 : 4;
+const mmSize = m => m === 'ffa' ? 4 : m === 'duel' ? 2 : 2;
+function onTab(t) {
+  onTabNow = t;
+  $('#tabQuick').classList.toggle('on', t === 'quick'); $('#tabFriends').classList.toggle('on', t === 'friends');
+  $('#onQuick').hidden = t !== 'quick'; $('#onFriends').hidden = t !== 'friends';
+  if (t !== 'quick') mmCancel(true);
+  mmRender();
+  setCur(0, false);
+}
+$('#tabQuick').addEventListener('click', () => { if (onTabNow !== 'quick') { SFX.ui(true); onTab('quick'); } });
+$('#tabFriends').addEventListener('click', () => { if (onTabNow !== 'friends') { SFX.ui(true); onTab('friends'); } });
+$('#qModes').addEventListener('click', e => {
+  const b = e.target.closest('.qmode'); if (!b || MM.on) return;
+  if (!MULTI && b.dataset.m !== 'duel') { SFX.ui(false); return; }
+  MM.m = b.dataset.m; SFX.ui(true); mmRender();
+});
+$('#qBack').addEventListener('click', () => showScreen('main'));
+$('#qCancel').addEventListener('click', () => { mmCancel(); SFX.back(); });
+$('#qFind').addEventListener('click', mmFind);
+const MODE_NAME = { duel: '1 ضد 1', ffa: 'كله في كله', tdm: 'الفتونة', elim: 'جولة عدالة' };
+function mmRender() {
+  document.querySelectorAll('#qModes .qmode').forEach(b => { b.classList.toggle('on', b.dataset.m === MM.m); b.classList.toggle('off', !MULTI && b.dataset.m !== 'duel'); });
+  const need = mmNeed(MM.m), found = MM.on ? Math.max(1, mmList().length) : 0;
+  const full = MM.going;
+  $('#qTitle').textContent = full ? 'لقينا!' : MM.on ? 'بندوّر على ناس...' : MODE_NAME[MM.m] + ' · ' + (need === 2 ? 'لاعيبين' : MM.m === 'ffa' ? '4 لاعيبة' : '2 ضد 2');
+  $('#qLine').textContent = full ? 'الخناقة بتبدأ دلوقتي' : MM.on ? 'لقينا ' + Math.min(found, need) + ' من ' + need : need === 2 ? 'هنلاقيلك خصم في ثواني' : 'هنجمعلك ' + (need - 1) + ' لاعيبة كمان';
+  const slots = $('#qSlots'); if (slots.children.length !== need) slots.innerHTML = Array.from({ length: need }, () => '<span class="qs"><i></i><em></em></span>').join('');
+  [...slots.children].forEach((n, i) => { const on = MM.on && i < found; n.classList.toggle('on', on); n.querySelector('em').textContent = i === 0 ? 'إنت' : on ? 'لاعب' : 'مستني'; });
+  $('#qFind').hidden = MM.on; $('#qCancel').hidden = !MM.on || MM.going;
+}
+function mmList() {
+  if (!MM.peers) return [];
+  return MM.peers.filter(p => p.presence && p.presence.mm === 1 && !p.presence.go).sort((a, b) => (a.presence.t - b.presence.t) || (a.peer < b.peer ? -1 : 1));
+}
+async function mmFind() {
+  SFX.init();
+  if (needClaim()) { onTab('friends'); onStatus('اختار اسمك الأول، وبعدها دوّر على خناقة.', true); return; }
+  const room = await getRoom();
+  if (!room) { $('#qLine').textContent = 'الأونلاين مش متاح دلوقتي'; SFX.ui(false); return; }
+  SFX.pick();
+  MM.need = mmNeed(MM.m); MM.on = true; MM.going = false; MM.t0 = Date.now(); MM.peers = null; mmRender();
+  try { MM.r = await room.join('otman-mm-' + MM.m); }
+  catch (e) { MM.on = false; mmRender(); $('#qLine').textContent = 'معرفناش ندوّر دلوقتي، جرب تاني'; return; }
+  if (!MM.on) { MM.r.leave().catch(() => {}); MM.r = null; return; }   // cancelled while joining
+  MM.r.presence({ mm: 1, t: MM.t0, name: myName() });
+  MM.unsub = MM.r.onPeers(mmPeers, () => { if (MM.on && !MM.going) { mmCancel(true); $('#qLine').textContent = 'الاتصال فصل، جرب تاني'; } });
+  MM.timer = setInterval(mmCheck, 1000);
+}
+function mmPeers(ch) {
+  if (!MM.on || MM.going) return;
+  MM.peers = ch.peers; const mine = ch.peers.find(p => p.isMe); if (mine) MM.me = mine.peer;
+  for (const p of ch.peers) { const go = !p.isMe && p.presence && p.presence.go; if (go && go.ids && go.ids.includes(MM.me)) return mmGo(go.code, 'guest'); }
+  const before = MM.seen || 0, n = mmList().length; MM.seen = n;
+  if (n > before && before) SFX.tick();
+  mmRender(); mmCheck();
+}
+function mmCheck() {
+  if (!MM.on || MM.going || !MM.peers) return;
+  const list = mmList(); if (!list.length || list[0].peer !== MM.me) return;   // only the one who has waited longest decides
+  const waited = (Date.now() - MM.t0) / 1000;
+  if (list.length >= MM.need || (MM.need > 2 && list.length >= 2 && waited > 25)) {
+    const ids = list.slice(0, MM.need).map(p => p.peer);
+    const A = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789', code = Array.from({ length: 4 }, () => A[Math.floor(Math.random() * A.length)]).join('');
+    MM.r.presence({ mm: 0, go: { code, ids } });
+    mmGo(code, 'host', ids.length);
+  }
+}
+async function mmGo(code, role, n) {
+  MM.going = true; clearInterval(MM.timer); MM.timer = null; SFX.found(); mmRender();
+  const r = MM.r, un = MM.unsub; MM.r = null; MM.unsub = null;
+  setTimeout(() => { if (un) un(); if (r) r.leave().catch(() => {}); }, role === 'host' ? 900 : 100);   // the host stays a moment so all see the code
+  if (role === 'host') { gmode = MM.m; if (SIZE_OPTS[gmode]) SIZES[gmode] = mmSize(gmode); renderMode(); }
+  if (!(await netJoin(role, code))) { MM.on = MM.going = false; mmRender(); $('#qLine').textContent = 'حصلت مشكلة، دوّر تاني'; return; }
+  if (role === 'host') {
+    const t0 = Date.now();
+    MM.hostWait = setInterval(() => {
+      if (!NET.role) { clearInterval(MM.hostWait); return; }
+      const all = NET.gs.size >= n - 1, late = Date.now() - t0 > 10000;
+      if ((all || late) && NET.gs.size > 0) { clearInterval(MM.hostWait); MM.on = MM.going = false; startMatch(); }
+      else if (late) { clearInterval(MM.hostWait); netLeave(); MM.on = MM.going = false; mmRender(); $('#qLine').textContent = 'الناس اتأخرت، دوّر تاني'; }
+    }, 300);
+  } else { MM.on = MM.going = false; }   // a friend's page: the host starts the match
+}
+function mmCancel(quiet) {
+  clearInterval(MM.timer); MM.timer = null; clearInterval(MM.hostWait);
+  if (MM.unsub) MM.unsub(); if (MM.r) MM.r.leave().catch(() => {});
+  const was = MM.on; Object.assign(MM, { on: false, r: null, unsub: null, peers: null, going: false, seen: 0 });
+  if (was && !quiet) mmRender(); else if (!quiet) mmRender();
+}
+
+/* ---------------- first time: your name, then the practice or skip ---------------- */
+const WELCOME_KEY = 'otman-helwan-welcome';
+function welcomeDone() { try { return !!localStorage.getItem(WELCOME_KEY); } catch (e) { return true; } }
+function welcomeShow() {
+  $('#welcome').hidden = false; $('#wlName').hidden = false; $('#wlPick').hidden = true;
+  $('#wlIn').value = ''; setTimeout(() => { if (!coarse) $('#wlIn').focus(); }, 200);
+}
+let wlBusy = false;
+async function welcomeName() {
+  SFX.init(); Music.kick();
+  const name = cleanName($('#wlIn').value, ''), msg = $('#wlMsg');
+  if (name.length < 2) { msg.textContent = 'الاسم لازم يكون حرفين على الأقل'; msg.classList.add('bad'); SFX.ui(false); return; }
+  if (wlBusy) return; wlBusy = true; msg.classList.remove('bad'); msg.textContent = 'بنثبّت الاسم...';
+  let r = null, down = false;
+  if (NAME_LOCK) { try { r = await claimName(name); } catch (e) { down = true; } }
+  wlBusy = false;
+  if (r && r.err === 'taken') { msg.textContent = 'الاسم ده حد تاني واخده، اختار غيره'; msg.classList.add('bad'); SFX.ui(false); return; }
+  if (r && !r.ok && r.err !== 'locked') { msg.textContent = 'الاسم مينفعش: من 2 لـ 18 حرف، من غير رموز غريبة'; msg.classList.add('bad'); SFX.ui(false); return; }
+  if (r && (r.ok || r.err === 'locked')) { const v = idGet() || {}; v.name = r.name; v.until = r.until; idSet(v); el.nm.value = r.name; }
+  else el.nm.value = name;   // the online server didn't answer: keep it here, it gets fixed the first time you go online
+  renderName(); savePrefs(); SFX.pick();
+  try { localStorage.setItem(WELCOME_KEY, '1'); } catch (e) {}
+  $('#wlHi').textContent = 'أهلاً يا ' + myName();
+  $('#wlName').hidden = true; $('#wlPick').hidden = false;
+}
+$('#wlGo').addEventListener('click', welcomeName);
+$('#wlIn').addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Enter') { e.preventDefault(); welcomeName(); } });
+$('#wlSkip').addEventListener('click', () => { SFX.init(); SFX.back(); $('#welcome').hidden = true; try { localStorage.setItem('otman-helwan-tut', 'skip'); } catch (e) {} });
+$('#wlLearn').addEventListener('click', () => { SFX.init(); SFX.pick(); $('#welcome').hidden = true; startTutorial(); });
+$('#tutB').addEventListener('click', () => { SFX.init(); SFX.pick(); startTutorial(); });
+
+/* ---------------- the practice ---------------- */
+// On the platform with a fighter who only stands there; no trains, no clock. Each step ticks when you
+// actually do it: walk both ways, double jump, three light hits, a heavy, hold guard, grab and throw.
+const TUT = { on: false, step: 0, l: 0, r: 0, lastX: 0, light: 0, guardT: 0, doneT: 0, prevMode: null };
+const TUT_STEPS = [
+  ['امشي يمين وشمال', 'A / D', 'العصاية', 'روح يمين... وارجع شمال'],
+  ['نط، ونط تاني في الهوا', 'Space', 'نط', 'نط مرتين!'],
+  ['اضرب خفيف 3 مرات', 'J', 'خفيفة', 'طاخ طاخ شلوت!'],
+  ['اضرب تقيلة', 'K', 'تقيلة', 'رزعة!'],
+  ['اقفل الدفاع ثانية', 'Shift', 'دفاع', 'اقفل الدرع!'],
+  ['امسكه وارميه', 'L', 'مسك', 'رمية بلدي!']
+];
+function startTutorial() {
+  if (NET.role) netLeave();
+  Object.assign(TUT, { on: true, step: 0, l: 0, r: 0, light: 0, guardT: 0, doneT: 0, prevMode: gmode });
+  gmode = 'duel';
+  startMatch();
+  if (mode !== 'count') { TUT.on = false; gmode = TUT.prevMode; return; }
+  P.lives = C.lives = 99; C.name = 'المدرّب';
+  TUT.lastX = P.pos.x;
+  $('#tut').hidden = false; el.hud.classList.add('tutorial'); tutRender(); tutBig(TUT_STEPS[0][3]);
+}
+function tutRender() {
+  $('#tutList').innerHTML = TUT_STEPS.map((t, i) => `<li class="${i < TUT.step ? 'ok' : i === TUT.step ? 'now' : ''}"><i>${i < TUT.step ? '✓' : i + 1}</i><span>${t[0]}</span><kbd>${coarse ? t[2] : t[1]}</kbd></li>`).join('');
+}
+function tutBig(t) { const b = $('#tutBig'); b.textContent = t; b.hidden = false; b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop'); }
+function tutNext() {
+  TUT.step++; SFX.tick(); tutRender();
+  if (TUT.step >= TUT_STEPS.length) { SFX.found(); tutBig('جاهز يا بطل!'); TUT.doneT = 2.2; try { localStorage.setItem('otman-helwan-tut', 'done'); } catch (e) {} }
+  else tutBig(TUT_STEPS[TUT.step][3]);
+}
+function tutEvent(kind, name) {
+  if (!TUT.on || TUT.step >= TUT_STEPS.length) return;
+  if (kind === 'atk') {
+    if (TUT.step === 2 && ['jab1', 'jab2', 'kick', 'dashk', 'air'].includes(name)) { if (++TUT.light >= 3) tutNext(); }
+    else if (TUT.step === 3 && !['jab1', 'jab2', 'kick', 'dashk', 'air', 'grab', 'shot'].includes(name)) tutNext();
+  } else if (kind === 'throw' && TUT.step === 5) tutNext();
+}
+function tutTick(dt) {
+  if (!TUT.on) return;
+  matchT = 180; if (train.state === 'idle') train.t = 99;
+  P.lives = C.lives = 99;
+  if (TUT.doneT > 0) { if ((TUT.doneT -= dt) <= 0) tutEnd(); return; }
+  const dx = P.pos.x - TUT.lastX; TUT.lastX = P.pos.x;
+  if (TUT.step === 0) { if (dx > 0) TUT.r += dx; else TUT.l -= dx; if (TUT.l > 1.2 && TUT.r > 1.2) tutNext(); }
+  else if (TUT.step === 1) { if (!P.onGround && P.jumps === 0) tutNext(); }
+  else if (TUT.step === 4) { if (P.state === 'guard') { if ((TUT.guardT += dt) > 1) tutNext(); } }
+}
+function tutEnd() { if (!TUT.on) return; toMenu(); }
+$('#tutSkip').addEventListener('click', () => { SFX.init(); SFX.back(); try { if (!localStorage.getItem('otman-helwan-tut')) localStorage.setItem('otman-helwan-tut', 'skip'); } catch (e) {} toMenu(); });
 
 function menuKey(e) {
   const c = e.code, it = items();
@@ -5061,7 +5884,7 @@ function menuKey(e) {
     else if (it[cur] && it[cur].id === 'diff') cycleDiff(d);
     else if (it[cur] && it[cur].id === 'modeB') cycleMode(d);
     else if (it[cur] && it[cur].id === 'sizeB') cycleSize(d);
-    else if (mscreen === 'char') cycleChar(d);
+    else if (mscreen === 'char' || mscreen === 'pick') cycleChar(d);
     else if (it[cur] && it[cur].id === 'charB') cycleChar(d);
   } else if (c === 'Enter' || c === 'Space' || c === 'NumpadEnter') {
     e.preventDefault(); SFX.init(); Music.kick();
@@ -5176,7 +5999,7 @@ function tick(now) {
       if (f === P) continue;
       const g = f.net && NET.role === 'host' ? NET.gs.get(f.net) : null;
       if (g) hostInput(f, g);                                   // a friend's keys
-      else if (f.isCPU && f.lives > 0 && !(window.__otman && window.__otman.noAI)) {
+      else if (f.isCPU && f.lives > 0 && !TUT.on && !(window.__otman && window.__otman.noAI)) {
         const t = aiTarget(f, dt);
         if (t) aiThink(f, t, dt); else { f.ctrl.mx = f.ctrl.mz = 0; f.ctrl.guard = false; }   // nobody left to go after
       }
@@ -5195,8 +6018,9 @@ function tick(now) {
         else if (f.state !== 'ko' && f.pos.y < -12) knockOut(f, 1);
       }
     }
-    updateTrain(sdt, true);
-    checkEnd();
+    tutTick(dt);
+    updateTrain(sdt, !TUT.on);
+    if (!TUT.on) checkEnd();
     updateHUD();
   } else if (mode === 'over') {
     overT += dt;
@@ -5801,7 +6625,7 @@ function supaWake() {
 // The browser keeps a random secret token; the server stores only its hash next to the name,
 // so nobody else can take or use that name. Clearing the browser's data loses the token (and
 // with it the name: it stays reserved for its old owner). Not used inside claude.ai.
-const ID_KEY = 'otman-helwan-id', MONTH = 30 * 864e5;
+const ID_KEY = 'otman-helwan-id', MONTH = 91 * 864e5;   // 3 months (user, 28 Nov 2026; the server's claim_name decides)
 const NAME_LOCK = !IN_CLAUDE;
 function idGet() { try { return JSON.parse(localStorage.getItem(ID_KEY) || 'null'); } catch (e) { return null; } }
 function idSet(v) { try { localStorage.setItem(ID_KEY, JSON.stringify(v)); } catch (e) {} }
@@ -5818,6 +6642,7 @@ function renderName() {
   if (NAME_LOCK && v && v.name && (lock || !el.nm.value.trim())) el.nm.value = v.name;
   el.nm.readOnly = lock;
   $('#nmNote').textContent = lock ? 'اسمك متثبت لحد ' + fmtDate(v.until) : 'اسم الراكب';
+  $('#mHello').textContent = 'أهلاً يا ' + myName();
 }
 async function claimName(name) {
   if (LOCALNET) {   // local stand-in: names in this browser's storage
@@ -6031,17 +6856,20 @@ function boot(data) {
     scene.environment = pm.fromScene(new THREE.RoomEnvironment(), 0.04).texture;
     scene.traverse(o => { if (o.isMesh && o.material && o.material.isMeshStandardMaterial && o.material.envMapIntensity === 1) o.material.envMapIntensity = 0.45; });
   }).catch(() => {});
+  // a new player (nothing saved yet) gets the name window and the practice offer first
+  let isNew = false; try { isNew = !localStorage.getItem(PREF_KEY) && !(idGet() || {}).name && !localStorage.getItem(WELCOME_KEY); if (!isNew) localStorage.setItem(WELCOME_KEY, '1'); } catch (e) {}
   loadPrefs(data);
   renderSlots(); renderDiff(); renderMode(); renderChar();
   rebuildPlayer();
   C.setRig(makeRig(outfitFrom({ mask: 1, chest: 1, cape: 1, legs: 1 }), C.color, '#5fd0ff', true));
   toMenu();
+  if (isNew && !/[?&]nowelcome\b/.test(location.search)) welcomeShow();
   resize();
   camPos.set(1.5, 1.8, 7); camLook.set(1.5, 1.1, 1);
   try { window.claude && window.claude.hot && window.claude.hot.snapshot && window.claude.hot.snapshot(() => ({ sel: { ...sel }, diff, name: el.nm.value, muted: SFX.muted })); } catch (e) {}
   // dev aid: open with ?debug to poke the game from the console (window.__otman)
   if (/[?&]debug\b/.test(location.search)) {
-    window.__otman = { P, C, C2, C3, ALLF, teamPts, rounds, setMode(m, n) { gmode = m; if (n) SIZES[m] = n; renderMode(); }, get fighters() { return fighters; }, renderer, QUAL, applyQuality, scene, camera, sel, OPTS, train, trainObj, GLB, CHARS, streetBlocks, BUILDINGS, ambient, PROPS, buildGlbFighter, loadChar, lockOf, rebuildPlayer, startMatch, endMatch, toMenu, cam: null, spin: null, pause: false,
+    window.__otman = { P, C, C2, C3, ALLF, teamPts, rounds, setMode(m, n) { gmode = m; if (n) SIZES[m] = n; renderMode(); }, get fighters() { return fighters; }, renderer, QUAL, applyQuality, scene, camera, sel, OPTS, train, trainObj, GLB, CHARS, streetBlocks, BUILDINGS, ambient, PROPS, buildGlbFighter, loadChar, lockOf, rebuildPlayer, startMatch, endMatch, toMenu, startTutorial, TUT, MM, welcomeShow, cam: null, spin: null, pause: false,
       get mode() { return mode; },
       get fx() { return { camKick, shake, freeze }; },   // (tests: the camera effects right now)
       // run n frames by hand (a hidden tab gets no rAF)
