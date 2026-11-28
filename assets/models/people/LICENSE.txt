@@ -1,0 +1,4 @@
+The people in the crowd and the street: Microsoft Rocketbox avatars and animations,
+https://github.com/microsoft/Microsoft-Rocketbox, MIT License, Copyright (c) Microsoft Corporation.
+Downloaded 28 Nov 2026 (base colour textures only, resized to 1024 px). The MIT licence lets us use, change and sell
+them in the game; keep this notice with the files and put the line above in the game's credits.
